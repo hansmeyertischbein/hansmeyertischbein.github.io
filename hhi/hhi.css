@@ -1,0 +1,67 @@
+/* Result */
+.result { padding: 2.25rem 0 2.5rem; border-top: 1px solid var(--rule); }
+.result-value { display: flex; align-items: baseline; gap: 0.75rem; margin: 0; }
+.result-num { font: 400 clamp(3.5rem, 14vw, 5.5rem)/1 var(--serif); letter-spacing: -0.02em; font-variant-numeric: tabular-nums lining-nums; }
+.result-of { color: var(--muted); font-size: 0.95rem; }
+.result-label { font-weight: 600; margin: 0.6rem 0 1.5rem; }
+.result-note { color: var(--muted); margin: 1.5rem 0 0; max-width: 36rem; }
+
+.scale { position: relative; padding-bottom: 1.6rem; }
+.scale-track { position: relative; display: flex; height: 10px; border-radius: 5px; overflow: visible; }
+.band { display: block; height: 100%; background: var(--navy); }
+.band-low { width: 33.333%; opacity: 0.12; border-radius: 5px 0 0 5px; }
+.band-mid { width: 26.667%; opacity: 0.3; }
+.band-high { width: 40%; opacity: 0.55; border-radius: 0 5px 5px 0; }
+.marker { position: absolute; top: -6px; width: 4px; height: 22px; margin-left: -2px; border-radius: 2px; background: var(--ink); left: 0; transition: left 0.25s ease; }
+@media (prefers-reduced-motion: reduce) { .marker { transition: none; } }
+.scale-ticks { position: relative; height: 1rem; margin-top: 0.6rem; font-size: 0.8rem; color: var(--muted); font-variant-numeric: tabular-nums; }
+.scale-ticks span { position: absolute; transform: translateX(-50%); white-space: nowrap; }
+.scale-ticks span:first-child { transform: none; }
+.scale-ticks span:last-child { transform: translateX(-100%); }
+
+/* Compact value that stays visible while editing a long list */
+.peek { position: sticky; top: calc(env(safe-area-inset-top, 0px) + 3.5rem); z-index: 9; height: 0; overflow: visible; }
+.peek .wrap { display: flex; gap: 1rem; align-items: baseline; justify-content: space-between; padding-top: 0.55rem; padding-bottom: 0.55rem; background: var(--paper); border-bottom: 1px solid var(--rule); font-size: 0.95rem; color: var(--muted); opacity: 0; pointer-events: none; transition: opacity 0.15s; }
+.peek strong { color: var(--ink); font-variant-numeric: tabular-nums; }
+.peek.show .wrap { opacity: 1; }
+
+/* Blocks */
+.block { padding: 2.5rem 0; border-top: 1px solid var(--rule); }
+.block h2 { font-size: 1.65rem; margin: 0 0 1.25rem; }
+.block-head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 0.75rem 1rem; margin-bottom: 1.25rem; }
+.block-head h2 { margin: 0; }
+.presets { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+
+/* Company rows */
+.firm-head, .firm { display: grid; grid-template-columns: minmax(0, 1fr) 6.5rem 7rem 2.25rem; gap: 0.6rem; align-items: center; }
+.firm-head { font-size: 0.8rem; color: var(--muted); padding-bottom: 0.4rem; }
+.firm-head span:nth-child(3) { text-align: left; }
+.firms { list-style: none; margin: 0 0 1rem; padding: 0; }
+.firm { padding: 0.35rem 0; }
+.firm input[type="number"] { text-align: right; font-variant-numeric: tabular-nums; }
+.contrib { display: flex; align-items: center; gap: 0.5rem; font-size: 0.875rem; color: var(--muted); font-variant-numeric: tabular-nums; }
+.contrib-bar { flex: none; height: 6px; border-radius: 3px; background: var(--navy); min-width: 1px; }
+.remove { width: 2.25rem; height: 2.25rem; padding: 0; display: grid; place-items: center; }
+.remove svg { width: 14px; height: 14px; stroke: currentColor; stroke-width: 2; }
+.share-sum { color: var(--muted); font-size: 0.9rem; margin: 1rem 0 0; }
+.share-sum.warn { color: #9A3B1E; }
+@media (prefers-color-scheme: dark) { .share-sum.warn { color: #F0A58A; } }
+
+/* Merger */
+.merger { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; max-width: 36rem; }
+.merger label { display: grid; gap: 0.35rem; font-size: 0.875rem; color: var(--muted); }
+.merger select { color: var(--ink); }
+.merger-out { margin: 1.25rem 0 0; max-width: 36rem; }
+
+.explain p { max-width: 38rem; }
+
+@media (max-width: 34rem) {
+  .firm-head { display: none; }
+  .firm { grid-template-columns: minmax(0, 1fr) 5.5rem 2.25rem; grid-template-areas: "name share rm" "contrib contrib contrib"; row-gap: 0.3rem; padding: 0.6rem 0; border-bottom: 1px solid var(--rule); }
+  .firm .f-name { grid-area: name; }
+  .firm .f-share { grid-area: share; }
+  .firm .contrib { grid-area: contrib; }
+  .firm .remove { grid-area: rm; }
+  .merger { grid-template-columns: 1fr; }
+  .contrib-val::before { content: "adds "; }
+}
