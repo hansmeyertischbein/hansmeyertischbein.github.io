@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Hans Meyer Tischbein</title>
+<meta name="description" content="Hans Meyer Tischbein – Master in Business (Finance) student at BI Norwegian Business School, based in Oslo.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,500&family=Public+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper: #FBFCFD;
+    --ink: #1A2238;
+    --navy: #1F3A68;
+    --muted: #5B6478;
+    --rule: #DDE2EA;
+    --serif: "Newsreader", Georgia, "Times New Roman", serif;
+    --sans: "Public Sans", -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    box-sizing: border-box;
+    padding-top: env(safe-area-inset-top, 0px);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --paper: #0F1626;
+      --ink: #E6EAF2;
+      --navy: #9DB8E8;
+      --muted: #9AA3B5;
+      --rule: #263049;
+    }
+  }
+  *, *::before, *::after { box-sizing: inherit; }
+  html { scroll-behavior: smooth; scroll-padding-top: 4.5rem; }
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font: 400 1.0625rem/1.6 var(--sans);
+    font-feature-settings: "tnum" 1, "lnum" 1;
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: var(--navy); text-underline-offset: 0.2em; text-decoration-thickness: 1px; }
+  a:hover { text-decoration-thickness: 2px; }
+  :focus-visible { outline: 2px solid var(--navy); outline-offset: 3px; border-radius: 2px; }
+
+  .wrap { max-width: 46rem; margin: 0 auto; padding: 0 1.5rem; }
+
+  /* Navigation */
+  header.nav {
+    position: sticky; top: env(safe-area-inset-top, 0px); z-index: 10;
+    background: var(--paper);
+    border-bottom: 1px solid var(--rule);
+  }
+  header.nav .wrap { display: flex; align-items: baseline; justify-content: space-between; height: 3.5rem; align-items: center; }
+  .nav-name { font: 500 1.05rem var(--serif); color: var(--ink); text-decoration: none; }
+  .nav-links { display: flex; gap: 1.5rem; margin: 0; padding: 0; list-style: none; font-size: 0.95rem; }
+  .nav-links a { color: var(--muted); text-decoration: none; }
+  .nav-links a:hover, .nav-links a[aria-current="true"] { color: var(--ink); }
+
+  /* Intro */
+  .intro { padding: 5.5rem 0 4rem; }
+  .intro h1 {
+    font: 400 clamp(2.75rem, 9vw, 4.75rem)/1.02 var(--serif);
+    letter-spacing: -0.02em;
+    margin: 0 0 1.75rem;
+  }
+  .intro h1 span { display: block; }
+  .intro p { max-width: 34rem; margin: 0 0 1.5rem; color: var(--muted); font-size: 1.125rem; }
+  .contact { display: flex; flex-wrap: wrap; gap: 0.5rem 1.5rem; margin: 0; padding: 0; list-style: none; font-size: 0.95rem; }
+
+  /* Sections */
+  section.part { padding: 3.5rem 0; border-top: 1px solid var(--rule); }
+  .part-head { display: flex; align-items: baseline; justify-content: space-between; gap: 1rem; margin-bottom: 2.5rem; }
+  h2 { font: 400 2rem/1.15 var(--serif); margin: 0; }
+  h3 { font: 600 0.95rem/1.4 var(--sans); color: var(--muted); margin: 2.75rem 0 1.25rem; }
+  h3:first-of-type { margin-top: 0; }
+
+  /* CV entries: content left, dates right */
+  .entry { display: grid; grid-template-columns: 1fr auto; gap: 0.15rem 2rem; padding: 0 0 1.5rem; }
+  .entry + .entry { padding-top: 1.5rem; border-top: 1px solid var(--rule); }
+  .entry-title { font-weight: 600; margin: 0; }
+  .entry-org { margin: 0; color: var(--muted); }
+  .entry-date { grid-column: 2; grid-row: 1; color: var(--muted); font-size: 0.95rem; white-space: nowrap; text-align: right; }
+  .entry-note { grid-column: 1 / -1; margin: 0.5rem 0 0; max-width: 36rem; }
+
+  .skills { display: grid; grid-template-columns: 9rem 1fr; gap: 0.6rem 1.5rem; margin: 0; }
+  .skills dt { color: var(--muted); }
+  .skills dd { margin: 0; }
+
+  /* Projects */
+  .project { padding: 1.75rem 0; border-top: 1px solid var(--rule); }
+  .project:first-child { border-top: 0; padding-top: 0; }
+  .project h4 { font: 500 1.4rem/1.25 var(--serif); margin: 0 0 0.5rem; }
+  .project p { margin: 0 0 0.75rem; max-width: 36rem; }
+  .project .tools { color: var(--muted); font-size: 0.95rem; margin: 0 0 0.75rem; }
+  .project .links { display: flex; gap: 1.25rem; font-size: 0.95rem; }
+
+  .entry ul { grid-column: 1 / -1; margin: 0.6rem 0 0; padding-left: 1.1rem; max-width: 38rem; }
+  .entry li { margin: 0.2rem 0; }
+  .entry li::marker { color: var(--muted); }
+  .downloads { display: flex; gap: 1.25rem; font-size: 0.95rem; }
+  .courses { margin: 0; max-width: 38rem; }
+
+  footer { padding: 2.5rem 0 3rem; border-top: 1px solid var(--rule); color: var(--muted); font-size: 0.9rem; }
+
+  @media (max-width: 34rem) {
+    .intro { padding: 3.5rem 0 3rem; }
+    .entry { grid-template-columns: 1fr; }
+    .entry-date { grid-column: 1; grid-row: auto; text-align: left; order: -1; font-size: 0.875rem; }
+    .skills { grid-template-columns: 1fr; gap: 0.1rem; }
+    .skills dd { margin-bottom: 0.75rem; }
+    .nav-links { gap: 1rem; }
+    .part-head { flex-direction: column; gap: 0.5rem; }
+  }
+  @media print {
+    header.nav, #projects, footer { display: none; }
+    body { background: #fff; color: #000; }
+  }
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <div class="wrap">
+    <a class="nav-name" href="#top">Hans Meyer Tischbein</a>
+    <ul class="nav-links">
+      <li><a href="#cv">CV</a></li>
+      <li><a href="#projects">Projects</a></li>
+    </ul>
+  </div>
+</header>
+
+<main id="top">
+  <div class="wrap">
+
+    <section class="intro">
+      <h1><span>Hans Meyer</span><span>Tischbein</span></h1>
+      <p>Finance student at BI Norwegian Business School and claims handler at If P&amp;C Insurance in Oslo. I work across data analysis, risk assessment and finance, and like to challenge assumptions before drawing conclusions.</p>
+      <ul class="contact">
+        <li><a href="mailto:s2312344@bi.no">s2312344@bi.no</a></li>
+        <li><a href="tel:+4747464581">+47 474 64 581</a></li>
+        <li><a href="https://linkedin.com/in/hans-meyer-tischbein">LinkedIn</a></li>
+        <li><a href="https://github.com/hansmeyertischbein">GitHub</a></li>
+      </ul>
+    </section>
+
+    <section class="part" id="cv">
+      <div class="part-head">
+        <h2>CV</h2>
+        <div class="downloads">
+          <a href="Hans_Meyer_Tischbein_CV_EN.pdf" download>CV in English (PDF)</a>
+          <a href="Hans_Meyer_Tischbein_CV_NO.pdf" download lang="no">CV på norsk (PDF)</a>
+        </div>
+      </div>
+
+      <h3>Education</h3>
+      <div class="entry">
+        <p class="entry-title">Master in Business, Major in Finance</p>
+        <p class="entry-org">BI Norwegian Business School, Oslo</p>
+        <span class="entry-date">2026–2028</span>
+        <ul>
+          <li>Awarded the BI Presidential Scholarship</li>
+          <li>Class Representative and BI Ambassador</li>
+        </ul>
+      </div>
+      <div class="entry">
+        <p class="entry-title">Bachelor in Business Law and Economics</p>
+        <p class="entry-org">BI Norwegian Business School, Trondheim</p>
+        <span class="entry-date">2023–2026</span>
+        <ul>
+          <li>GPA: A (4.63 / 5.00)</li>
+        </ul>
+      </div>
+
+      <h3>Work experience</h3>
+      <div class="entry">
+        <p class="entry-title">Claims Handler, Property Residential</p>
+        <p class="entry-org">If P&amp;C Insurance</p>
+        <span class="entry-date">2026–present</span>
+        <ul>
+          <li>Handle property and residential claims, weighing policy terms against the facts of each case where information is often incomplete</li>
+          <li>Independent payment authorization of NOK 100,000 after one month</li>
+        </ul>
+      </div>
+      <div class="entry">
+        <p class="entry-title">Insurance Advisor</p>
+        <p class="entry-org">If P&amp;C Insurance</p>
+        <span class="entry-date">2024–2026</span>
+        <ul>
+          <li>Needs-based advice and sales of insurance to private customers</li>
+          <li>AML/CTF risk assessments in customer follow-up</li>
+          <li>Responsible for training new advisors</li>
+          <li>FinAut authorized in non-life and personal insurance</li>
+        </ul>
+      </div>
+      <div class="entry">
+        <p class="entry-title">Field Sales Representative</p>
+        <p class="entry-org">Meyer Tischbein ENK</p>
+        <span class="entry-date">2023–2024</span>
+        <ul>
+          <li>Door-to-door and telephone sales of telecommunications services</li>
+          <li>Ran my own sole proprietorship, including bookkeeping and VAT reporting</li>
+        </ul>
+      </div>
+      <div class="entry">
+        <p class="entry-title">Team Leader</p>
+        <p class="entry-org">Telliberry AS</p>
+        <span class="entry-date">2021–2022</span>
+        <ul>
+          <li>Led a team of more than ten; total results rose by over 30% in the first month through coaching and KPI follow-up</li>
+        </ul>
+      </div>
+      <div class="entry">
+        <p class="entry-title">Sales Representative</p>
+        <p class="entry-org">Telliberry AS</p>
+        <span class="entry-date">2019–2020</span>
+        <ul>
+          <li>More than 100 individual cold sales in the first full month</li>
+        </ul>
+      </div>
+      <div class="entry">
+        <p class="entry-title">Conscript, Coast Guard</p>
+        <p class="entry-org">Norwegian Armed Forces</p>
+        <span class="entry-date">2022</span>
+        <ul>
+          <li>National service on KV Sortland as artillery gunner and smoke diver</li>
+          <li>Elected representative for enlisted personnel</li>
+          <li>NATO SECRET security clearance</li>
+        </ul>
+      </div>
+
+      <h3>Organizational roles</h3>
+      <div class="entry">
+        <p class="entry-title">Leader</p>
+        <p class="entry-org">Finansforbundet Student Association, Trondheim and Oslo</p>
+        <span class="entry-date">2026–present</span>
+        <ul>
+          <li>Founded the association in Trondheim: structure, recruitment and contact with senior figures in the finance industry</li>
+          <li>Now leading a board of ten at BI Oslo</li>
+          <li>Grew membership by more than 25%, recruiting over 300 members in under six months</li>
+        </ul>
+      </div>
+
+      <h3>Courses</h3>
+      <p class="courses">If x Antler Founder Series, Trust Representative Course (Norwegian Armed Forces), Trust Representative Course (Finansforbundet), Excel Basics by Learnesy, NVIDIA Deep Learning Institute: Creating an Omniverse Extension With Python and Agentic AI Explained.</p>
+
+      <h3>Skills</h3>
+      <dl class="skills">
+        <dt>Data</dt>
+        <dd>Python (data analysis and simulation), R, Stata, JMP, Excel (advanced), PowerPoint</dd>
+        <dt>Competencies</dt>
+        <dd>Data analysis, risk assessment, structured work, communication</dd>
+        <dt>Languages</dt>
+        <dd>Norwegian (native), English (fluent), German (basic), Spanish (basic)</dd>
+      </dl>
+    </section>
+
+    <section class="part" id="projects">
+      <div class="part-head">
+        <h2>Projects</h2>
+      </div>
+
+      <div class="project-list">
+        <article class="project">
+          <h4>CV generator</h4>
+          <p>Builds my Norwegian and English CVs as Word documents straight from code, so layout, spacing and content stay consistent across both versions.</p>
+          <p class="tools">Node.js, docx</p>
+        </article>
+
+        <!--
+          Copy this block to add a new project:
+
+        <article class="project">
+          <h4>Project name</h4>
+          <p>What the project does and what you found out, in one or two sentences.</p>
+          <p class="tools">Python, pandas</p>
+          <div class="links">
+            <a href="https://github.com/hansmeyertischbein/repo">Code on GitHub</a>
+          </div>
+        </article>
+        -->
+      </div>
+    </section>
+
+  </div>
+</main>
+
+<footer>
+  <div class="wrap">Oslo, Norway</div>
+</footer>
+
+<script>
+  // Highlight the nav link for the section in view
+  const links = document.querySelectorAll('.nav-links a');
+  const sections = [...links].map(a => document.querySelector(a.getAttribute('href')));
+  if ('IntersectionObserver' in window) {
+    const io = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          links.forEach(a => a.removeAttribute('aria-current'));
+          const active = document.querySelector('.nav-links a[href="#' + e.target.id + '"]');
+          if (active) active.setAttribute('aria-current', 'true');
+        }
+      });
+    }, { rootMargin: '-40% 0px -55% 0px' });
+    sections.forEach(s => s && io.observe(s));
+  }
+</script>
+</body>
+</html>
