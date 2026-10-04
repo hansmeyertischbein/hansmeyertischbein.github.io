@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Market concentration calculator – Hans Meyer Tischbein</title>
+<meta name="description" content="Calculate the Herfindahl–Hirschman Index for any market and test what a merger would do to concentration.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Market concentration calculator">
+<meta property="og:description" content="Calculate the Herfindahl–Hirschman Index for any market and test what a merger would do to concentration.">
+<meta property="og:url" content="https://hansmeyertischbein.github.io/hhi/">
+<meta property="og:image" content="https://hansmeyertischbein.github.io/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="HMT">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,500&family=Public+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/site.css">
+<link rel="stylesheet" href="hhi.css">
+</head>
+<body>
+
+<header class="nav">
+  <div class="wrap">
+    <a class="nav-name" href="/">Hans Meyer Tischbein</a>
+    <ul class="nav-links">
+      <li><a href="/#cv">CV</a></li>
+      <li><a href="/#projects">Projects</a></li>
+    </ul>
+  </div>
+</header>
+
+<div class="peek" id="peek" aria-hidden="true">
+  <div class="wrap"><span>HHI <strong id="peek-value">0</strong></span><span id="peek-label"></span></div>
+</div>
+
+<main>
+  <div class="wrap">
+
+    <header class="page-head">
+      <h1>Market concentration calculator</h1>
+      <p class="lede">Enter each company's market share to get the Herfindahl–Hirschman Index (HHI), see how concentrated the market is, and test what a merger between two companies would do.</p>
+      <ul class="page-links">
+        <li><a href="https://github.com/hansmeyertischbein/hansmeyertischbein.github.io/tree/main/hhi">Code on GitHub</a></li>
+        <li><a href="/if-study/">Where the example data comes from</a></li>
+      </ul>
+    </header>
+
+    <section class="result" id="result" aria-live="polite">
+      <p class="result-value"><span class="result-num" id="hhi-value">0</span><span class="result-of">of 10,000</span></p>
+      <p class="result-label" id="hhi-label">Add companies to start</p>
+      <div class="scale" aria-hidden="true">
+        <div class="scale-track">
+          <span class="band band-low"></span><span class="band band-mid"></span><span class="band band-high"></span>
+          <span class="marker" id="marker"></span>
+        </div>
+        <div class="scale-ticks"><span style="left:0">0</span><span style="left:33.333%">1,000</span><span style="left:60%">1,800</span><span style="left:100%">3,000+</span></div>
+      </div>
+      <p class="result-note" id="hhi-note"></p>
+    </section>
+
+    <section class="block">
+      <h2>Test a merger</h2>
+      <div class="merger">
+        <label>First company<select class="field" id="m-a"></select></label>
+        <label>Second company<select class="field" id="m-b"></select></label>
+      </div>
+      <p class="merger-out" id="merger-out" aria-live="polite">Pick two companies to see the effect.</p>
+    </section>
+
+    <section class="block">
+      <div class="block-head">
+        <h2>Companies</h2>
+        <div class="presets">
+          <button class="btn" type="button" id="load-example">Load Norwegian non-life insurance</button>
+          <button class="btn btn-quiet" type="button" id="clear">Clear</button>
+        </div>
+      </div>
+      <div class="firm-head" aria-hidden="true"><span>Company</span><span>Share, %</span><span>Adds to HHI</span><span></span></div>
+      <ol class="firms" id="firms"></ol>
+      <button class="btn" type="button" id="add">Add company</button>
+      <p class="share-sum" id="share-sum"></p>
+    </section>
+
+
+    <section class="block explain">
+      <h2>How it works</h2>
+      <p>The HHI adds up the square of every company's market share, measured in percent. A market with one company scores 10,000. A market with a hundred equal companies scores 100. Squaring gives large companies far more weight than small ones, so the index reacts strongly when big players grow.</p>
+      <p>When two companies with shares <em>a</em> and <em>b</em> merge, the index rises by 2 × <em>a</em> × <em>b</em>, assuming the combined company keeps both customer bases.</p>
+      <p>The colour bands use common rules of thumb: below 1,000 is unconcentrated, and above 1,800 is treated as highly concentrated in the 2023 US Merger Guidelines. Thresholds differ between competition authorities, so read the label as a guide rather than a verdict.</p>
+      <p>The example loads premium-based market shares in Norwegian non-life insurance for Q3 2025, as used in my <a href="/if-study/">study of young adults and insurance loyalty</a> (source: Finans Norge).</p>
+    </section>
+
+  </div>
+</main>
+
+<footer>
+  <div class="wrap">Oslo, Norway</div>
+</footer>
+
+<script src="hhi.js"></script>
+</body>
+</html>
