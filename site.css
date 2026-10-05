@@ -134,7 +134,7 @@ figcaption { margin-top: 0.75rem; color: var(--muted); font-size: 0.875rem; max-
 
 /* ---------- Tool controls ---------- */
 input, select, button { font: inherit; color: inherit; }
-.field { width: 100%; padding: 0.5rem 0.6rem; border: 1px solid var(--rule); border-radius: 4px; background: var(--paper); }
+.field { box-sizing: border-box; width: 100%; padding: 0.5rem 0.6rem; border: 1px solid var(--rule); border-radius: 4px; background: var(--paper); }
 .field:focus-visible { outline: 2px solid var(--navy); outline-offset: 0; border-color: var(--navy); }
 .btn { padding: 0.5rem 0.9rem; border: 1px solid var(--rule); border-radius: 4px; background: transparent; cursor: pointer; font-size: 0.95rem; }
 .btn:hover { border-color: var(--muted); }
