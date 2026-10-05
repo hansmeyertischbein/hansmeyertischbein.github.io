@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Case: student contents insurance – Hans Meyer Tischbein</title>
+<meta name="description" content="A consulting-style market sizing case for contents insurance among students in Norway, with an interactive estimate and a recommendation.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="How big is the market for student contents insurance?">
+<meta property="og:description" content="A consulting-style market sizing case for contents insurance among students in Norway, with an interactive estimate and a recommendation.">
+<meta property="og:url" content="https://hansmeyertischbein.github.io/student-insurance-case/">
+<meta property="og:image" content="https://hansmeyertischbein.github.io/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="HMT">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,500&family=Public+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/site.css">
+<link rel="stylesheet" href="case.css">
+</head>
+<body>
+
+<header class="nav">
+  <div class="wrap">
+    <a class="nav-name" href="/">Hans Meyer Tischbein</a>
+    <ul class="nav-links">
+      <li><a href="/#cv">CV</a></li>
+      <li><a href="/#projects">Projects</a></li>
+    </ul>
+  </div>
+</header>
+
+<main>
+  <div class="wrap">
+    <header class="page-head">
+      <h1>Case: how big is the market for student contents insurance?</h1>
+      <p class="lede">A consulting-style case. A Nordic insurer asks how much money there is in contents insurance for students in Norway, and whether it is worth going after. Structure, estimate, test the assumptions, recommend.</p>
+      <ul class="page-links">
+        <li><a href="https://github.com/hansmeyertischbein/hansmeyertischbein.github.io/tree/main/student-insurance-case">Code on GitHub</a></li>
+        <li><a href="/if-study/">Young adults and insurance loyalty</a></li>
+      </ul>
+    </header>
+
+    <section class="block">
+      <h2>1. Clarify the question</h2>
+      <p>The client is a large insurer with a strong brand but weak loyalty among young adults. It wants to know the size of the student segment for contents insurance (innboforsikring), measured as annual premium, and whether the segment deserves a dedicated push. Contents insurance is the natural first product: it is often the first policy a young person buys alone, typically when moving out to study.</p>
+      <p>Scope: students at Norwegian universities and university colleges, one year, private customers only.</p>
+    </section>
+
+    <section class="block">
+      <h2>2. Structure</h2>
+      <p>A bottom-up funnel works best, because each step can be checked separately:</p>
+      <ul class="tree">
+        <li>Annual premium market
+          <ul>
+            <li>Number of students</li>
+            <li>× share living away from their parents
+              <ul><li>× share not covered by a parent’s policy
+                <ul><li>× share who have bought their own policy</li></ul>
+              </li></ul>
+            </li>
+            <li>× average annual premium</li>
+          </ul>
+        </li>
+      </ul>
+      <p>The step about parents matters. Some home insurance policies in Norway extend cover to children who live away while studying, so a student who moves out does not automatically need a policy. Terms vary between insurers and change over time, which makes this the assumption to verify first.</p>
+    </section>
+
+    <section class="block">
+      <div class="block-head"><h2>3. Estimate</h2><button class="btn btn-quiet" type="button" id="reset">Reset</button></div>
+      <div class="fields">
+        <label>Students<input class="field" id="students" type="number" inputmode="numeric" step="1000"><span class="hint">308,097 in Norwegian higher education in 2025 (HK-dir).</span></label>
+        <label>Living with parents, %<input class="field" id="home" type="number" inputmode="decimal" step="1"><span class="hint">Assumption. 14% in our survey of 18–29-year-olds.</span></label>
+        <label>Covered by parents’ policy, %<input class="field" id="parents" type="number" inputmode="decimal" step="1"><span class="hint">Assumption. Check each insurer’s terms.</span></label>
+        <label>Of the rest, own policy, %<input class="field" id="bought" type="number" inputmode="decimal" step="1"><span class="hint">Assumption. Young adults often don’t know what they have.</span></label>
+        <label>Average premium, NOK per year<input class="field" id="premium" type="number" inputmode="numeric" step="100"><span class="hint">Assumption for a small rented home.</span></label>
+      </div>
+      <dl class="outputs" style="margin-top:2rem">
+        <div><dt>Market today</dt><dd id="o-market"></dd></div>
+        <div><dt>Full potential</dt><dd id="o-potential"></dd></div>
+        <div><dt>Uninsured gap</dt><dd id="o-gap"></dd></div>
+      </dl>
+      <h3 style="margin-top:2.25rem">The funnel</h3>
+      <div class="f-rows" id="funnel"></div>
+    </section>
+
+    <section class="block">
+      <h2>4. Test the assumptions</h2>
+      <p>Which assumption moves the answer most? The bars show how much the market estimate changes when each input moves within a plausible range, with the others held fixed.</p>
+      <div class="f-rows" id="tornado"></div>
+      <p>With the default inputs, the average premium matters most, followed by the share who buy their own policy and the share covered by a parent’s policy. The premium is easy to check against published prices. The other two are the least known, so a small survey on those questions is worth more than any refinement of the student count.</p>
+      <p><strong>Sanity check.</strong> At about NOK 175 million a year, the segment is a fraction of a per cent of the Norwegian private non-life market. That fits the intuition: students have few belongings and pay low premiums. The size of today’s premium pool is therefore not the argument for the segment.</p>
+    </section>
+
+    <section class="block">
+      <h2>5. Recommendation</h2>
+      <p><strong>Go after the segment, but for lifetime value, not for this year’s premium.</strong> A student who buys contents insurance at 20 will later need car, home and travel insurance. Even a small share of those customers staying for ten years is worth far more than the student premium itself.</p>
+      <p>Our <a href="/if-study/">study of young adults</a> points to how. Loyalty among those without claims was driven by involvement, how well people understand and keep track of their insurance, and among those with claims by how satisfied they were with the claims process. That suggests three moves:</p>
+      <ul>
+        <li><strong>Be there when students move.</strong> August is when the need arises. Partnerships with student housing and student welfare organisations reach people at that moment.</li>
+        <li><strong>Make the product easy to understand.</strong> A simple price, a clear overview in the app, and a plain explanation of what is and isn’t covered build the involvement that predicts loyalty.</li>
+        <li><strong>Win on the first claim.</strong> A bike or phone claim settled quickly and fairly is the strongest loyalty driver we found. Fast, digital claims handling for small claims is worth more than a lower price.</li>
+      </ul>
+    </section>
+
+    <section class="block">
+      <h2>6. Next steps</h2>
+      <ul>
+        <li>Map how each major insurer covers students living away under their parents’ policy.</li>
+        <li>Survey a few hundred students on whether they have their own policy and what they pay.</li>
+        <li>Estimate lifetime value: how long young customers stay and which products they add over time.</li>
+      </ul>
+      <p class="disclaimer">An illustrative case built from public figures and stated assumptions. Not based on any insurer’s internal data.</p>
+    </section>
+
+  </div>
+</main>
+
+<footer>
+  <div class="wrap">Oslo, Norway</div>
+</footer>
+<script src="case.js"></script>
+</body>
+</html>
