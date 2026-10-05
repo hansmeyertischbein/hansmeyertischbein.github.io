@@ -62,43 +62,103 @@
       </div>
 
       <div class="project-list">
-        <article class="project">
-          <h4>What does it cost to wait?</h4>
-          <p>A conceptual study of how to prioritise tasks. Starting from a grid of importance and urgency with time spent as a third axis, I develop the model in five steps and test each one against theory from scheduling, finance, decision analysis and behavioural economics. The result is an index that ranks tasks by cost of delay per calibrated hour, with urgency calculated from the slack to each deadline, and a feasibility check that shows overload days before it becomes a crisis.</p>
-          <p>The model is also built as a calculator: enter your tasks and it ranks them and checks whether the plan adds up before each deadline.</p>
-          <p class="tools">Scheduling theory, decision analysis, behavioural economics, JavaScript</p>
-          <div class="links">
+        <div class="projects-group">
+          <h3>Finance</h3>
+          <article class="project">
+            <h4>What does Gjensidige’s share price assume?</h4>
+            <p>A justified price-to-book valuation that works backwards from the share price to the return on equity the market is pricing in.</p>
+            <p class="tools">Valuation, residual income model, JavaScript</p>
+            <div class="links">
+            <a href="/valuation/">Open the calculator</a>
+            <a href="https://github.com/hansmeyertischbein/hansmeyertischbein.github.io/tree/main/valuation">Code on GitHub</a>
+            </div>
+          </article>
+          <article class="project">
+            <h4>Portfolio and CAPM calculator</h4>
+            <p>An interactive efficient frontier for two assets, the best risk-adjusted mix and the required return on equity.</p>
+            <p class="tools">Portfolio theory, CAPM, JavaScript</p>
+            <div class="links">
+            <a href="/portfolio/">Open the calculator</a>
+            <a href="https://github.com/hansmeyertischbein/hansmeyertischbein.github.io/tree/main/portfolio">Code on GitHub</a>
+            </div>
+          </article>
+          <article class="project">
+            <h4>Market concentration calculator</h4>
+            <p>Calculates the Herfindahl–Hirschman Index for any market and shows what a merger would do to concentration. Comes loaded with the Norwegian non-life insurance market.</p>
+            <p class="tools">Competition economics, JavaScript</p>
+            <div class="links">
+            <a href="/hhi/">Open the calculator</a>
+            <a href="https://github.com/hansmeyertischbein/hansmeyertischbein.github.io/tree/main/hhi">Code on GitHub</a>
+            </div>
+          </article>
+        </div>
+        <div class="projects-group">
+          <h3>Insurance</h3>
+          <article class="project">
+            <h4>Young adults and insurance loyalty</h4>
+            <p>Group project in Methods and Insight at BI (spring 2026): a market study of what drives loyalty among 18–29-year-olds in Norway, with If P&amp;C Insurance as the case. Three focus groups, 187 survey respondents and four customer segments from cluster analysis.</p>
+            <p class="tools">JMP, focus groups, cluster analysis, ANOVA, regression</p>
+            <div class="links">
+            <a href="/if-study/">Read the summary</a>
+            <a href="/If_young_adults_segmentation.pdf">Full report (PDF, Norwegian)</a>
+            </div>
+          </article>
+          <article class="project">
+            <h4>Who makes money on insurance itself?</h4>
+            <p>Combined ratios for Gjensidige, Tryg and Sampo since 2023, and what drives the differences between them.</p>
+            <p class="tools">Financial analysis, IFRS 17</p>
+            <div class="links">
+            <a href="/combined-ratio/">Read the analysis</a>
+            </div>
+          </article>
+          <article class="project">
+            <h4>Simulating a year of claims</h4>
+            <p>A Monte Carlo simulation of an insurer’s annual claims that shows how often premiums fall short and how much capital the worst year in 200 requires. Also written in Python.</p>
+            <p class="tools">Monte Carlo simulation, Solvency II, JavaScript, Python</p>
+            <div class="links">
+            <a href="/claims-simulation/">Open the simulation</a>
+            <a href="/claims-simulation/claims_sim.py">Python version</a>
+            <a href="https://github.com/hansmeyertischbein/hansmeyertischbein.github.io/tree/main/claims-simulation">Code on GitHub</a>
+            </div>
+          </article>
+          <article class="project">
+            <h4>Careless or grossly careless?</h4>
+            <p>How Norwegian insurance law separates ordinary carelessness from gross negligence, explained through two cases from the complaints board.</p>
+            <p class="tools">Insurance law, forsikringsavtaleloven</p>
+            <div class="links">
+            <a href="/gross-negligence/">Read the explainer</a>
+            </div>
+          </article>
+        </div>
+        <div class="projects-group">
+          <h3>Strategy and decisions</h3>
+          <article class="project">
+            <h4>What does it cost to wait?</h4>
+            <p>A conceptual study of how to prioritise tasks. The result is an index that ranks tasks by cost of delay per calibrated hour, with urgency calculated from the slack to each deadline, plus a check that shows overload before it becomes a crisis. Built as a calculator too.</p>
+            <p class="tools">Scheduling theory, decision analysis, behavioural economics, JavaScript</p>
+            <div class="links">
             <a href="/priority/">Try the calculator</a>
             <a href="/Cost_of_delay_prioritization.pdf">Read the paper (PDF, Norwegian)</a>
             <a href="https://github.com/hansmeyertischbein/hansmeyertischbein.github.io/tree/main/priority">Code on GitHub</a>
-          </div>
-        </article>
-
-        <article class="project">
-          <h4>Young adults and insurance loyalty</h4>
-          <p>Group project in Methods and Insight at BI (spring 2026): a market study of what drives loyalty among 18–29-year-olds in Norway, using If P&amp;C Insurance as the case. We ran three focus groups, surveyed 187 respondents and identified four customer segments through cluster analysis. Among those who had filed a claim, satisfaction with the claims process was the strongest driver of loyalty.</p>
-          <p class="tools">JMP, focus groups, cluster analysis, ANOVA, regression</p>
-          <div class="links">
-            <a href="/if-study/">Read the summary</a>
-            <a href="/If_young_adults_segmentation.pdf">Full report (PDF, Norwegian)</a>
-          </div>
-        </article>
-
-        <article class="project">
-          <h4>Market concentration calculator</h4>
-          <p>Calculates the Herfindahl–Hirschman Index for any market and shows what a merger between two companies would do to concentration. Comes loaded with the Norwegian non-life insurance market.</p>
-          <p class="tools">JavaScript, HTML, CSS</p>
-          <div class="links">
-            <a href="/hhi/">Open the calculator</a>
-            <a href="https://github.com/hansmeyertischbein/hansmeyertischbein.github.io/tree/main/hhi">Code on GitHub</a>
-          </div>
-        </article>
-
-        <article class="project">
-          <h4>CV generator</h4>
-          <p>Builds my Norwegian and English CVs as Word documents straight from code, so layout, spacing and content stay consistent across both versions.</p>
-          <p class="tools">Node.js, docx</p>
-        </article>
+            </div>
+          </article>
+          <article class="project">
+            <h4>Case: student contents insurance</h4>
+            <p>A consulting-style case that sizes the market for contents insurance among students in Norway, tests the assumptions and recommends how an insurer should approach the segment.</p>
+            <p class="tools">Market sizing, case structure, JavaScript</p>
+            <div class="links">
+            <a href="/student-insurance-case/">Read the case</a>
+            </div>
+          </article>
+        </div>
+        <div class="projects-group">
+          <h3>Other</h3>
+          <article class="project">
+            <h4>CV generator</h4>
+            <p>Builds my Norwegian and English CVs as Word documents straight from code, so layout, spacing and content stay consistent across both versions.</p>
+            <p class="tools">Node.js, docx</p>
+          </article>
+        </div>
 
         <!--
           Copy this block to add a new project:
