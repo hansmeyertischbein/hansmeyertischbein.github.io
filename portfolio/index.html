@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Portfolio and CAPM calculator – Hans Meyer Tischbein</title>
+<meta name="description" content="An interactive efficient frontier for two assets, the best risk-adjusted mix, and a CAPM calculator for the required return on equity.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Portfolio and CAPM calculator">
+<meta property="og:description" content="An interactive efficient frontier for two assets, the best risk-adjusted mix, and a CAPM calculator for the required return on equity.">
+<meta property="og:url" content="https://hansmeyertischbein.github.io/portfolio/">
+<meta property="og:image" content="https://hansmeyertischbein.github.io/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="HMT">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,500&family=Public+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/site.css">
+</head>
+<body>
+
+<header class="nav">
+  <div class="wrap">
+    <a class="nav-name" href="/">Hans Meyer Tischbein</a>
+    <ul class="nav-links">
+      <li><a href="/#cv">CV</a></li>
+      <li><a href="/#projects">Projects</a></li>
+    </ul>
+  </div>
+</header>
+
+<main>
+  <div class="wrap">
+    <header class="page-head">
+      <h1>Portfolio and CAPM calculator</h1>
+      <p class="lede">Two questions at the core of finance: how should you split money between two investments, and what return should you demand for taking risk? Change the inputs and see the efficient frontier and the required return update.</p>
+      <ul class="page-links">
+        <li><a href="https://github.com/hansmeyertischbein/hansmeyertischbein.github.io/tree/main/portfolio">Code on GitHub</a></li>
+        <li><a href="/valuation/">What does Gjensidige’s share price assume?</a></li>
+      </ul>
+    </header>
+
+    <section class="block" id="frontier">
+      <div class="block-head"><h2>Two assets</h2><button class="btn btn-quiet" type="button" id="reset">Reset</button></div>
+      <div class="fields">
+        <label>Asset A<input class="field" id="aName" type="text"></label>
+        <label>Expected return A, %<input class="field" id="aRet" type="number" inputmode="decimal" step="0.5"></label>
+        <label>Volatility A, %<input class="field" id="aVol" type="number" inputmode="decimal" min="0" step="0.5"></label>
+        <label>Asset B<input class="field" id="bName" type="text"></label>
+        <label>Expected return B, %<input class="field" id="bRet" type="number" inputmode="decimal" step="0.5"></label>
+        <label>Volatility B, %<input class="field" id="bVol" type="number" inputmode="decimal" min="0" step="0.5"></label>
+        <label>Correlation<input class="field" id="rho" type="number" inputmode="decimal" min="-1" max="1" step="0.1"></label>
+        <label>Risk-free rate, %<input class="field" id="rf" type="number" inputmode="decimal" step="0.1"></label>
+      </div>
+      <p class="hint">Default returns and volatilities are illustrative long-run assumptions, not forecasts. The risk-free rate is the ten-year Norwegian government yield in November 2025.</p>
+
+      <div style="margin-top:2rem">
+        <label class="hint" for="w" id="wLabel">Share in A</label>
+        <div class="range-row"><input type="range" id="w" min="0" max="100" step="1"><output id="wOut" for="w"></output></div>
+      </div>
+      <div class="chart-box" id="chart" style="margin-top:1.25rem"></div>
+      <dl class="outputs" style="margin-top:1.5rem">
+        <div><dt>Your portfolio</dt><dd id="o-cur"></dd></div>
+        <div><dt>Sharpe ratio</dt><dd id="o-sharpe"></dd></div>
+        <div><dt>Lowest-risk mix</dt><dd id="o-min"></dd></div>
+        <div><dt>Best risk-adjusted mix</dt><dd id="o-tan"></dd></div>
+      </dl>
+    </section>
+
+    <section class="block" id="capm">
+      <h2>Required return (CAPM)</h2>
+      <div class="fields">
+        <label>Risk-free rate, %<input class="field" id="cRf" type="number" inputmode="decimal" step="0.1"></label>
+        <label>Beta<input class="field" id="cBeta" type="number" inputmode="decimal" step="0.1"><span class="hint">1 moves with the market; below 1 is less sensitive.</span></label>
+        <label>Market risk premium, %<input class="field" id="cMrp" type="number" inputmode="decimal" step="0.25"><span class="hint">5% is the median in PwC’s 2025 survey of the Norwegian market.</span></label>
+      </div>
+      <dl class="outputs" style="margin-top:1.5rem"><div><dt>Required return on equity</dt><dd id="o-capm"></dd></div></dl>
+    </section>
+
+    <section class="block">
+      <h2>The ideas behind it</h2>
+      <p><strong>Diversification.</strong> The return of a mix is the weighted average of the two returns, but the risk is not, unless the assets move perfectly together. With a correlation below 1, part of each asset’s ups and downs cancel out, so the curve bends to the left: some mixes carry less risk than either asset alone. The lower the correlation, the more it bends.</p>
+      <p><strong>The efficient frontier.</strong> Mixes on the upper part of the curve give the highest return for their level of risk. Anything below the lowest-risk point is dominated, because a mix higher up has the same risk and more return.</p>
+      <p><strong>The best risk-adjusted mix.</strong> Once a risk-free asset exists, the best combination of the two risky assets is the one with the highest Sharpe ratio, where a straight line from the risk-free rate just touches the curve. Every investor should hold that same mix and adjust risk by adding cash or borrowing, moving along the dashed line instead of along the curve. This is the separation idea behind modern portfolio theory.</p>
+      <p><strong>CAPM.</strong> If everyone holds the market portfolio, the only risk that earns a reward is the part that cannot be diversified away, measured by beta. The required return is then the risk-free rate plus beta times the market risk premium. It is the starting point for the cost of equity in most valuations, including the <a href="/valuation/">Gjensidige valuation</a> on this site.</p>
+    </section>
+
+    <section class="block">
+      <h2>Limitations</h2>
+      <p>Expected returns, volatilities and correlations are estimates, and the results are very sensitive to them, especially the expected returns. Correlations also tend to rise in crises, exactly when diversification is needed. Treat the output as a way to understand the trade-offs, not as a recommendation.</p>
+      <p class="disclaimer">Not investment advice.</p>
+    </section>
+
+  </div>
+</main>
+
+<footer>
+  <div class="wrap">Oslo, Norway</div>
+</footer>
+<script src="portfolio.js"></script>
+</body>
+</html>
