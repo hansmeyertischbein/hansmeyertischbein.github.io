@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>What does it cost to wait? – Hans Meyer Tischbein</title>
+<meta name="description" content="Rank your tasks by cost of delay per hour, with urgency calculated from your deadlines, and see whether the plan adds up.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="What does it cost to wait?">
+<meta property="og:description" content="Rank your tasks by cost of delay per hour, with urgency calculated from your deadlines, and see whether the plan adds up.">
+<meta property="og:url" content="https://hansmeyertischbein.github.io/priority/">
+<meta property="og:image" content="https://hansmeyertischbein.github.io/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="HMT">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,500&family=Public+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/site.css">
+<link rel="stylesheet" href="priority.css">
+</head>
+<body>
+
+<header class="nav">
+  <div class="wrap">
+    <a class="nav-name" href="/">Hans Meyer Tischbein</a>
+    <ul class="nav-links">
+      <li><a href="/#cv">CV</a></li>
+      <li><a href="/#projects">Projects</a></li>
+    </ul>
+  </div>
+</header>
+
+<main>
+  <div class="wrap">
+
+    <header class="page-head">
+      <h1>What does it cost to wait?</h1>
+      <p class="lede">List your tasks with how much is at stake, how long they take and when they're due. The calculator ranks them by cost of delay per hour and tells you whether the plan adds up before each deadline.</p>
+      <ul class="page-links">
+        <li><a href="/Cost_of_delay_prioritization.pdf">The paper behind it (PDF, Norwegian)</a></li>
+        <li><a href="https://github.com/hansmeyertischbein/hansmeyertischbein.github.io/tree/main/priority">Code on GitHub</a></li>
+      </ul>
+    </header>
+
+    <section class="block">
+      <h2>Your time</h2>
+      <div class="settings">
+        <label>Hours for tasks per day<input class="field" type="number" inputmode="decimal" min="0.5" step="0.5" id="s-hours"></label>
+        <label>Share you plan, %<input class="field" type="number" inputmode="numeric" min="10" max="100" step="5" id="s-plan"></label>
+        <label>Estimate correction<input class="field" type="number" inputmode="decimal" min="1" step="0.1" id="s-k"></label>
+      </div>
+      <p class="hint" id="s-summary"></p>
+    </section>
+
+    <section class="block">
+      <div class="block-head">
+        <h2>Tasks</h2>
+        <div class="presets">
+          <button class="btn" type="button" id="load-example">Load example</button>
+          <button class="btn btn-quiet" type="button" id="clear">Clear</button>
+        </div>
+      </div>
+      <div class="task-head" aria-hidden="true"><span>Task</span><span>Value</span><span>Hours</span><span>Due in days</span><span></span></div>
+      <ol class="tasks" id="tasks"></ol>
+      <button class="btn" type="button" id="add">Add task</button>
+      <p class="hint">Your tasks are saved in this browser only.</p>
+    </section>
+
+    <section class="block" aria-live="polite">
+      <h2>Priority</h2>
+      <p class="now-label">Work on the top three, in blue, and keep the rest waiting. Fewer tasks in progress means each one finishes sooner.</p>
+      <ol class="ranking" id="ranking"></ol>
+      <div id="batch"></div>
+    </section>
+
+    <section class="block" aria-live="polite">
+      <h2>Does the plan add up?</h2>
+      <p class="verdict" id="verdict"></p>
+      <ol class="checks" id="checks"></ol>
+      <p class="hint">Each bar is the work due by that day, counted in deadline order. The line marks the time you plan to have.</p>
+    </section>
+
+    <section class="block explain">
+      <h2>How it works</h2>
+      <p>Each task gets a priority index:</p>
+      <p class="formula">P = (V ÷ p) × e<sup>−max(A − p, 0) ÷ H</sup></p>
+      <p><strong>V</strong> is what's at stake if the task never gets done, on a scale where the steps grow: 1, 2, 3, 5, 8, 13 and 21. <strong>p</strong> is your time estimate in hours, multiplied by the estimate correction because most of us underestimate. <strong>A</strong> is the plannable time until the deadline, so A − p is the slack. <strong>H</strong>, the urgency horizon, is two days of plannable time.</p>
+      <p>The first part ranks by value per hour, which is the order that minimises the total cost of tasks waiting (Smith's rule). The second part is an urgency factor between 0 and 1 that rises as slack runs out, borrowed from the ATC rule in production scheduling. Urgency is calculated from your deadlines instead of how pressing a task feels, because people reliably overrate urgent but unimportant tasks.</p>
+      <p>The feasibility check sums the estimated time in deadline order and compares it with the time you have at each deadline. If every deadline can be met, this order will meet them.</p>
+      <p>A few rules from the paper are built in. Give every task a deadline, even a self-imposed one, or important work without a deadline never rises. Split tasks bigger than a day into parts with their own deadlines. Plan at most 80% of your time. Work on no more than three tasks at once, and book fixed blocks for valuable tasks that aren't urgent yet. Put small recurring tasks like email in a daily batch instead of the ranking, and do anything that takes under two minutes straight away.</p>
+    </section>
+
+  </div>
+</main>
+
+<footer>
+  <div class="wrap">Oslo, Norway</div>
+</footer>
+
+<script src="priority.js"></script>
+</body>
+</html>
