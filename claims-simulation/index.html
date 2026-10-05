@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Simulating a year of claims – Hans Meyer Tischbein</title>
+<meta name="description" content="A Monte Carlo simulation of an insurer’s annual claims: how often premiums fall short, the worst year in 200 and the capital needed.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Simulating a year of claims">
+<meta property="og:description" content="A Monte Carlo simulation of an insurer’s annual claims: how often premiums fall short, the worst year in 200 and the capital needed.">
+<meta property="og:url" content="https://hansmeyertischbein.github.io/claims-simulation/">
+<meta property="og:image" content="https://hansmeyertischbein.github.io/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="HMT">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,500&family=Public+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/site.css">
+</head>
+<body>
+
+<header class="nav">
+  <div class="wrap">
+    <a class="nav-name" href="/">Hans Meyer Tischbein</a>
+    <ul class="nav-links">
+      <li><a href="/#cv">CV</a></li>
+      <li><a href="/#projects">Projects</a></li>
+    </ul>
+  </div>
+</header>
+
+<main>
+  <div class="wrap">
+    <header class="page-head">
+      <h1>Simulating a year of claims</h1>
+      <p class="lede">How much capital does an insurer need? This simulation draws thousands of possible years of claims for a portfolio of home insurance policies and shows how often the premiums fall short, and how bad the worst year in 200 gets.</p>
+      <ul class="page-links">
+        <li><a href="claims_sim.py">Same model in Python</a></li>
+        <li><a href="https://github.com/hansmeyertischbein/hansmeyertischbein.github.io/tree/main/claims-simulation">Code on GitHub</a></li>
+        <li><a href="/combined-ratio/">Combined ratios in Nordic insurance</a></li>
+      </ul>
+    </header>
+
+    <section class="block">
+      <div class="block-head"><h2>Portfolio</h2><button class="btn btn-quiet" type="button" id="reset">Reset</button></div>
+      <div class="fields">
+        <label>Policies<input class="field" id="policies" type="number" inputmode="numeric" min="1" step="1000"></label>
+        <label>Claims per policy per year, %<input class="field" id="freq" type="number" inputmode="decimal" min="0" step="0.5"></label>
+        <label>Average claim, NOK<input class="field" id="severity" type="number" inputmode="numeric" min="1" step="1000"></label>
+        <label>Claim size variation<input class="field" id="cv" type="number" inputmode="decimal" min="0" step="0.5"><span class="hint">Coefficient of variation. Higher means more rare, very large claims.</span></label>
+        <label>Premium above expected claims, %<input class="field" id="loading" type="number" inputmode="decimal" step="1"></label>
+        <label>Chance of a storm year, %<input class="field" id="stormProb" type="number" inputmode="decimal" min="0" step="1"></label>
+        <label>Policies that claim in a storm, %<input class="field" id="stormShare" type="number" inputmode="decimal" min="0" step="1"></label>
+      </div>
+      <p class="hint">The defaults are illustrative, not any insurer’s real figures.</p>
+    </section>
+
+    <section class="block" aria-live="polite">
+      <div class="block-head"><h2>Result</h2><button class="btn" type="button" id="rerun">Run again</button></div>
+      <p class="lead-result" id="summary"></p>
+      <div class="chart-box" id="hist"></div>
+      <p class="hint" id="meta"></p>
+      <dl class="outputs" style="margin-top:1.75rem">
+        <div><dt>Expected claims</dt><dd id="o-expected"></dd></div>
+        <div><dt>Premium</dt><dd id="o-premium"></dd></div>
+        <div><dt>Years with a loss</dt><dd id="o-loss"></dd></div>
+        <div><dt>Worst year in 200</dt><dd id="o-var"></dd></div>
+        <div><dt>Capital needed</dt><dd id="o-capital"></dd></div>
+        <div><dt>Relative volatility</dt><dd id="o-cv"></dd></div>
+      </dl>
+    </section>
+
+    <section class="block">
+      <h2>How it works</h2>
+      <p>Each simulated year starts by drawing the number of claims. With many independent policies that each have a small chance of a claim, the count follows a Poisson distribution. Each claim then gets a size drawn from a lognormal distribution, which is skewed: most claims are small, a few are very large. Adding the claims gives the total for that year, and repeating this thousands of times gives a distribution of possible years.</p>
+      <p>A storm adds a second source of claims that hits many policies at the same time. That one feature changes the risk more than any other, because it breaks the assumption that policies are independent.</p>
+      <p>The capital figure follows the logic of Solvency II, the European rulebook for insurers, which sets the capital requirement at the loss an insurer should be able to absorb in the worst year in 200. Here it is simplified to the gap between that year’s claims and the premium, ignoring costs, investment income and reinsurance.</p>
+    </section>
+
+    <section class="block">
+      <h2>What to try</h2>
+      <p><strong>Grow the portfolio.</strong> Without storms, relative volatility falls with the square root of the number of policies: ten times as many policies cuts it to about a third. That is the law of large numbers, and the reason insurance works at all. Running the Python version gives 34.5% for 1,000 policies, 11.1% for 10,000 and 3.5% for 100,000.</p>
+      <p><strong>Then turn storms on.</strong> With storms, the same three portfolios give 35.8%, 15.4% and 11.4%. Growth no longer helps much, because a storm hits everyone at once. Correlated risk cannot be diversified away by writing more policies, only by spreading geography, buying reinsurance or holding capital.</p>
+      <p><strong>Make claims more skewed.</strong> Raising the variation keeps the average the same but fattens the tail. The expected claims hardly move, while the worst year in 200 and the capital requirement climb. Averages hide the risk that capital is there for.</p>
+    </section>
+
+    <section class="block">
+      <h2>Limitations</h2>
+      <p>Real portfolios mix products with different claim patterns, prices change with risk, claims are settled over several years, and reinsurance caps the largest losses. The model leaves all of that out to keep the mechanics visible. It is a teaching model, not a capital model.</p>
+    </section>
+
+  </div>
+</main>
+
+<footer>
+  <div class="wrap">Oslo, Norway</div>
+</footer>
+<script src="claims.js"></script>
+</body>
+</html>
