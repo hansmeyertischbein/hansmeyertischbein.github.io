@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Valuing Gjensidige – Hans Meyer Tischbein</title>
+<meta name="description" content="A justified price-to-book valuation of Gjensidige that works backwards from the share price to the return on equity the market is pricing in.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="What does Gjensidige’s share price assume?">
+<meta property="og:description" content="A justified price-to-book valuation of Gjensidige that works backwards from the share price to the return on equity the market is pricing in.">
+<meta property="og:url" content="https://hansmeyertischbein.github.io/valuation/">
+<meta property="og:image" content="https://hansmeyertischbein.github.io/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="HMT">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,500&family=Public+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/site.css">
+</head>
+<body>
+
+<header class="nav">
+  <div class="wrap">
+    <a class="nav-name" href="/">Hans Meyer Tischbein</a>
+    <ul class="nav-links">
+      <li><a href="/#cv">CV</a></li>
+      <li><a href="/#projects">Projects</a></li>
+    </ul>
+  </div>
+</header>
+
+<main>
+  <div class="wrap">
+    <header class="page-head">
+      <h1>What does Gjensidige’s share price assume?</h1>
+      <p class="lede">Insurers are valued on their book equity and the return they earn on it, not on cash flow. This calculator values Gjensidige with the justified price-to-book model and works backwards from the share price to show what the market is pricing in.</p>
+      <ul class="page-links">
+        <li><a href="https://github.com/hansmeyertischbein/hansmeyertischbein.github.io/tree/main/valuation">Code on GitHub</a></li>
+        <li><a href="/combined-ratio/">Combined ratios in Nordic insurance</a></li>
+        <li><a href="/portfolio/">Portfolio and CAPM calculator</a></li>
+      </ul>
+    </header>
+
+    <section class="block">
+      <div class="block-head"><h2>Inputs</h2><button class="btn btn-quiet" type="button" id="reset">Reset</button></div>
+      <div class="fields">
+        <label>Share price, NOK<input class="field" id="price" type="number" inputmode="decimal" step="1"><span class="hint">NOK 280.03 on 14 July 2026, from Gjensidige’s own share-savings release. Enter today’s price.</span></label>
+        <label>Book equity per share, NOK<input class="field" id="bvps" type="number" inputmode="decimal" step="0.1"><span class="hint">30 June 2026: NOK 23,311m equity to owners, less NOK 2,000m perpetual Tier 1 capital, over 500m shares.</span></label>
+        <label>Long-run return on equity, %<input class="field" id="roe" type="number" inputmode="decimal" step="0.5"><span class="hint">Target above 28% for 2027–2028. First half of 2026: 33.3% annualised.</span></label>
+        <label>Cost of equity, %<input class="field" id="r" type="number" inputmode="decimal" step="0.25"><span class="hint">4.0% risk-free rate plus an assumed beta of 0.8 times a 5.0% market risk premium.</span></label>
+        <label>Long-run growth, %<input class="field" id="g" type="number" inputmode="decimal" step="0.25"><span class="hint">Gjensidige expects long-term growth roughly in line with nominal GDP.</span></label>
+      </div>
+    </section>
+
+    <section class="block" aria-live="polite">
+      <h2>Result</h2>
+      <p class="lead-result" id="summary"></p>
+      <dl class="outputs">
+        <div><dt>Value per share</dt><dd id="o-value"></dd></div>
+        <div><dt>Justified price-to-book</dt><dd id="o-pb"></dd></div>
+        <div><dt>ROE the price requires</dt><dd id="o-roe"></dd></div>
+        <div><dt>Cost of equity the price implies</dt><dd id="o-r"></dd></div>
+        <div><dt>Implied payout ratio</dt><dd id="o-payout"></dd></div>
+      </dl>
+      <h3 style="margin-top:2.5rem">Value per share at different assumptions</h3>
+      <div class="table-wrap"><table class="data-table" id="grid"></table></div>
+      <p class="hint">NOK per share. Rows are long-run ROE, columns are cost of equity, at your growth rate. Shaded cells are at or above the share price.</p>
+    </section>
+
+    <section class="block">
+      <h2>How the model works</h2>
+      <p>An insurer’s balance sheet is its business. Premiums are collected before claims are paid, the money in between is invested, and regulators decide how much capital must stand behind the risk. Book equity is therefore a meaningful starting point for value, and the question becomes how much more than book the equity is worth.</p>
+      <p>The residual income model answers that. A company is worth its book equity plus the present value of the profits it earns above what shareholders require. If return on equity, cost of equity and growth stay constant, the model collapses to one ratio:</p>
+      <p class="formula">P / B = (ROE − g) ÷ (r − g)</p>
+      <p>A company that earns exactly its cost of equity is worth book value. Every point of ROE above the cost of equity adds value, and growth multiplies the effect, but only when ROE is above r. Growth at a return below the cost of equity destroys value.</p>
+      <p>The same assumptions also pin down the dividend. If growth is funded by retained profit, the share of profit paid out must be 1 − g ÷ ROE. With 28% ROE and 3% growth that is about 89%, close to Gjensidige’s policy of paying out at least 80% of profit over time plus excess capital. That consistency check is a useful sign the inputs hang together.</p>
+      <p>The model can also be run backwards. Given the share price, it shows which ROE the market must expect at a chosen cost of equity, or which cost of equity investors accept at a chosen ROE. That is often more useful than a single price target, because it turns a valuation into a question you can argue about: is a permanently higher ROE realistic, or are investors simply accepting a lower return for a stable, well-capitalised insurer?</p>
+    </section>
+
+    <section class="block">
+      <h2>What it shows for Gjensidige</h2>
+      <p>At the July 2026 reference price, Gjensidige trades at more than six times book equity. With an 8% cost of equity and 3% growth, that price requires a long-run ROE in the mid-30s, above the company’s own target of more than 28%. Put differently, if ROE settles at the target, the price implies investors accept a cost of equity below 7%.</p>
+      <p>Neither reading is unreasonable. Gjensidige has delivered an ROE above 27% in 2025 and 33% in the first half of 2026, holds a leading position in Norway, and pays out most of what it earns. Low volatility and a steady dividend can justify a lower required return than the market average. But the gap shows how much of the share price rests on profitability staying exceptionally high for a long time.</p>
+    </section>
+
+    <section class="block">
+      <h2>Limitations</h2>
+      <ul>
+        <li>The model assumes one ROE and one growth rate forever. Real returns move with the insurance cycle, weather, interest rates and competition.</li>
+        <li>Gjensidige reports ROE on average equity including Tier 1 capital, while the book value here excludes it, so the figures are not perfectly comparable.</li>
+        <li>Book equity falls each spring when the dividend is paid and rises through the year, so the price-to-book ratio depends on the date.</li>
+        <li>The beta of 0.8 is an assumption, not an estimate. Test other values in the <a href="/portfolio/">CAPM calculator</a>.</li>
+      </ul>
+      <p class="disclaimer">This is an analysis exercise, not investment advice.</p>
+      <ul class="sources">
+        <li>Gjensidige Forsikring Group, interim report Q2 2026, and interim report Q4 2025, including financial targets for 2026–2028.</li>
+        <li>Gjensidige Forsikring ASA, stock exchange release on the share savings scheme, 14 July 2026.</li>
+        <li>PwC and Finansforeningen, Risikopremien i det norske markedet 2025 (market risk premium 5%, ten-year government bond yield 4.0% in November 2025).</li>
+      </ul>
+    </section>
+
+  </div>
+</main>
+
+<footer>
+  <div class="wrap">Oslo, Norway</div>
+</footer>
+<script src="valuation.js"></script>
+</body>
+</html>
