@@ -127,18 +127,18 @@
     {
       "date": "2026-09-20",
       "topic": "Other",
-      "title": "CV generator",
-      "url": "/cv-generator/",
+      "title": "CV builder",
+      "url": "/cv-builder/",
       "text": "Upload a CV as PDF or Word, or start from scratch, and download a clean one-page version as a Word file or PDF. The text scales to fit one page, and a writing check flags bullet points without numbers or with weak verbs.",
       "tools": "JavaScript, docx, jsPDF, pdf.js",
       "links": [
         {
-          "text": "Open the generator",
-          "url": "/cv-generator/"
+          "text": "Open the CV builder",
+          "url": "/cv-builder/"
         },
         {
           "text": "Code on GitHub",
-          "url": "https://github.com/hansmeyertischbein/hansmeyertischbein.github.io/tree/main/cv-generator"
+          "url": "https://github.com/hansmeyertischbein/hansmeyertischbein.github.io/tree/main/cv-builder"
         }
       ]
     },

@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" media="(prefers-color-scheme: light)" content="#FBFCFD">
+<meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0F1626">
+<meta name="color-scheme" content="light dark">
+<title>CV builder – Hans Meyer Tischbein</title>
+<meta name="description" content="Upload your CV or start from scratch, and download a clean one-page CV as a Word file or PDF. Everything stays in your browser.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="CV builder">
+<meta property="og:description" content="Upload your CV or start from scratch, and download a clean one-page CV as a Word file or PDF. Everything stays in your browser.">
+<meta property="og:url" content="https://hansmeyertischbein.github.io/cv-builder/">
+<meta property="og:image" content="https://hansmeyertischbein.github.io/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="HMT">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,500&family=Public+Sans:wght@400;500;600&family=Carlito:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/site.css?v=3">
+<link rel="stylesheet" href="cv-builder.css?v=1">
+</head>
+<body class="cvgen" data-view="edit">
+
+<header class="nav">
+  <div class="wrap">
+    <a class="nav-name" href="/">Hans Meyer Tischbein</a>
+    <ul class="nav-links">
+      <li><a href="/cv/">CV</a></li>
+      <li><a href="/projects/">Projects</a></li>
+    </ul>
+  </div>
+</header>
+
+<main>
+  <div class="wrap wide">
+    <header class="page-head">
+      <h1>CV builder</h1>
+      <p class="lede">Upload the CV you have, or start from scratch, and get a clean one-page version as a Word file or PDF. The tool reads your CV into the form, scales the text so it always fits on one page, and points out bullet points that need a number or a stronger verb. Nothing you enter leaves your browser.</p>
+      <ul class="page-links">
+        <li><a href="https://github.com/hansmeyertischbein/hansmeyertischbein.github.io/tree/main/cv-builder">Code on GitHub</a></li>
+      </ul>
+    </header>
+
+    <div class="toolbar" id="tool">
+      <div class="seg" role="group" aria-label="CV language">
+        <button type="button" class="seg-btn" data-lang="en" aria-pressed="true">English</button>
+        <button type="button" class="seg-btn" data-lang="no" aria-pressed="false">Norsk</button>
+      </div>
+      <div class="actions">
+        <button type="button" class="btn btn-primary" id="dl-word">Download Word</button>
+        <button type="button" class="btn" id="dl-pdf">Download PDF</button>
+      </div>
+      <div class="seg view-tabs" role="group" aria-label="Show">
+        <button type="button" class="seg-btn" data-view="edit" aria-pressed="true">Edit</button>
+        <button type="button" class="seg-btn" data-view="preview" aria-pressed="false">Preview</button>
+      </div>
+    </div>
+
+    <div class="workspace">
+      <form class="editor" autocomplete="on">
+        <fieldset class="import">
+          <legend>Start from your CV</legend>
+          <p class="hint">Upload a PDF or Word file and the form fills itself in. The file is read in your browser and never sent anywhere. Check the result: layouts differ, so some lines may land in the wrong place.</p>
+          <div class="file-actions">
+            <label class="btn btn-primary file-btn">Upload CV<input type="file" id="upload" accept=".pdf,.docx,.txt,.json,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document,text/plain,application/json"></label>
+            <button type="button" class="btn btn-quiet" id="load-example">Load example</button>
+            <button type="button" class="btn btn-quiet" id="clear">Clear all</button>
+          </div>
+          <div class="import-report" id="import-report" aria-live="polite" hidden></div>
+        </fieldset>
+        <fieldset class="ai-step" id="ai-step">
+          <legend>Improve the wording with AI</legend>
+          <p class="hint">An AI assistant rewrites your CV with strong verbs, results and numbers, in this layout. It never invents numbers: where one is missing it writes [add number] for you to fill in.</p>
+          <ol class="ai-steps">
+            <li><span class="ai-n">1</span><div><p>Copy the prompt. It contains your CV and the writing rules.</p><div class="file-actions"><button type="button" class="btn btn-primary" id="copy-prompt">Copy prompt</button><span class="hint" id="copy-status" aria-live="polite"></span></div><textarea class="field" id="prompt-box" rows="4" readonly hidden aria-label="The prompt"></textarea></div></li>
+            <li><span class="ai-n">2</span><div><p>Paste it into Claude, or another AI assistant, and send it.</p><div class="file-actions"><a class="btn" href="https://claude.ai/new" target="_blank" rel="noopener">Open Claude ↗</a></div></div></li>
+            <li><span class="ai-n">3</span><div><p>Copy the whole answer, paste it here and press the button. The form and the preview update.</p><label class="f" style="margin:0.5rem 0 0">The assistant's answer<textarea class="field" id="ai-answer" rows="4" placeholder="Paste the whole answer here"></textarea></label><div class="file-actions"><button type="button" class="btn btn-primary" id="ai-import">Use this version</button><span class="hint" id="ai-status" aria-live="polite"></span></div></div></li>
+          </ol>
+        </fieldset>
+        <fieldset><legend>Your details</legend><div class="grid2" id="f-details"></div></fieldset>
+        <fieldset><legend>Summary</legend><div id="f-summary"></div></fieldset>
+        <fieldset><legend>Education</legend><div class="entries" id="list-education"></div></fieldset>
+        <fieldset><legend>Work experience</legend><div class="entries" id="list-experience"></div></fieldset>
+        <fieldset><legend>Organisational roles</legend><div class="entries" id="list-roles"></div><div id="f-courses"></div></fieldset>
+        <fieldset><legend>Skills and languages</legend><div class="grid2" id="f-skills"></div></fieldset>
+        <fieldset class="checks">
+          <legend>Make it stronger</legend>
+          <p class="hint" id="check-summary"></p>
+          <ol class="check-list" id="check-list"></ol>
+        </fieldset>
+        <fieldset class="file-tools">
+          <legend>Your data</legend>
+          <p class="hint">Saved automatically in this browser. Save a file to keep it or move it to another device, and open it again with Upload CV.</p>
+          <div class="file-actions">
+            <button type="button" class="btn" id="save-file">Save to file</button>
+          </div>
+        </fieldset>
+      </form>
+
+      <section class="preview" aria-label="Preview">
+        <div class="stage" id="cv-stage">
+          <div class="cv-page" id="cv-page"><div class="cv-content" id="cv-content"></div></div>
+        </div>
+        <p class="fit" id="fit" aria-live="polite"></p>
+      </section>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <div class="wrap">Oslo, Norway</div>
+</footer>
+
+<script src="cv-builder.js?v=1"></script>
+</body>
+</html>

@@ -1,4 +1,4 @@
-// CV generator: a one-page CV with navy headings, right-aligned dates and bullet points.
+// CV builder: a one-page CV with navy headings, right-aligned dates and bullet points.
 // Live preview in HTML, download as Word (docx) or PDF (jsPDF). Upload a CV as PDF, Word,
 // text or JSON and it is read into the form. Everything runs in the browser.
 
