@@ -8,6 +8,110 @@
   "entries": [
     {
       "date": "2026-10-11",
+      "topic": "Finance",
+      "title": "Taylor rule for Norges Bank",
+      "url": "/taylor-rule/",
+      "text": "What a simple Taylor rule says Norway’s policy rate should be, against what Norges Bank actually set since 2015, with data from Norges Bank and Statistics Norway. An AI agent updates it after every rate decision.",
+      "tools": "Monetary policy, Hodrick-Prescott filter, Python, JavaScript",
+      "links": [
+        {
+          "text": "Open the page",
+          "url": "/taylor-rule/"
+        },
+        {
+          "text": "Code and data on GitHub",
+          "url": "https://github.com/hansmeyertischbein/hansmeyertischbein.github.io/tree/main/taylor-rule"
+        }
+      ]
+    },
+    {
+      "date": "2026-10-11",
+      "topic": "Finance",
+      "title": "Bonds and the yield curve",
+      "url": "/bonds/",
+      "text": "The Norwegian government yield curve from Norges Bank’s daily data, and a calculator for price, duration, convexity and what a rate shock does to a bond.",
+      "tools": "Fixed income, duration, convexity, JavaScript",
+      "links": [
+        {
+          "text": "Open the page",
+          "url": "/bonds/"
+        },
+        {
+          "text": "Code and data on GitHub",
+          "url": "https://github.com/hansmeyertischbein/hansmeyertischbein.github.io/tree/main/bonds"
+        }
+      ]
+    },
+    {
+      "date": "2026-10-11",
+      "topic": "Finance",
+      "title": "Option pricing",
+      "url": "/options/",
+      "text": "Black–Scholes and binomial pricing side by side, with the Greeks, early exercise for American options and a check against the textbook examples.",
+      "tools": "Derivatives, Black–Scholes, binomial trees, JavaScript",
+      "links": [
+        {
+          "text": "Open the calculator",
+          "url": "/options/"
+        },
+        {
+          "text": "Code on GitHub",
+          "url": "https://github.com/hansmeyertischbein/hansmeyertischbein.github.io/tree/main/options"
+        }
+      ]
+    },
+    {
+      "date": "2026-10-11",
+      "topic": "Finance",
+      "title": "LBO calculator",
+      "url": "/lbo/",
+      "text": "A leveraged buyout of a fictional company: set the price, the debt and the plan, and see the IRR, the money multiple, where the gain comes from and how sensitive it is to the exit price.",
+      "tools": "Private equity, LBO modelling, JavaScript",
+      "links": [
+        {
+          "text": "Open the calculator",
+          "url": "/lbo/"
+        },
+        {
+          "text": "Code on GitHub",
+          "url": "https://github.com/hansmeyertischbein/hansmeyertischbein.github.io/tree/main/lbo"
+        }
+      ]
+    },
+    {
+      "date": "2026-10-11",
+      "topic": "Strategy and decisions",
+      "title": "Case interview trainer",
+      "url": "/case-trainer/",
+      "text": "Five practice cases with a timer, exhibits, answer checks and model answers, from market sizing to profitability and investment cases, plus a mental maths drill.",
+      "tools": "Case interviews, issue trees, JavaScript",
+      "links": [
+        {
+          "text": "Start a case",
+          "url": "/case-trainer/"
+        },
+        {
+          "text": "Code on GitHub",
+          "url": "https://github.com/hansmeyertischbein/hansmeyertischbein.github.io/tree/main/case-trainer"
+        }
+      ]
+    },
+    {
+      "date": "2026-10-11",
+      "topic": "Other",
+      "title": "How I work with AI agents",
+      "url": "/ai-agents/",
+      "text": "The scheduled agents behind this site and my working day, the rules that check their output, and four times they got it wrong.",
+      "tools": "AI agents, automation, quality control",
+      "links": [
+        {
+          "text": "Read it",
+          "url": "/ai-agents/"
+        }
+      ]
+    },
+    {
+      "date": "2026-10-11",
       "topic": "Strategy and decisions",
       "title": "Market analysis: Norwegian grocery retail",
       "url": "/markets/norwegian-grocery-retail/",

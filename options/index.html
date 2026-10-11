@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" media="(prefers-color-scheme: light)" content="#FBFCFD">
+<meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0F1626">
+<meta name="color-scheme" content="light dark">
+<title>Option pricing – Hans Meyer Tischbein</title>
+<meta name="description" content="Black–Scholes and binomial option pricing with Greeks, charts and a check against textbook examples.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Option pricing">
+<meta property="og:description" content="Black–Scholes and binomial option pricing with Greeks, charts and a check against textbook examples.">
+<meta property="og:url" content="https://hansmeyertischbein.github.io/options/">
+<meta property="og:image" content="https://hansmeyertischbein.github.io/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="HMT">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,500&family=Public+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/site.css?v=3">
+<link rel="stylesheet" href="/assets/tools.css?v=1">
+<link rel="stylesheet" href="/assets/charts.css?v=1">
+</head>
+<body>
+
+<header class="nav">
+  <div class="wrap">
+    <a class="nav-name" href="/">Hans Meyer Tischbein</a>
+    <ul class="nav-links">
+      <li><a href="/cv/">CV</a></li>
+      <li><a href="/projects/">Projects</a></li>
+    </ul>
+  </div>
+</header>
+
+<main>
+  <div class="wrap">
+    <header class="page-head">
+      <h1>Option pricing</h1>
+      <p class="lede">Price a call or a put with Black–Scholes and with a binomial tree, read the Greeks, and see why an American put can be worth more than a European one.</p>
+      <ul class="page-links">
+        <li><a href="#formulas">Formulas</a></li>
+        <li><a href="#check">Check against the textbook</a></li>
+        <li><a href="https://github.com/hansmeyertischbein/hansmeyertischbein.github.io/tree/main/options">Code on GitHub</a></li>
+      </ul>
+    </header>
+
+    <section class="block" aria-labelledby="in-h">
+      <h2 id="in-h">The option</h2>
+      <div class="control" style="margin-bottom:1.25rem">
+        <span id="type-l">Type</span>
+        <div class="seg" role="group" aria-labelledby="type-l">
+          <button type="button" data-type="call" aria-pressed="true">Call</button>
+          <button type="button" data-type="put" aria-pressed="false">Put</button>
+        </div>
+      </div>
+      <div class="fields">
+        <label>Share price, S<input class="field" type="number" inputmode="decimal" enterkeyhint="done" id="o-S" value="100" step="1" min="0.01"></label>
+        <label>Strike, K<input class="field" type="number" inputmode="decimal" enterkeyhint="done" id="o-K" value="100" step="1" min="0.01"></label>
+        <label>Time to expiry, years<input class="field" type="number" inputmode="decimal" enterkeyhint="done" id="o-T" value="0.5" step="0.05" min="0.01"></label>
+        <label>Risk-free rate, % a year<input class="field" type="number" inputmode="decimal" enterkeyhint="done" id="o-r" value="4.5" step="0.25"><span class="hint">Continuously compounded</span></label>
+        <label>Volatility, % a year<input class="field" type="number" inputmode="decimal" enterkeyhint="done" id="o-v" value="25" step="1" min="0.1"></label>
+        <label>Dividend yield, % a year<input class="field" type="number" inputmode="decimal" enterkeyhint="done" id="o-q" value="0" step="0.25" min="0"></label>
+        <label>Steps in the tree<input class="field" type="number" inputmode="numeric" enterkeyhint="done" id="o-n" value="100" step="10" min="1" max="1000"></label>
+      </div>
+      <p class="hint" style="margin-top:1rem"><button type="button" class="btn btn-quiet" id="ex-hull">Load the textbook example</button> <button type="button" class="btn btn-quiet" id="ex-amput">Load the American put example</button></p>
+    </section>
+
+    <section class="block" aria-labelledby="out-h">
+      <h2 id="out-h">Price</h2>
+      <p class="verdict" id="verdict"></p>
+      <dl class="kpis" id="prices"></dl>
+      <h3>The Greeks</h3>
+      <div class="table-wrap">
+        <table class="data-table" id="greeks">
+          <thead><tr><th>Greek</th><th>Value</th><th>What it means here</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+      <p class="hint">Vega and rho per 1 percentage point, theta per calendar day.</p>
+    </section>
+
+    <section class="block" aria-labelledby="ch-h">
+      <h2 id="ch-h">Value against the share price</h2>
+      <p>Before expiry the option is worth more than its payoff because the share can still move. That extra is the time value, and it is largest when the option is at the money.</p>
+      <div id="chart-value"></div>
+      <div class="control" style="margin:2rem 0 0.75rem">
+        <span id="greek-l">Show a Greek against the share price</span>
+        <div class="seg" role="group" aria-labelledby="greek-l" id="greek-pick">
+          <button type="button" data-g="delta" aria-pressed="true">Delta</button>
+          <button type="button" data-g="gamma" aria-pressed="false">Gamma</button>
+          <button type="button" data-g="vega" aria-pressed="false">Vega</button>
+          <button type="button" data-g="theta" aria-pressed="false">Theta</button>
+        </div>
+      </div>
+      <div id="chart-greek"></div>
+    </section>
+
+    <section class="block" aria-labelledby="tree-h">
+      <h2 id="tree-h">The binomial tree converges</h2>
+      <p>A binomial tree lets the share go up or down each step. With more steps the European price zigzags towards the Black–Scholes price. The American price sits on or above it, because the holder can exercise early.</p>
+      <div id="chart-conv"></div>
+      <h3>The first three steps of the tree</h3>
+      <p class="note" id="tree-note"></p>
+      <div class="table-wrap"><table class="data-table" id="tree"></table></div>
+    </section>
+
+    <section class="block" id="formulas" aria-labelledby="f-h">
+      <h2 id="f-h">Formulas</h2>
+      <p class="formula">C = S e<sup>−qT</sup> N(d<sub>1</sub>) − K e<sup>−rT</sup> N(d<sub>2</sub>)<br>P = K e<sup>−rT</sup> N(−d<sub>2</sub>) − S e<sup>−qT</sup> N(−d<sub>1</sub>)</p>
+      <p class="formula">d<sub>1</sub> = [ln(S/K) + (r − q + σ²/2)T] / (σ√T), &nbsp; d<sub>2</sub> = d<sub>1</sub> − σ√T</p>
+      <ul>
+        <li><strong>Put–call parity</strong> for European options: C − P = S e<sup>−qT</sup> − K e<sup>−rT</sup>. The page checks it on every change.</li>
+        <li><strong>Binomial tree</strong> (Cox, Ross and Rubinstein): u = e<sup>σ√Δt</sup>, d = 1/u, risk-neutral probability p = (e<sup>(r−q)Δt</sup> − d)/(u − d). Work backwards from the payoffs, discounting by e<sup>−rΔt</sup>. For an American option, take the larger of that value and exercising now at every node.</li>
+        <li><strong>Delta</strong> N(d<sub>1</sub>)e<sup>−qT</sup> for a call, (N(d<sub>1</sub>) − 1)e<sup>−qT</sup> for a put. <strong>Gamma</strong> e<sup>−qT</sup>N′(d<sub>1</sub>)/(Sσ√T). <strong>Vega</strong> S e<sup>−qT</sup>N′(d<sub>1</sub>)√T.</li>
+      </ul>
+      <p class="note">Black–Scholes assumes constant volatility and interest rates, no transaction costs and log-normal share prices. Real markets show a volatility smile, so traders quote options in implied volatility rather than price.</p>
+    </section>
+
+    <section class="block" id="check" aria-labelledby="c-h">
+      <h2 id="c-h">Check against the textbook</h2>
+      <p>The calculator reproduces two worked examples from John C. Hull, <em>Options, Futures, and Other Derivatives</em>:</p>
+      <div class="table-wrap">
+        <table class="data-table" id="checks">
+          <thead><tr><th>Example</th><th>Hull</th><th>This page</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+      <p class="hint">Hull rounds to cents. The American put uses a five-step tree, so its value differs from the 100-step value above.</p>
+    </section>
+
+    <section class="block" aria-labelledby="src-h">
+      <h2 id="src-h">Sources</h2>
+      <ol class="sources-list">
+        <li>Fischer Black and Myron Scholes (1973), <a href="https://doi.org/10.1086/260062">The Pricing of Options and Corporate Liabilities</a>, Journal of Political Economy 81(3).</li>
+        <li>Robert C. Merton (1973), <a href="https://doi.org/10.2307/3003143">Theory of Rational Option Pricing</a>, Bell Journal of Economics and Management Science 4(1). Adds the dividend yield.</li>
+        <li>John C. Cox, Stephen A. Ross and Mark Rubinstein (1979), <a href="https://doi.org/10.1016/0304-405X(79)90015-1">Option pricing: A simplified approach</a>, Journal of Financial Economics 7(3).</li>
+        <li>John C. Hull, Options, Futures, and Other Derivatives, Pearson. Worked examples used for the check above.</li>
+      </ol>
+    </section>
+  </div>
+</main>
+
+<footer>
+  <div class="wrap">Oslo, Norway</div>
+</footer>
+
+<script src="/assets/charts.js?v=1"></script>
+<script src="options.js?v=1"></script>
+</body>
+</html>

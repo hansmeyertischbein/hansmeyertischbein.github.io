@@ -1,0 +1,52 @@
+/* Shared pieces for the calculator and data pages (Taylor rule, bonds, options, LBO, case trainer, AI agents) */
+.page-meta { display: flex; flex-wrap: wrap; gap: 0.25rem 1rem; margin: 1.25rem 0 0; color: var(--muted); font-size: 0.9rem; }
+.ai-note { margin: 0.75rem 0 0; font-size: 0.875rem; color: var(--muted); max-width: 38rem; }
+.wrap.wide { max-width: 60rem; }
+
+.block p, .block ul, .block ol { max-width: 38rem; }
+.block > p { margin: 0 0 1rem; }
+.block ul, .block ol { padding-left: 1.1rem; }
+.block li { margin: 0.35rem 0; }
+.block h3 { margin: 2rem 0 0.75rem; color: var(--ink); font: 600 1rem/1.4 var(--sans); }
+
+/* Controls */
+.controls { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 15rem), 1fr)); gap: 1.1rem 1.5rem; margin: 0 0 1.5rem; }
+.control { display: grid; gap: 0.3rem; font-size: 0.875rem; color: var(--muted); align-content: start; min-width: 0; }
+.control .range-row output { font-size: 0.95rem; }
+.control select, .control input[type="number"] { color: var(--ink); }
+.control-actions { display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center; }
+.seg { display: inline-flex; border: 1px solid var(--rule); border-radius: 6px; padding: 2px; gap: 2px; flex-wrap: wrap; }
+.seg button { border: 0; background: transparent; padding: 0.4rem 0.75rem; border-radius: 4px; font-size: 0.9rem; color: var(--muted); cursor: pointer; transition: background-color 150ms ease, color 150ms ease; }
+.seg button[aria-pressed="true"] { background: var(--ink); color: var(--paper); }
+.seg button:active { transform: scale(0.97); }
+
+/* Key figures with explanation underneath */
+.kpis { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 10.5rem), 1fr)); gap: 1.5rem 1.25rem; margin: 0 0 1.5rem; }
+.kpis div { min-width: 0; }
+.kpis dt { font-size: 0.8rem; color: var(--muted); margin-bottom: 0.3rem; }
+.kpis dd { margin: 0; font: 400 1.75rem/1.1 var(--serif); font-variant-numeric: tabular-nums lining-nums; }
+.kpis dd small { display: block; font: 400 0.8rem/1.4 var(--sans); color: var(--muted); margin-top: 0.3rem; }
+
+.verdict { font: 400 clamp(1.25rem, 3.6vw, 1.5rem)/1.4 var(--serif); margin: 0 0 1.5rem; max-width: 38rem; }
+.note { font-size: 0.875rem; color: var(--muted); max-width: 38rem; }
+.sources-list { font-size: 0.875rem; color: var(--muted); padding-left: 1.25rem !important; }
+.sources-list li { margin: 0.4rem 0; overflow-wrap: anywhere; }
+.num { font-variant-numeric: tabular-nums; }
+.pos { color: var(--ink); }
+.neg { color: var(--ink); }
+
+/* Heat table: one hue, light to dark, text stays ink */
+.heat td { position: relative; }
+.heat td[data-v] { background: color-mix(in srgb, var(--c1) var(--w, 0%), transparent); }
+.heat td.base { outline: 2px solid var(--ink); outline-offset: -2px; font-weight: 600; }
+.heat th[scope="row"] { text-align: left; font-weight: 600; color: var(--muted); font-size: 0.8rem; }
+
+.two-charts { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 22rem), 1fr)); gap: 1.5rem 2rem; }
+.two-charts > div { min-width: 0; }
+
+@media (max-width: 34rem) {
+  .kpis dd { font-size: 1.5rem; }
+}
+
+.btn-primary { background: var(--ink); border-color: var(--ink); color: var(--paper); }
+@media (hover: hover) and (pointer: fine) { .btn-primary:hover { border-color: var(--ink); opacity: 0.9; } }

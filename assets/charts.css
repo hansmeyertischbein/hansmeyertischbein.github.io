@@ -1,0 +1,65 @@
+/* Shared chart styles. Series colours were checked for colour-blind separation
+   and contrast against the page background in both light and dark mode. */
+:root {
+  --c1: #2a78d6;
+  --c2: #eb6834;
+  --c3: #1baf7a;
+  --c-grid: #E6EAF0;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --c1: #3987e5;
+    --c2: #d95926;
+    --c3: #199e70;
+    --c-grid: #1E2840;
+  }
+}
+
+.chart-wrap { position: relative; margin: 1.25rem 0 0; }
+.chart-title { font: 600 0.95rem/1.4 var(--sans); color: var(--ink); margin: 0; }
+.chart-sub { font-size: 0.85rem; color: var(--muted); margin: 0.15rem 0 0; }
+.chart-svg { display: block; width: 100%; height: auto; overflow: visible; touch-action: pan-y; user-select: none; -webkit-user-select: none; }
+.chart-svg text { font-family: var(--sans); font-size: 12px; fill: var(--muted); font-variant-numeric: tabular-nums; }
+.chart-svg .ch-label { fill: var(--ink); font-weight: 600; }
+.chart-svg .ch-grid { stroke: var(--c-grid); stroke-width: 1; }
+.chart-svg .ch-zero { stroke: var(--muted); stroke-width: 1; opacity: 0.6; }
+.chart-svg .ch-axis { stroke: var(--rule); stroke-width: 1; }
+.chart-svg .ch-ref { stroke: var(--muted); stroke-width: 1; stroke-dasharray: 3 3; }
+.chart-svg .ch-cross { stroke: var(--muted); stroke-width: 1; }
+.chart-svg .ch-line { fill: none; stroke-width: 2; stroke-linejoin: round; stroke-linecap: round; }
+.chart-svg .ch-dash { stroke-dasharray: 5 4; }
+.chart-svg .ch-band { opacity: 0.12; }
+.chart-svg .ch-dot { stroke: var(--paper); stroke-width: 2; }
+.chart-svg .ch-bar { shape-rendering: geometricPrecision; }
+.chart-svg .ch-hit { fill: transparent; }
+
+.chart-legend { display: flex; flex-wrap: wrap; gap: 0.35rem 1.1rem; margin: 0.6rem 0 0; padding: 0; list-style: none; font-size: 0.85rem; color: var(--muted); }
+.chart-legend li { display: inline-flex; align-items: center; gap: 0.4rem; }
+.chart-legend i { display: inline-block; width: 14px; height: 0; border-top: 2px solid currentColor; }
+.chart-legend i.sq { height: 10px; border: 0; border-radius: 2px; background: currentColor; width: 10px; }
+.chart-legend i.dash { border-top-style: dashed; }
+
+.chart-tip {
+  position: absolute; top: 0; left: 0; z-index: 3; pointer-events: none;
+  min-width: 8rem; max-width: 15rem; padding: 0.5rem 0.65rem; border-radius: 6px;
+  background: var(--paper); border: 1px solid var(--rule); box-shadow: 0 4px 16px rgba(15, 22, 38, 0.12);
+  font-size: 0.8rem; line-height: 1.45; color: var(--ink); opacity: 0; transform: translateY(2px);
+  transition: opacity 120ms ease, transform 120ms var(--ease-out);
+}
+.chart-tip.on { opacity: 1; transform: none; }
+.chart-tip .t-head { font-weight: 600; margin-bottom: 0.2rem; }
+.chart-tip .t-row { display: grid; grid-template-columns: 10px minmax(0, 1fr) auto; gap: 0.4rem; align-items: center; }
+.chart-tip .t-row i { width: 10px; height: 2px; background: currentColor; }
+.chart-tip .t-row span:last-child { font-variant-numeric: tabular-nums; text-align: right; }
+.chart-tip .t-name { color: var(--muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+.chart-table { margin-top: 0.5rem; font-size: 0.875rem; }
+.chart-table summary { cursor: pointer; color: var(--navy); width: fit-content; padding: 0.25rem 0; }
+.chart-table .table-wrap { max-height: 22rem; overflow: auto; margin-top: 0.5rem; }
+.chart-table thead th { position: sticky; top: 0; background: var(--paper); }
+
+@media (prefers-reduced-motion: reduce) { .chart-tip { transition: none; } }
+@media (forced-colors: active) {
+  .chart-svg .ch-line { stroke: CanvasText; }
+  .chart-svg .ch-bar { fill: CanvasText; }
+}

@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" media="(prefers-color-scheme: light)" content="#FBFCFD">
+<meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0F1626">
+<meta name="color-scheme" content="light dark">
+<title>Bonds and the yield curve – Hans Meyer Tischbein</title>
+<meta name="description" content="Price a bond, see its duration and convexity, and read the Norwegian government yield curve with data from Norges Bank.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Bonds and the yield curve">
+<meta property="og:description" content="Price a bond, see its duration and convexity, and read the Norwegian government yield curve with data from Norges Bank.">
+<meta property="og:url" content="https://hansmeyertischbein.github.io/bonds/">
+<meta property="og:image" content="https://hansmeyertischbein.github.io/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="HMT">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,500&family=Public+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/site.css?v=3">
+<link rel="stylesheet" href="/assets/tools.css?v=1">
+<link rel="stylesheet" href="/assets/charts.css?v=1">
+</head>
+<body>
+
+<header class="nav">
+  <div class="wrap">
+    <a class="nav-name" href="/">Hans Meyer Tischbein</a>
+    <ul class="nav-links">
+      <li><a href="/cv/">CV</a></li>
+      <li><a href="/projects/">Projects</a></li>
+    </ul>
+  </div>
+</header>
+
+<main>
+  <div class="wrap">
+    <header class="page-head">
+      <h1>Bonds and the yield curve</h1>
+      <p class="lede">What the Norwegian government yield curve says about interest rates ahead, and a calculator that prices a bond and shows how much it moves when yields change.</p>
+      <p class="page-meta"><span id="m-data">Yields from Norges Bank, latest 8 October 2026</span></p>
+      <ul class="page-links">
+        <li><a href="#calc">Bond calculator</a></li>
+        <li><a href="#formulas">Formulas</a></li>
+        <li><a href="https://github.com/hansmeyertischbein/hansmeyertischbein.github.io/tree/main/bonds">Code and data on GitHub</a></li>
+      </ul>
+    </header>
+
+    <section class="block" aria-labelledby="curve-h">
+      <h2 id="curve-h">The Norwegian yield curve</h2>
+      <p class="verdict" id="curve-verdict"></p>
+      <p class="chart-title">Yield on Norwegian government securities by maturity, %</p>
+      <p class="chart-sub">Treasury bills up to 12 months, government bonds from 3 years. Each point is the security closest to that maturity.</p>
+      <div id="chart-curve"></div>
+      <div id="curve-text"></div>
+    </section>
+
+    <section class="block" aria-labelledby="time-h">
+      <h2 id="time-h">Short and long rates since May</h2>
+      <p>Daily yields at the close. The dashed lines mark Norges Bank's rate decisions. The 3-month bill follows the policy rate and expectations for the next few months; the 10-year bond follows expectations further out and the global bond market.</p>
+      <div id="chart-time"></div>
+    </section>
+
+    <section class="block" id="calc" aria-labelledby="calc-h">
+      <h2 id="calc-h">Bond calculator</h2>
+      <p>A fixed-rate bond valued on a coupon date. Norwegian government bonds pay coupons once a year. The yield starts at today's Norwegian government yield for the chosen maturity, read off the curve above.</p>
+      <div class="fields">
+        <label>Coupon, % a year<input class="field" type="number" inputmode="decimal" enterkeyhint="done" id="b-c" value="4" step="0.125" min="0"></label>
+        <label>Years to maturity<input class="field" type="number" inputmode="numeric" enterkeyhint="done" id="b-n" value="10" step="1" min="1" max="50"></label>
+        <label>Yield to maturity, %<input class="field" type="number" inputmode="decimal" enterkeyhint="done" id="b-y" step="0.01"><span class="hint" id="b-y-hint"></span></label>
+        <label>Coupons a year
+          <select class="field" id="b-m"><option value="1" selected>1, as in Norway</option><option value="2">2, as in the US</option><option value="4">4</option></select>
+        </label>
+      </div>
+      <p class="hint"><button type="button" class="btn btn-quiet" id="b-reset">Use today's yield for this maturity</button></p>
+
+      <dl class="kpis" id="b-out" style="margin-top:1.5rem"></dl>
+      <p class="verdict" id="b-verdict"></p>
+
+      <p class="chart-title">Price against yield</p>
+      <p class="chart-sub">Price per 100 face value. Duration alone is a straight line; adding convexity bends it towards the true price.</p>
+      <div id="chart-py"></div>
+
+      <h3>If yields move overnight</h3>
+      <div class="table-wrap">
+        <table class="data-table" id="b-shocks">
+          <thead><tr><th>Yield change</th><th>New price</th><th>Exact change</th><th>Duration estimate</th><th>With convexity</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+
+      <h3>Cash flows</h3>
+      <div class="table-wrap">
+        <table class="data-table" id="b-cf">
+          <thead><tr><th>Year</th><th>Cash flow</th><th>Present value</th><th>Share of price</th><th>Year × share</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+      <p class="hint">Macaulay duration is the sum of the last column: the average time until you are paid, weighted by present value.</p>
+    </section>
+
+    <section class="block" id="formulas" aria-labelledby="f-h">
+      <h2 id="f-h">Formulas</h2>
+      <p>With coupon C per period, face value F, yield y, m payments a year and n periods:</p>
+      <p class="formula">P = Σ<sub>k=1..n</sub> C / (1 + y/m)<sup>k</sup> + F / (1 + y/m)<sup>n</sup></p>
+      <ul>
+        <li><strong>Macaulay duration</strong> D = Σ t<sub>k</sub> · PV<sub>k</sub> / P, in years.</li>
+        <li><strong>Modified duration</strong> D* = D / (1 + y/m). A 1 point rise in yield cuts the price by about D* percent.</li>
+        <li><strong>Convexity</strong> K = Σ CF<sub>k</sub> · k(k + 1) / (1 + y/m)<sup>k+2</sup> / (P · m²).</li>
+        <li><strong>Price change</strong> ΔP/P ≈ −D* · Δy + ½ · K · (Δy)².</li>
+        <li><strong>DV01</strong> = D* · P · 0.0001, the krone change in price per 100 face value for a 0.01 point move.</li>
+      </ul>
+      <p class="note">The calculator assumes settlement on a coupon date, so there is no accrued interest, and a flat yield for all cash flows. Real government bonds trade with accrued interest and are better priced off a zero-coupon curve.</p>
+    </section>
+
+    <section class="block" aria-labelledby="src-h">
+      <h2 id="src-h">Sources</h2>
+      <ol class="sources-list">
+        <li>Norges Bank, <a href="https://www.norges-bank.no/en/topics/statistics/norwegian-government-securities/generiske-statsrenter/">Generic yields on Norwegian government securities</a>. Mid yield in the interdealer market at 16:00, for the security closest to each maturity. Daily data 21 May to 8 October 2026, read on 11 October 2026.</li>
+        <li>Norges Bank, <a href="https://www.norges-bank.no/en/topics/monetary-policy/policy-rate/Key-policy-rate-Monetary-policy-meetings-and-changes-in-the-policy-rate/">Key policy rate: meetings and changes</a>.</li>
+        <li>Norges Bank, <a href="https://www.norges-bank.no/en/news-events/publications/Monetary-Policy-Report/2026/mpr-32026/">Monetary Policy Report 3/2026</a>. The policy rate forecast.</li>
+      </ol>
+    </section>
+  </div>
+</main>
+
+<footer>
+  <div class="wrap">Oslo, Norway</div>
+</footer>
+
+<script src="/assets/charts.js?v=1"></script>
+<script src="bonds.js?v=1"></script>
+</body>
+</html>
