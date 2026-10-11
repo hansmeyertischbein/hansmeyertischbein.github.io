@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" media="(prefers-color-scheme: light)" content="#FBFCFD">
+<meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0F1626">
+<meta name="color-scheme" content="light dark">
+<title>Snake – Hans Meyer Tischbein</title>
+<meta name="description" content="The classic Snake game, with swipe controls for phones and arrow keys on a keyboard.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Snake">
+<meta property="og:description" content="The classic Snake game, with swipe controls for phones and arrow keys on a keyboard.">
+<meta property="og:url" content="https://hansmeyertischbein.github.io/games/snake/">
+<meta property="og:image" content="https://hansmeyertischbein.github.io/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="HMT">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,500&family=Public+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/site.css?v=3">
+<link rel="stylesheet" href="/assets/tools.css?v=1">
+<link rel="stylesheet" href="/assets/charts.css?v=1">
+<link rel="stylesheet" href="/games/games.css?v=1">
+<link rel="stylesheet" href="snake.css?v=1">
+</head>
+<body>
+
+<header class="nav">
+  <div class="wrap">
+    <a class="nav-name" href="/">Hans Meyer Tischbein</a>
+    <ul class="nav-links">
+      <li><a href="/cv/">CV</a></li>
+      <li><a href="/projects/">Projects</a></li>
+    </ul>
+  </div>
+</header>
+
+<main>
+  <div class="wrap">
+    <header class="game-head">
+      <p class="crumbs"><a href="/games/">Games</a></p>
+      <h1>Snake</h1>
+      <p class="lede">Eat, grow and keep away from the walls and your own tail. The snake speeds up as it grows.</p>
+    </header>
+
+    <div class="game">
+      <div class="hud">
+        <dl class="stats">
+          <div><dt>Score</dt><dd id="score">0</dd></div>
+          <div><dt>Best</dt><dd id="best">0</dd></div>
+        </dl>
+        <div class="controls-row">
+          <div class="seg" role="group" aria-label="Walls" id="mode">
+            <button type="button" data-walls="1">Walls</button>
+            <button type="button" data-walls="0">Wrap</button>
+          </div>
+          <button type="button" class="btn" id="pause">Pause</button>
+        </div>
+      </div>
+      <div class="board-wrap">
+        <canvas class="snake" id="board" aria-label="Snake board" role="img"></canvas>
+        <div class="overlay on" id="overlay"><div><strong id="ov-title">Snake</strong><p id="ov-text">Swipe on the board or use the arrow keys.</p><button type="button" class="btn btn-primary" id="start">Start</button></div></div>
+      </div>
+      <div class="dpad" aria-label="Direction buttons">
+        <button type="button" data-dir="up" aria-label="Up">▲</button>
+        <button type="button" data-dir="left" aria-label="Left">◀</button>
+        <button type="button" data-dir="down" aria-label="Down">▼</button>
+        <button type="button" data-dir="right" aria-label="Right">▶</button>
+      </div>
+      <p class="game-help">Arrow keys or <kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> to steer, <kbd>Space</kbd> to pause. On a phone, swipe on the board or use the buttons. In Wrap mode the snake comes out on the other side.</p>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <div class="wrap">Oslo, Norway</div>
+</footer>
+
+<script src="/games/games.js?v=1"></script>
+<script src="snake.js?v=1"></script>
+</body>
+</html>
