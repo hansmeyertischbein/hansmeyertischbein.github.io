@@ -1,5 +1,5 @@
-// CV generator: a one-page CV with navy headings, right-aligned dates and bullet points,
-// the same layout as my own CV. Live preview in HTML, download as Word (docx) or PDF (print).
+// CV generator: a one-page CV with navy headings, right-aligned dates and bullet points.
+// Live preview in HTML, download as Word (docx) or PDF (print).
 // Hans Meyer Tischbein — https://hansmeyertischbein.github.io/cv-generator/
 
 /* ---------- Content model ---------- */
@@ -21,27 +21,27 @@ const LABELS = {
 
 const EXAMPLE = {
   lang: 'en',
-  name: 'Ingrid Solberg',
-  location: 'Oslo',
-  phone: '+47 400 00 000',
-  email: 'ingrid.solberg@example.com',
-  linkedin: 'linkedin.com/in/ingrid-solberg',
-  summary: 'Analytical economics student with experience from banking, customer service and student organisations. Comfortable with large data sets and quick to turn numbers into recommendations.',
+  name: 'Sara Nilsen',
+  location: 'Bergen',
+  phone: '+47 900 00 000',
+  email: 'sara.nilsen@example.com',
+  linkedin: 'linkedin.com/in/sara-nilsen',
+  summary: 'Marketing graduate who likes turning customer insight into campaigns that can be measured. Experience from retail, a student newspaper and a summer job in digital marketing.',
   education: [
-    { title: 'MSc in Business, Major in Finance', org: 'BI Norwegian Business School, Oslo', dates: '2026–2028', bullets: 'Courses in corporate finance, investments and econometrics' },
-    { title: 'Bachelor in Economics and Business Administration', org: 'University of Bergen', dates: '2023–2026', bullets: 'GPA: B (4.1 / 5.0)\nBachelor thesis on interest rate pass-through in Norwegian banks' }
+    { title: 'Master in Marketing and Brand Management', org: 'University of Bergen', dates: '2025–2027', bullets: 'Thesis on how loyalty programmes change shopping habits' },
+    { title: 'Bachelor in Media and Communication', org: 'University of Agder', dates: '2022–2025', bullets: 'Exchange semester at Lund University, Sweden' }
   ],
   experience: [
-    { title: 'Customer Advisor, Part-time', org: 'Nordbank', dates: '2024–present', bullets: 'Advise private customers on savings, loans and insurance\nHandle around 40 customer enquiries per day with a satisfaction score above team average' },
-    { title: 'Summer Intern, Finance', org: 'Vestland Energi', dates: '2025', bullets: 'Built a monthly cash flow model in Excel used by the finance team\nPresented a cost analysis to the CFO with three recommendations, two of them implemented' }
+    { title: 'Digital Marketing Assistant, Summer', org: 'Fjord Outdoor AS', dates: '2025', bullets: 'Planned and ran paid social campaigns for the summer season\nWrote a weekly report on reach, clicks and sales for the marketing manager' },
+    { title: 'Store Employee, Part-time', org: 'Bokhuset Bergen', dates: '2022–present', bullets: 'Customer service, displays and stock management\nTrained four new employees' }
   ],
   roles: [
-    { title: 'Head of Events', org: 'Student Finance Society', dates: '2024–2025', bullets: 'Planned eight company presentations with over 400 attendees in total' }
+    { title: 'Editor', org: 'Student newspaper', dates: '2023–2024', bullets: 'Led a team of twelve writers and photographers' }
   ],
-  courses: 'Excel for Financial Modelling\nIntroduction to Python for Data Analysis',
-  dataSkills: 'Excel (advanced), PowerPoint\nPython and R for data analysis\nPower BI',
-  competencies: 'Financial analysis, customer dialogue, structured work',
-  languages: 'Norwegian (native) · English (fluent) · Spanish (basic)',
+  courses: 'Google Analytics Certification\nCopywriting for the web',
+  dataSkills: 'Google Analytics, Meta Ads Manager\nCanva, Figma\nExcel',
+  competencies: 'Campaign planning, copywriting, customer insight',
+  languages: 'Norwegian (native) · English (fluent) · Swedish (good)',
   references: 'Available upon request'
 };
 
@@ -140,7 +140,7 @@ if (typeof module !== 'undefined') module.exports = { buildDocx, EXAMPLE, LABELS
 /* ---------- Browser ---------- */
 
 if (typeof document !== 'undefined') {
-  const STORE = 'cv-generator-v1';
+  const STORE = 'cv-generator-v2';
   const el = id => document.getElementById(id);
   const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
   let cv = load() || clone(EXAMPLE);
@@ -184,8 +184,8 @@ if (typeof document !== 'undefined') {
       const grid = document.createElement('div'); grid.className = 'entry-fields';
       const bind = (label, prop, extra = {}) => field(label, null, { ...extra, get: () => e[prop], set: v => { e[prop] = v; refresh(); dates.textContent = e.dates || ''; } });
       grid.append(
-        bind('Title', 'title', { placeholder: 'Claims Handler' }),
-        bind('Organisation', 'org', { placeholder: 'If P&C Insurance' }),
+        bind('Title', 'title', { placeholder: 'Job title or degree' }),
+        bind('Organisation', 'org', { placeholder: 'Company or school' }),
         bind('Dates', 'dates', { placeholder: '2024–present' }),
         bind('Bullet points', 'bullets', { area: true, rows: 3, hint: 'One per line.' })
       );
