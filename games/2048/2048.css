@@ -1,0 +1,23 @@
+.g2048 { --gap: 0.6rem; position: relative; aspect-ratio: 1; padding: var(--gap); border-radius: 10px; background: color-mix(in srgb, var(--ink) 9%, var(--paper)); touch-action: none; user-select: none; -webkit-user-select: none; }
+.g-cells { display: grid; grid-template-columns: repeat(4, 1fr); grid-template-rows: repeat(4, 1fr); gap: var(--gap); height: 100%; }
+.g-cells span { border-radius: 6px; background: color-mix(in srgb, var(--ink) 6%, var(--paper)); }
+.g-tiles { position: absolute; inset: var(--gap); }
+.tile {
+  --x: 0; --y: 0; position: absolute; left: 0; top: 0;
+  width: calc((100% - 3 * var(--gap)) / 4); height: calc((100% - 3 * var(--gap)) / 4);
+  transform: translate(calc(var(--x) * (100% + var(--gap))), calc(var(--y) * (100% + var(--gap))));
+  transition: transform 110ms var(--ease-out);
+  display: grid; place-items: center; border-radius: 6px;
+  font: 600 clamp(1.4rem, 8vw, 2.3rem)/1 var(--sans); font-variant-numeric: tabular-nums; color: var(--ink);
+  background: color-mix(in srgb, var(--c1) var(--p, 10%), var(--paper));
+}
+.tile.light { color: #fff; }
+.tile.big { background: var(--ink); color: var(--paper); }
+.tile.d3 { font-size: clamp(1.15rem, 6.5vw, 1.9rem); }
+.tile.d4 { font-size: clamp(0.95rem, 5.2vw, 1.55rem); }
+.tile.d5 { font-size: clamp(0.8rem, 4.2vw, 1.25rem); }
+.tile.new { animation: appear 160ms var(--ease-out) 90ms backwards; }
+.tile.merged { animation: merge 180ms var(--ease-out); }
+@keyframes appear { from { opacity: 0; scale: 0.5; } to { opacity: 1; scale: 1; } }
+@keyframes merge { 0% { scale: 1; } 45% { scale: 1.14; } 100% { scale: 1; } }
+@media (prefers-reduced-motion: reduce) { .tile { transition: none; } .tile.new, .tile.merged { animation: none; } }

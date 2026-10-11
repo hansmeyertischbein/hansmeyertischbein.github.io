@@ -7,6 +7,20 @@
   ],
   "entries": [
     {
+      "date": "2026-10-11",
+      "topic": "Other",
+      "title": "Games: Sudoku, Snake, 2048 and Minesweeper",
+      "url": "/games/",
+      "text": "Four classics built for a phone and a keyboard: swipe and tap controls, saved games and best scores, light and dark mode. Every Sudoku is generated in the browser and has exactly one solution.",
+      "tools": "JavaScript, canvas, game design",
+      "links": [
+        {
+          "text": "Play",
+          "url": "/games/"
+        }
+      ]
+    },
+    {
       "date": "2026-10-10",
       "topic": "Finance",
       "title": "Taylor rule for Norges Bank",

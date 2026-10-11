@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" media="(prefers-color-scheme: light)" content="#FBFCFD">
+<meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0F1626">
+<meta name="color-scheme" content="light dark">
+<title>Games – Hans Meyer Tischbein</title>
+<meta name="description" content="Sudoku, Snake, 2048 and Minesweeper, made to play on a phone or with a keyboard.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Games">
+<meta property="og:description" content="Sudoku, Snake, 2048 and Minesweeper, made to play on a phone or with a keyboard.">
+<meta property="og:url" content="https://hansmeyertischbein.github.io/games/">
+<meta property="og:image" content="https://hansmeyertischbein.github.io/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="HMT">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,500&family=Public+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/site.css?v=3">
+<link rel="stylesheet" href="/assets/tools.css?v=1">
+<link rel="stylesheet" href="/assets/charts.css?v=1">
+<link rel="stylesheet" href="/games/games.css?v=1">
+</head>
+<body>
+
+<header class="nav">
+  <div class="wrap">
+    <a class="nav-name" href="/">Hans Meyer Tischbein</a>
+    <ul class="nav-links">
+      <li><a href="/cv/">CV</a></li>
+      <li><a href="/projects/">Projects</a></li>
+    </ul>
+  </div>
+</header>
+
+<main>
+  <div class="wrap">
+    <header class="page-head">
+      <h1>Games</h1>
+      <p class="lede">Four classics for a break between lectures. They work on a phone and with a keyboard, and remember your best scores in this browser.</p>
+    </header>
+
+    <ul class="game-cards">
+      <li class="game-card"><a href="/games/sudoku/">
+        <svg viewBox="0 0 72 72" aria-hidden="true"><rect x="3" y="3" width="66" height="66" rx="6" fill="none" stroke="currentColor" stroke-width="2.5"/><path d="M25 3v66M47 3v66M3 25h66M3 47h66" stroke="currentColor" stroke-width="1.5"/><text x="14" y="20" font-size="13" text-anchor="middle" fill="currentColor" font-family="sans-serif" font-weight="600">5</text><text x="36" y="42" font-size="13" text-anchor="middle" fill="var(--c1)" font-family="sans-serif">3</text><text x="58" y="64" font-size="13" text-anchor="middle" fill="currentColor" font-family="sans-serif" font-weight="600">9</text></svg>
+        <div><h2>Sudoku</h2><p>Three levels, notes, hints and undo. Every puzzle has one solution.</p><span class="best" data-best="sudoku"></span></div></a></li>
+      <li class="game-card"><a href="/games/snake/">
+        <svg viewBox="0 0 72 72" aria-hidden="true"><rect x="3" y="3" width="66" height="66" rx="6" fill="none" stroke="currentColor" stroke-width="2.5"/><path d="M14 52h24V30h20" fill="none" stroke="var(--c3)" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/><circle cx="58" cy="30" r="5.5" fill="currentColor"/><circle cx="24" cy="20" r="5" fill="var(--c2)"/></svg>
+        <div><h2>Snake</h2><p>Swipe or use the arrow keys. With or without walls.</p><span class="best" data-best="snake"></span></div></a></li>
+      <li class="game-card"><a href="/games/2048/">
+        <svg viewBox="0 0 72 72" aria-hidden="true"><rect x="3" y="3" width="66" height="66" rx="8" fill="color-mix(in srgb, currentColor 10%, transparent)"/><rect x="9" y="9" width="25" height="25" rx="4" fill="color-mix(in srgb, var(--c1) 25%, transparent)"/><rect x="38" y="9" width="25" height="25" rx="4" fill="color-mix(in srgb, var(--c1) 50%, transparent)"/><rect x="9" y="38" width="25" height="25" rx="4" fill="color-mix(in srgb, var(--c1) 75%, transparent)"/><rect x="38" y="38" width="25" height="25" rx="4" fill="var(--c1)"/></svg>
+        <div><h2>2048</h2><p>Slide and merge tiles. Undo one move if you slip.</p><span class="best" data-best="2048"></span></div></a></li>
+      <li class="game-card"><a href="/games/minesweeper/">
+        <svg viewBox="0 0 72 72" aria-hidden="true"><rect x="3" y="3" width="66" height="66" rx="6" fill="none" stroke="currentColor" stroke-width="2.5"/><path d="M25 3v66M47 3v66M3 25h66M3 47h66" stroke="currentColor" stroke-width="1" opacity="0.4"/><text x="14" y="20" font-size="13" text-anchor="middle" fill="var(--c1)" font-family="sans-serif" font-weight="700">1</text><text x="36" y="20" font-size="13" text-anchor="middle" fill="var(--c3)" font-family="sans-serif" font-weight="700">2</text><circle cx="58" cy="36" r="6" fill="currentColor"/><path d="M33 52v12M33 52l9 3-9 3" fill="var(--c2)" stroke="var(--c2)" stroke-width="2"/></svg>
+        <div><h2>Minesweeper</h2><p>Safe first click, flags by long-press and three board sizes.</p><span class="best" data-best="mines"></span></div></a></li>
+    </ul>
+  </div>
+</main>
+
+<footer>
+  <div class="wrap">Oslo, Norway</div>
+</footer>
+
+<script src="/games/games.js?v=1"></script>
+<script src="index.js?v=1"></script>
+</body>
+</html>

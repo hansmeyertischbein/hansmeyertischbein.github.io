@@ -1,0 +1,45 @@
+/* Shared styles for the games */
+.game-head { padding: 3.5rem 0 1.25rem; }
+.game-head h1 { font: 400 clamp(2.25rem, 7vw, 3.25rem)/1.08 var(--serif); letter-spacing: -0.015em; margin: 0 0 0.75rem; }
+.game-head .lede { font-size: 1.05rem; }
+.crumbs { font-size: 0.9rem; margin: 0 0 1rem; }
+.crumbs a { color: var(--muted); }
+
+.game { max-width: 32rem; margin: 0 auto 3rem; }
+.game.wide { max-width: 46rem; }
+.hud { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 0.5rem 1rem; margin: 0 0 0.9rem; }
+.stats { display: flex; gap: 1.25rem; margin: 0; }
+.stats div { min-width: 0; }
+.stats dt { font-size: 0.75rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; }
+.stats dd { margin: 0; font: 400 1.5rem/1.1 var(--serif); font-variant-numeric: tabular-nums lining-nums; }
+.controls-row { display: flex; flex-wrap: wrap; gap: 0.4rem; align-items: center; }
+.btn-primary { background: var(--ink); border-color: var(--ink); color: var(--paper); }
+.btn[aria-pressed="true"] { background: var(--ink); border-color: var(--ink); color: var(--paper); }
+.btn:disabled { opacity: 0.45; cursor: default; }
+.seg { display: inline-flex; border: 1px solid var(--rule); border-radius: 6px; padding: 2px; gap: 2px; flex-wrap: wrap; }
+.seg button { border: 0; background: transparent; padding: 0.35rem 0.7rem; border-radius: 4px; font-size: 0.9rem; color: var(--muted); cursor: pointer; transition: background-color 150ms ease, color 150ms ease; }
+.seg button[aria-pressed="true"] { background: var(--ink); color: var(--paper); }
+
+.game-msg { min-height: 1.6em; margin: 0.75rem 0 0; font-size: 0.95rem; color: var(--ink); text-align: center; }
+.game-help { font-size: 0.875rem; color: var(--muted); margin: 1.25rem 0 0; }
+.game-help kbd { font: 600 0.8rem var(--sans); border: 1px solid var(--rule); border-bottom-width: 2px; border-radius: 4px; padding: 0 0.3rem; }
+
+/* Overlay on top of a board */
+.board-wrap { position: relative; }
+.overlay { position: absolute; inset: 0; display: grid; place-items: center; text-align: center; background: color-mix(in srgb, var(--paper) 82%, transparent); border-radius: 8px; z-index: 4;
+  opacity: 0; pointer-events: none; transition: opacity 200ms var(--ease-out); }
+.overlay.on { opacity: 1; pointer-events: auto; }
+.overlay div { display: grid; gap: 0.6rem; justify-items: center; padding: 1rem; }
+.overlay strong { font: 400 2rem/1.1 var(--serif); }
+.overlay p { margin: 0; color: var(--muted); }
+
+/* Games index */
+.game-cards { list-style: none; margin: 0 0 4rem; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 19rem), 1fr)); gap: 1rem; }
+.game-card a { display: grid; grid-template-columns: 4.5rem minmax(0, 1fr); gap: 1rem; align-items: center; padding: 1rem; border: 1px solid var(--rule); border-radius: 8px; color: var(--ink); text-decoration: none; transition: border-color 150ms ease, transform 160ms var(--ease-out); }
+.game-card a:active { transform: scale(0.98); }
+.game-card svg { width: 4.5rem; height: 4.5rem; display: block; }
+.game-card h2 { font: 500 1.35rem/1.2 var(--serif); margin: 0 0 0.25rem; }
+.game-card p { margin: 0; font-size: 0.9rem; color: var(--muted); }
+.game-card .best { display: block; margin-top: 0.35rem; font-size: 0.8rem; color: var(--ink); font-variant-numeric: tabular-nums; }
+@media (hover: hover) and (pointer: fine) { .game-card a:hover { border-color: var(--muted); } }
+@media (prefers-reduced-motion: reduce) { .overlay, .game-card a { transition: none; } }

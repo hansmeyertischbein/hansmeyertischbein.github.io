@@ -1,0 +1,35 @@
+.sudoku {
+  display: grid; grid-template-columns: repeat(9, minmax(0, 1fr)); aspect-ratio: 1;
+  border: 2px solid var(--ink); border-radius: 6px; overflow: hidden; user-select: none; -webkit-user-select: none;
+  background: var(--paper);
+}
+.cell {
+  position: relative; display: grid; place-items: center; min-width: 0; padding: 0; border: 0; margin: 0;
+  border-right: 1px solid var(--rule); border-bottom: 1px solid var(--rule);
+  background: var(--paper); color: var(--c1); font: 400 clamp(1.1rem, 5.6vw, 1.75rem)/1 var(--sans); font-variant-numeric: tabular-nums;
+  cursor: pointer; touch-action: manipulation; transition: background-color 120ms ease;
+}
+.cell:nth-child(9n) { border-right: 0; }
+.cell:nth-child(n+73) { border-bottom: 0; }
+.cell.bx { border-right: 2px solid var(--ink); }
+.cell.by { border-bottom: 2px solid var(--ink); }
+.cell.given { color: var(--ink); font-weight: 600; }
+.cell.peer { background: color-mix(in srgb, var(--c1) 7%, var(--paper)); }
+.cell.same { background: color-mix(in srgb, var(--c1) 18%, var(--paper)); }
+.cell.sel { background: color-mix(in srgb, var(--c1) 30%, var(--paper)); }
+.cell.wrong { color: var(--c2); text-decoration: underline wavy; text-decoration-thickness: 1px; text-underline-offset: 3px; }
+.cell:focus-visible { outline: 2px solid var(--ink); outline-offset: -3px; }
+.notes-grid { position: absolute; inset: 2px; display: grid; grid-template-columns: repeat(3, 1fr); grid-template-rows: repeat(3, 1fr); font-size: clamp(0.5rem, 2.2vw, 0.7rem); color: var(--muted); font-weight: 500; }
+.notes-grid span { display: grid; place-items: center; }
+.cell.pop { animation: pop 260ms var(--ease-out); }
+@keyframes pop { 0% { transform: scale(0.85); } 100% { transform: scale(1); } }
+
+.pad { display: grid; grid-template-columns: repeat(9, minmax(0, 1fr)); gap: 0.35rem; margin: 0.9rem 0 0; }
+.pad button { position: relative; padding: 0.65rem 0 0.75rem; border: 1px solid var(--rule); border-radius: 6px; background: transparent; color: var(--ink);
+  font: 400 clamp(1.15rem, 5vw, 1.5rem)/1 var(--serif); cursor: pointer; touch-action: manipulation; transition: transform 140ms var(--ease-out), opacity 150ms ease; }
+.pad button:active { transform: scale(0.94); }
+.pad button small { position: absolute; left: 0; right: 0; bottom: 0.15rem; font: 500 0.6rem var(--sans); color: var(--muted); }
+.pad button.done { opacity: 0.3; }
+.pad-tools { display: flex; flex-wrap: wrap; gap: 0.4rem; justify-content: center; margin: 0.7rem 0 0; }
+@media (hover: hover) and (pointer: fine) { .pad button:hover { border-color: var(--muted); } .cell:hover:not(.sel) { background: color-mix(in srgb, var(--c1) 12%, var(--paper)); } }
+@media (prefers-reduced-motion: reduce) { .cell.pop { animation: none; } .cell, .pad button { transition: none; } }
