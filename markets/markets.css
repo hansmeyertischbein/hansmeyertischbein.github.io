@@ -1,0 +1,48 @@
+/* Weekly market analysis pages */
+.page-meta { display: flex; flex-wrap: wrap; gap: 0.25rem 1rem; margin: 1.25rem 0 0; color: var(--muted); font-size: 0.9rem; }
+.ai-note { margin: 0.75rem 0 0; font-size: 0.875rem; color: var(--muted); max-width: 38rem; }
+
+.key-points { list-style: none; padding: 0 !important; margin: 0; }
+.key-points li { position: relative; padding: 0.15rem 0 0.15rem 1.4rem; margin: 0.5rem 0; }
+.key-points li::before { content: ""; position: absolute; left: 0; top: 0.72em; width: 0.55rem; height: 2px; background: var(--navy); }
+
+/* Competitor table: first column stays readable when the table scrolls */
+.comp-table td { white-space: normal; min-width: 9rem; vertical-align: top; text-align: left; }
+.comp-table th { text-align: left; }
+.comp-table td:first-child { min-width: 7rem; font-weight: 600; }
+.comp-table td.num, .comp-table th.num { text-align: right; min-width: 4.5rem; white-space: nowrap; }
+
+/* PESTEL */
+.pestel { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 19rem), 1fr)); gap: 1rem; margin-top: 1.25rem; }
+.pestel-card { border: 1px solid var(--rule); border-radius: 6px; padding: 1rem 1.1rem 1.1rem; display: grid; gap: 0.6rem; align-content: start; }
+.pestel-head { display: flex; align-items: baseline; justify-content: space-between; gap: 0.75rem; }
+.pestel-head h3 { font: 500 1.2rem/1.2 var(--serif); color: var(--ink); margin: 0; }
+.pestel-card p { margin: 0 !important; font-size: 0.95rem; }
+.ratings { display: flex; flex-wrap: wrap; gap: 0.35rem; }
+.rating { font-size: 0.75rem; font-weight: 600; letter-spacing: 0.02em; padding: 0.15rem 0.5rem; border-radius: 999px; border: 1px solid var(--rule); color: var(--muted); white-space: nowrap; }
+.rating.high { background: var(--ink); border-color: var(--ink); color: var(--paper); }
+.rating.medium { border-color: var(--muted); color: var(--ink); }
+.rating.headwind::before { content: "↓ "; }
+.rating.tailwind::before { content: "↑ "; }
+.rating.mixed::before { content: "↕ "; }
+
+/* SWOT */
+.swot { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1px; background: var(--rule); border: 1px solid var(--rule); border-radius: 6px; overflow: hidden; margin-top: 1.25rem; }
+.swot > div { background: var(--paper); padding: 1rem 1.1rem; }
+.swot h3 { font: 600 0.8rem/1.4 var(--sans); letter-spacing: 0.08em; text-transform: uppercase; color: var(--navy); margin: 0 0 0.5rem; }
+.swot ul { margin: 0 !important; padding-left: 1.1rem !important; font-size: 0.95rem; }
+.swot li { margin: 0.3rem 0; }
+.swot-axis { font-size: 0.8rem; color: var(--muted); margin: 0.5rem 0 0 !important; }
+
+.watch { counter-reset: w; list-style: none; padding: 0 !important; }
+.watch li { counter-increment: w; position: relative; padding-left: 2rem; margin: 0.75rem 0; }
+.watch li::before { content: counter(w); position: absolute; left: 0; top: 0; font: 400 1.25rem/1.3 var(--serif); color: var(--navy); }
+
+.sources-list { font-size: 0.875rem; color: var(--muted); padding-left: 1.25rem !important; }
+.sources-list li { margin: 0.4rem 0; overflow-wrap: anywhere; }
+.series-nav { display: flex; flex-wrap: wrap; gap: 0.5rem 1.5rem; font-size: 0.95rem; }
+
+@media (max-width: 34rem) {
+  .swot { grid-template-columns: minmax(0, 1fr); }
+}
+.article .outputs { margin: 1.5rem 0; }
