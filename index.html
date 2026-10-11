@@ -7,7 +7,7 @@
 <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0F1626">
 <meta name="color-scheme" content="light dark">
 <title>Hans Meyer Tischbein</title>
-<meta name="description" content="Hans Meyer Tischbein – CV and projects.">
+<meta name="description" content="CV and projects in finance, data analysis and law.">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Hans Meyer Tischbein">
 <meta property="og:description" content="CV and projects in finance, data analysis and law.">
@@ -21,23 +21,22 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,500&family=Public+Sans:wght@400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/site.css?v=2">
+<link rel="stylesheet" href="/site.css?v=3">
 </head>
 <body>
 
 <header class="nav">
   <div class="wrap">
-    <a class="nav-name" href="#top">Hans Meyer Tischbein</a>
+    <a class="nav-name" href="/">Hans Meyer Tischbein</a>
     <ul class="nav-links">
-      <li><a href="#cv">CV</a></li>
-      <li><a href="#projects">Projects</a></li>
+      <li><a href="/cv/">CV</a></li>
+      <li><a href="/projects/">Projects</a></li>
     </ul>
   </div>
 </header>
 
-<main id="top">
+<main>
   <div class="wrap">
-
     <section class="intro">
       <h1><span>Hans Meyer</span><span>Tischbein</span></h1>
       <p>Interested in data analysis, mathematics, finance and law.</p>
@@ -49,135 +48,18 @@
       </ul>
     </section>
 
-    <section class="part" id="cv">
-      <div class="part-head">
-        <h2>CV</h2>
-      </div>
-      <ul class="cv-files">
-        <li><a href="Hans_Meyer_Tischbein_CV_EN.pdf"><span>English</span><span class="cv-meta">PDF</span></a></li>
-        <li lang="no"><a href="Hans_Meyer_Tischbein_CV_NO.pdf"><span>Norsk</span><span class="cv-meta">PDF</span></a></li>
-      </ul>
-    </section>
-
-    <section class="part" id="projects">
-      <div class="part-head">
-        <h2>Projects</h2>
-      </div>
-
-      <div class="project-list">
-        <div class="projects-group">
-          <h3>Finance</h3>
-          <article class="project">
-            <h4>What does Gjensidige’s share price assume?</h4>
-            <p>A justified price-to-book valuation that works backwards from the share price to the return on equity the market is pricing in.</p>
-            <p class="tools">Valuation, residual income model, JavaScript</p>
-            <div class="links">
-            <a href="/valuation/">Open the calculator</a>
-            <a href="https://github.com/hansmeyertischbein/hansmeyertischbein.github.io/tree/main/valuation">Code on GitHub</a>
-            </div>
-          </article>
-          <article class="project">
-            <h4>Portfolio and CAPM calculator</h4>
-            <p>An interactive efficient frontier for two assets, the best risk-adjusted mix and the required return on equity.</p>
-            <p class="tools">Portfolio theory, CAPM, JavaScript</p>
-            <div class="links">
-            <a href="/portfolio/">Open the calculator</a>
-            <a href="https://github.com/hansmeyertischbein/hansmeyertischbein.github.io/tree/main/portfolio">Code on GitHub</a>
-            </div>
-          </article>
-          <article class="project">
-            <h4>Market concentration calculator</h4>
-            <p>Calculates the Herfindahl–Hirschman Index for any market and shows what a merger would do to concentration. Comes loaded with the Norwegian non-life insurance market.</p>
-            <p class="tools">Competition economics, JavaScript</p>
-            <div class="links">
-            <a href="/hhi/">Open the calculator</a>
-            <a href="https://github.com/hansmeyertischbein/hansmeyertischbein.github.io/tree/main/hhi">Code on GitHub</a>
-            </div>
-          </article>
-        </div>
-        <div class="projects-group">
-          <h3>Insurance</h3>
-          <article class="project">
-            <h4>Young adults and insurance loyalty</h4>
-            <p>Group project in Methods and Insight at BI (spring 2026): a market study of what drives loyalty among 18–29-year-olds in Norway, with If P&amp;C Insurance as the case. Three focus groups, 187 survey respondents and four customer segments from cluster analysis.</p>
-            <p class="tools">JMP, focus groups, cluster analysis, ANOVA, regression</p>
-            <div class="links">
-            <a href="/if-study/">Read the summary</a>
-            <a href="/If_young_adults_segmentation.pdf">Full report (PDF, Norwegian)</a>
-            </div>
-          </article>
-          <article class="project">
-            <h4>Who makes money on insurance itself?</h4>
-            <p>Combined ratios for Gjensidige, Tryg and Sampo since 2023, and what drives the differences between them.</p>
-            <p class="tools">Financial analysis, IFRS 17</p>
-            <div class="links">
-            <a href="/combined-ratio/">Read the analysis</a>
-            </div>
-          </article>
-          <article class="project">
-            <h4>Simulating a year of claims</h4>
-            <p>A Monte Carlo simulation of an insurer’s annual claims that shows how often premiums fall short and how much capital the worst year in 200 requires. Also written in Python.</p>
-            <p class="tools">Monte Carlo simulation, Solvency II, JavaScript, Python</p>
-            <div class="links">
-            <a href="/claims-simulation/">Open the simulation</a>
-            <a href="/claims-simulation/claims_sim.py">Python version</a>
-            <a href="https://github.com/hansmeyertischbein/hansmeyertischbein.github.io/tree/main/claims-simulation">Code on GitHub</a>
-            </div>
-          </article>
-          <article class="project">
-            <h4>Careless or grossly careless?</h4>
-            <p>How Norwegian insurance law separates ordinary carelessness from gross negligence, explained through two cases from the complaints board.</p>
-            <p class="tools">Insurance law, forsikringsavtaleloven</p>
-            <div class="links">
-            <a href="/gross-negligence/">Read the explainer</a>
-            </div>
-          </article>
-        </div>
-        <div class="projects-group">
-          <h3>Strategy and decisions</h3>
-          <article class="project">
-            <h4>What does it cost to wait?</h4>
-            <p>A conceptual study of how to prioritise tasks. The result is an index that ranks tasks by cost of delay per calibrated hour, with urgency calculated from the slack to each deadline, plus a check that shows overload before it becomes a crisis. Built as a calculator too.</p>
-            <p class="tools">Scheduling theory, decision analysis, behavioural economics, JavaScript</p>
-            <div class="links">
-            <a href="/priority/">Try the calculator</a>
-            <a href="/Cost_of_delay_prioritization.pdf">Read the paper (PDF, Norwegian)</a>
-            <a href="https://github.com/hansmeyertischbein/hansmeyertischbein.github.io/tree/main/priority">Code on GitHub</a>
-            </div>
-          </article>
-          <article class="project">
-            <h4>Case: student contents insurance</h4>
-            <p>A consulting-style case that sizes the market for contents insurance among students in Norway, tests the assumptions and recommends how an insurer should approach the segment.</p>
-            <p class="tools">Market sizing, case structure, JavaScript</p>
-            <div class="links">
-            <a href="/student-insurance-case/">Read the case</a>
-            </div>
-          </article>
-        </div>
-        <div class="projects-group">
-          <h3>Other</h3>
-          <article class="project">
-            <h4>CV generator</h4>
-            <p>Builds my Norwegian and English CVs as Word documents straight from code, so layout, spacing and content stay consistent across both versions.</p>
-            <p class="tools">Node.js, docx</p>
-          </article>
-        </div>
-
-        <!--
-          Copy this block to add a new project:
-
-        <article class="project">
-          <h4>Project name</h4>
-          <p>What the project does and what you found out, in one or two sentences.</p>
-          <p class="tools">Python, pandas</p>
-          <div class="links">
-            <a href="https://github.com/hansmeyertischbein/repo">Code on GitHub</a>
-          </div>
-        </article>
-        -->
-      </div>
-    </section>
-
+    <nav class="choices" aria-label="Sections">
+      <a class="choice" href="/cv/">
+        <span class="choice-title">CV</span>
+        <span class="choice-desc">Education, experience and skills. English and Norwegian.</span>
+        <span class="choice-arrow" aria-hidden="true">→</span>
+      </a>
+      <a class="choice" href="/projects/">
+        <span class="choice-title">Projects</span>
+        <span class="choice-desc">10 analyses, tools and write-ups. Latest 5 Oct 2026.</span>
+        <span class="choice-arrow" aria-hidden="true">→</span>
+      </a>
+    </nav>
   </div>
 </main>
 
@@ -186,21 +68,9 @@
 </footer>
 
 <script>
-  // Highlight the nav link for the section in view
-  const links = document.querySelectorAll('.nav-links a');
-  const sections = [...links].map(a => document.querySelector(a.getAttribute('href')));
-  if ('IntersectionObserver' in window) {
-    const io = new IntersectionObserver(entries => {
-      entries.forEach(e => {
-        if (e.isIntersecting) {
-          links.forEach(a => a.removeAttribute('aria-current'));
-          const active = document.querySelector('.nav-links a[href="#' + e.target.id + '"]');
-          if (active) active.setAttribute('aria-current', 'true');
-        }
-      });
-    }, { rootMargin: '-40% 0px -55% 0px' });
-    sections.forEach(s => s && io.observe(s));
-  }
+  // Old links pointed to sections on this page
+  if (location.hash === '#projects') location.replace('/projects/');
+  else if (location.hash === '#cv') location.replace('/cv/');
 </script>
 </body>
 </html>

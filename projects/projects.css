@@ -1,0 +1,33 @@
+/* Topic filter */
+.chips { display: flex; flex-wrap: wrap; gap: 0.5rem; margin: 2rem 0 0; }
+.chip {
+  padding: 0.45rem 0.9rem; border: 1px solid var(--rule); border-radius: 999px; background: transparent;
+  font-size: 0.9rem; color: var(--muted); cursor: pointer; touch-action: manipulation; user-select: none; -webkit-user-select: none;
+  transition: transform 160ms var(--ease-out), background-color 150ms ease, color 150ms ease, border-color 150ms ease;
+}
+.chip:active { transform: scale(0.97); }
+.chip[aria-pressed="true"] { background: var(--ink); border-color: var(--ink); color: var(--paper); }
+@media (hover: hover) and (pointer: fine) { .chip:hover:not([aria-pressed="true"]) { border-color: var(--muted); color: var(--ink); } }
+
+/* Feed, grouped by month like a newsletter archive */
+.feed-month { border-top: 1px solid var(--rule); padding: 2rem 0 0.5rem; }
+.feed-month[hidden] { display: none; }
+.feed-month-title { font: 600 0.8rem/1.4 var(--sans); letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin: 0 0 1.5rem; }
+.feed { list-style: none; margin: 0; padding: 0; }
+.entry { display: grid; grid-template-columns: 7.5rem minmax(0, 1fr); gap: 0 1.5rem; padding: 0 0 2.25rem; }
+.entry[hidden] { display: none; }
+.entry-date { color: var(--muted); font-size: 0.9rem; font-variant-numeric: tabular-nums; padding-top: 0.15rem; white-space: nowrap; }
+.entry-body { min-width: 0; }
+.entry-kicker { margin: 0 0 0.3rem; font-size: 0.8rem; font-weight: 600; color: var(--navy); letter-spacing: 0.02em; }
+.entry-title { font: 500 1.5rem/1.25 var(--serif); margin: 0 0 0.6rem; }
+.entry-title a { color: var(--ink); text-decoration: none; }
+.entry-body p { margin: 0 0 0.75rem; max-width: 36rem; }
+.entry-body .tools { color: var(--muted); font-size: 0.95rem; }
+.entry-body .links { display: flex; flex-wrap: wrap; gap: 0.4rem 1.25rem; font-size: 0.95rem; }
+.feed-empty { color: var(--muted); padding: 2rem 0; }
+@media (hover: hover) and (pointer: fine) { .entry-title a:hover { text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 0.15em; } }
+
+@media (max-width: 34rem) {
+  .entry { grid-template-columns: minmax(0, 1fr); }
+  .entry-date { font-size: 0.85rem; padding: 0 0 0.35rem; }
+}

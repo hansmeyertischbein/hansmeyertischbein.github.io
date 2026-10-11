@@ -6,7 +6,7 @@
 .result-label { font-weight: 600; margin: 0.6rem 0 1.5rem; }
 .result-note { color: var(--muted); margin: 1.5rem 0 0; max-width: 36rem; }
 
-.scale { position: relative; padding-bottom: 1.6rem; }
+.scale { position: relative; padding-bottom: 1.6rem; overflow-x: clip; overflow-clip-margin: 4px; }
 .scale-track { position: relative; display: flex; height: 10px; border-radius: 5px; overflow: visible; }
 .band { display: block; height: 100%; background: var(--navy); }
 .band-low { width: 33.333%; opacity: 0.12; border-radius: 5px 0 0 5px; }
