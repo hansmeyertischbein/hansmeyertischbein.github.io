@@ -22,7 +22,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,500&family=Public+Sans:wght@400;500;600&family=Carlito:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/site.css?v=3">
-<link rel="stylesheet" href="cv-generator.css?v=2">
+<link rel="stylesheet" href="cv-generator.css?v=3">
 </head>
 <body class="cvgen" data-view="edit">
 
@@ -73,6 +73,15 @@
           </div>
           <div class="import-report" id="import-report" aria-live="polite" hidden></div>
         </fieldset>
+        <fieldset class="ai-step" id="ai-step">
+          <legend>Improve the wording with AI</legend>
+          <p class="hint">An AI assistant rewrites your CV with strong verbs, results and numbers, in this layout. It never invents numbers: where one is missing it writes [add number] for you to fill in.</p>
+          <ol class="ai-steps">
+            <li><span class="ai-n">1</span><div><p>Copy the prompt. It contains your CV and the writing rules.</p><div class="file-actions"><button type="button" class="btn btn-primary" id="copy-prompt">Copy prompt</button><span class="hint" id="copy-status" aria-live="polite"></span></div><textarea class="field" id="prompt-box" rows="4" readonly hidden aria-label="The prompt"></textarea></div></li>
+            <li><span class="ai-n">2</span><div><p>Paste it into Claude, or another AI assistant, and send it.</p><div class="file-actions"><a class="btn" href="https://claude.ai/new" target="_blank" rel="noopener">Open Claude ↗</a></div></div></li>
+            <li><span class="ai-n">3</span><div><p>Copy the whole answer, paste it here and press the button. The form and the preview update.</p><label class="f" style="margin:0.5rem 0 0">The assistant's answer<textarea class="field" id="ai-answer" rows="4" placeholder="Paste the whole answer here"></textarea></label><div class="file-actions"><button type="button" class="btn btn-primary" id="ai-import">Use this version</button><span class="hint" id="ai-status" aria-live="polite"></span></div></div></li>
+          </ol>
+        </fieldset>
         <fieldset><legend>Your details</legend><div class="grid2" id="f-details"></div></fieldset>
         <fieldset><legend>Summary</legend><div id="f-summary"></div></fieldset>
         <fieldset><legend>Education</legend><div class="entries" id="list-education"></div></fieldset>
@@ -83,13 +92,6 @@
           <legend>Make it stronger</legend>
           <p class="hint" id="check-summary"></p>
           <ol class="check-list" id="check-list"></ol>
-          <details class="ai-help">
-            <summary>Rewrite it with an AI assistant</summary>
-            <p class="hint">Copy a prompt with your CV and the writing rules, paste it into Claude or another AI assistant, then paste the answer back here. The rules tell the assistant never to invent numbers; where one is missing it writes [add number] for you to fill in.</p>
-            <div class="file-actions"><button type="button" class="btn" id="copy-prompt">Copy prompt</button><span class="hint" id="copy-status" aria-live="polite"></span></div>
-            <label class="f" style="margin-top:0.9rem">The assistant's answer<textarea class="field" id="ai-answer" rows="5" placeholder="Paste the whole answer here"></textarea></label>
-            <div class="file-actions"><button type="button" class="btn" id="ai-import">Use this version</button><span class="hint" id="ai-status" aria-live="polite"></span></div>
-          </details>
         </fieldset>
         <fieldset class="file-tools">
           <legend>Your data</legend>
@@ -114,6 +116,6 @@
   <div class="wrap">Oslo, Norway</div>
 </footer>
 
-<script src="cv-generator.js?v=3"></script>
+<script src="cv-generator.js?v=4"></script>
 </body>
 </html>

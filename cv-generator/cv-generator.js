@@ -825,7 +825,7 @@ if (typeof document !== 'undefined') {
     const c = result.cv;
     const n = k => c[k].filter(hasEntry).length;
     const p = document.createElement('p');
-    p.textContent = `Read ${fileLabel}: ${n('education')} education entries, ${n('experience')} jobs, ${n('roles')} roles${c.summary ? ', a summary' : ''}${c.dataSkills || c.languages ? ', skills and languages' : ''}. Check every section below before you download.`;
+    p.textContent = `Read ${fileLabel}: ${n('education')} education entries, ${n('experience')} jobs, ${n('roles')} roles${c.summary ? ', a summary' : ''}${c.dataSkills || c.languages ? ', skills and languages' : ''}. Check every section below before you download, or improve the wording with AI in the next step.`;
     box.append(p);
     const missing = ['name', 'email', 'phone'].filter(k => !c[k]);
     if (missing.length) { const m = document.createElement('p'); m.textContent = `Not found: ${missing.join(', ')}.`; box.append(m); }
@@ -864,13 +864,13 @@ if (typeof document !== 'undefined') {
   el('copy-prompt').addEventListener('click', async () => {
     const text = aiPrompt(cv);
     try { await navigator.clipboard.writeText(text); el('copy-status').textContent = 'Copied. Paste it into your AI assistant.'; }
-    catch (err) { el('ai-answer').value = text; el('ai-answer').select(); el('copy-status').textContent = 'Could not copy automatically. The prompt is in the box below: copy it from there.'; }
+    catch (err) { const box = el('prompt-box'); box.hidden = false; box.value = text; box.focus(); box.select(); el('copy-status').textContent = 'Copy the text in the box below.'; }
   });
   el('ai-import').addEventListener('click', () => {
     try {
       const next = readJsonAnswer(el('ai-answer').value);
       cv = next; renderEditor(); changed();
-      el('ai-status').textContent = 'Done. Check the placeholders in the list above.';
+      el('ai-status').textContent = 'Done. The CV is updated. Fill in any [add number] the checks under "Make it stronger" point to.';
       el('ai-answer').value = '';
     } catch (err) { el('ai-status').textContent = 'That did not look like the JSON the prompt asks for. Paste the whole answer.'; }
   });
