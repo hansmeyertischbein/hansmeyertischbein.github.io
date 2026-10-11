@@ -54,7 +54,7 @@
       <h2 id="flow-h">One run, start to finish</h2>
       <p>Every agent follows the same pattern. A schedule starts it, it works from written instructions, and nothing reaches the site or me before it has passed the checks.</p>
       <ol class="flow" aria-label="Steps in one agent run">
-        <li><span class="flow-n">1</span><strong>Trigger</strong><span>A fixed time, or the day of a Norges Bank decision</span></li>
+        <li><span class="flow-n">1</span><strong>Trigger</strong><span>A fixed time: every weekday, every week or twice a month</span></li>
         <li><span class="flow-n">2</span><strong>Instructions</strong><span>A method file in the code repository, versioned like code</span></li>
         <li><span class="flow-n">3</span><strong>Research</strong><span>Web search and the original sources: Norges Bank, Statistics Norway, company reports</span></li>
         <li><span class="flow-n">4</span><strong>Compute</strong><span>Numbers go through scripts, not through the model's head</span></li>
@@ -68,7 +68,7 @@
     <section class="block" id="agents" aria-labelledby="agents-h">
       <h2 id="agents-h">The agents</h2>
       <p class="chart-title">When they run in a normal week</p>
-      <p class="chart-sub">Oslo time. Rate decisions come on top, eight times a year.</p>
+      <p class="chart-sub">Oslo time. The Taylor rule update also runs on the 1st and 15th of every month.</p>
       <div class="week" id="week" role="img" aria-label="Weekly schedule: morning digest at 06:56, pre-market brief at 08:45 and post-open brief at 09:15 on weekdays, market analysis on Sundays at 17:52"></div>
       <ul class="chart-legend" id="week-legend"></ul>
 
@@ -80,9 +80,9 @@
           <p class="agent-links"><a href="/markets/norwegian-grocery-retail/">First issue: Norwegian grocery retail</a> · <a href="https://github.com/hansmeyertischbein/hansmeyertischbein.github.io/blob/main/markets/METHOD.md">Method</a></p>
         </article>
         <article class="agent">
-          <h3>Taylor rule after each rate decision</h3>
-          <p class="agent-when">The day of every Norges Bank decision</p>
-          <p>Fetches the decision, the newest inflation and GDP figures and, four times a year, the projections in the Monetary Policy Report. A script rebuilds the data and checks every series before the page is published.</p>
+          <h3>Taylor rule update</h3>
+          <p class="agent-when">The 1st and 15th of every month</p>
+          <p>Checks for a new Norges Bank decision, new inflation and GDP figures and, four times a year, the projections in the Monetary Policy Report. If nothing is new, it does nothing. A script rebuilds the data and checks every series before the page is published.</p>
           <p class="agent-links"><a href="/taylor-rule/">Taylor rule for Norges Bank</a> · <a href="https://github.com/hansmeyertischbein/hansmeyertischbein.github.io/blob/main/taylor-rule/METHOD.md">Method</a></p>
         </article>
         <article class="agent">
