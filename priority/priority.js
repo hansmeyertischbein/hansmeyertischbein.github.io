@@ -111,7 +111,7 @@ function make(tag, props = {}, children = []) {
 }
 
 function numberInput(task, key, opts) {
-  const input = make('input', { class: 'field', type: 'number', inputmode: 'decimal', min: '0', step: opts.step || '0.5', placeholder: opts.placeholder || '' });
+  const input = make('input', { class: 'field', type: 'number', inputmode: 'decimal', min: '0', step: opts.step || '0.5', placeholder: opts.placeholder || '', enterkeyhint: 'done' });
   input.value = Number.isFinite(task[key]) ? task[key] : '';
   input.setAttribute('aria-label', opts.aria);
   input.addEventListener('input', () => { task[key] = num(input.value); update(); });
