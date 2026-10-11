@@ -1,0 +1,200 @@
+{
+  "topics": [
+    "Finance",
+    "Insurance",
+    "Strategy and decisions",
+    "Other"
+  ],
+  "entries": [
+    {
+      "date": "2026-10-11",
+      "topic": "Strategy and decisions",
+      "title": "Market analysis: Norwegian grocery retail",
+      "url": "/markets/norwegian-grocery-retail/",
+      "text": "Three groups sell almost all groceries in Norway and low-price chains keep growing. The change to watch is the government’s plan to open the big groups’ wholesale systems to small challengers. The first in a weekly series with competitor analysis, PESTEL and SWOT.",
+      "tools": "Market analysis, competitor analysis, PESTEL, SWOT",
+      "links": [
+        {
+          "text": "Read the analysis",
+          "url": "/markets/norwegian-grocery-retail/"
+        }
+      ]
+    },
+    {
+      "date": "2026-10-11",
+      "topic": "Other",
+      "title": "CV generator",
+      "url": "/cv-generator/",
+      "text": "Write a CV once and download a clean one-page version as a Word file or PDF, with a live preview, a check that it fits on one page, and English or Norwegian headings.",
+      "tools": "JavaScript, docx, print CSS",
+      "links": [
+        {
+          "text": "Open the generator",
+          "url": "/cv-generator/"
+        },
+        {
+          "text": "Code on GitHub",
+          "url": "https://github.com/hansmeyertischbein/hansmeyertischbein.github.io/tree/main/cv-generator"
+        }
+      ]
+    },
+    {
+      "date": "2026-09-28",
+      "topic": "Finance",
+      "title": "What does Gjensidige’s share price assume?",
+      "url": "/valuation/",
+      "text": "A justified price-to-book valuation that works backwards from the share price to the return on equity the market is pricing in.",
+      "tools": "Valuation, residual income model, JavaScript",
+      "links": [
+        {
+          "text": "Open the calculator",
+          "url": "/valuation/"
+        },
+        {
+          "text": "Code on GitHub",
+          "url": "https://github.com/hansmeyertischbein/hansmeyertischbein.github.io/tree/main/valuation"
+        }
+      ]
+    },
+    {
+      "date": "2026-09-21",
+      "topic": "Insurance",
+      "title": "Who makes money on insurance itself?",
+      "url": "/combined-ratio/",
+      "text": "Combined ratios for Gjensidige, Tryg and Sampo since 2023, and what drives the differences between them.",
+      "tools": "Financial analysis, IFRS 17",
+      "links": [
+        {
+          "text": "Read the analysis",
+          "url": "/combined-ratio/"
+        }
+      ]
+    },
+    {
+      "date": "2026-09-07",
+      "topic": "Insurance",
+      "title": "Simulating a year of claims",
+      "url": "/claims-simulation/",
+      "text": "A Monte Carlo simulation of an insurer’s annual claims that shows how often premiums fall short and how much capital the worst year in 200 requires. Also written in Python.",
+      "tools": "Monte Carlo simulation, Solvency II, JavaScript, Python",
+      "links": [
+        {
+          "text": "Open the simulation",
+          "url": "/claims-simulation/"
+        },
+        {
+          "text": "Python version",
+          "url": "/claims-simulation/claims_sim.py"
+        },
+        {
+          "text": "Code on GitHub",
+          "url": "https://github.com/hansmeyertischbein/hansmeyertischbein.github.io/tree/main/claims-simulation"
+        }
+      ]
+    },
+    {
+      "date": "2026-08-31",
+      "topic": "Finance",
+      "title": "Portfolio and CAPM calculator",
+      "url": "/portfolio/",
+      "text": "An interactive efficient frontier for two assets, the best risk-adjusted mix and the required return on equity.",
+      "tools": "Portfolio theory, CAPM, JavaScript",
+      "links": [
+        {
+          "text": "Open the calculator",
+          "url": "/portfolio/"
+        },
+        {
+          "text": "Code on GitHub",
+          "url": "https://github.com/hansmeyertischbein/hansmeyertischbein.github.io/tree/main/portfolio"
+        }
+      ]
+    },
+    {
+      "date": "2026-08-17",
+      "topic": "Strategy and decisions",
+      "title": "Case: student contents insurance",
+      "url": "/student-insurance-case/",
+      "text": "A consulting-style case that sizes the market for contents insurance among students in Norway, tests the assumptions and recommends how an insurer should approach the segment.",
+      "tools": "Market sizing, case structure, JavaScript",
+      "links": [
+        {
+          "text": "Read the case",
+          "url": "/student-insurance-case/"
+        }
+      ]
+    },
+    {
+      "date": "2026-09-14",
+      "topic": "Insurance",
+      "title": "Careless or grossly careless?",
+      "url": "/gross-negligence/",
+      "text": "How Norwegian insurance law separates ordinary carelessness from gross negligence, explained through two cases from the complaints board.",
+      "tools": "Insurance law, forsikringsavtaleloven",
+      "links": [
+        {
+          "text": "Read the explainer",
+          "url": "/gross-negligence/"
+        }
+      ]
+    },
+    {
+      "date": "2026-10-05",
+      "topic": "Strategy and decisions",
+      "title": "What does it cost to wait?",
+      "url": "/priority/",
+      "text": "A conceptual study of how to prioritise tasks. The result is an index that ranks tasks by cost of delay per calibrated hour, with urgency calculated from the slack to each deadline, plus a check that shows overload before it becomes a crisis. Built as a calculator too.",
+      "tools": "Scheduling theory, decision analysis, behavioural economics, JavaScript",
+      "links": [
+        {
+          "text": "Try the calculator",
+          "url": "/priority/"
+        },
+        {
+          "text": "Read the paper (PDF, Norwegian)",
+          "url": "/Cost_of_delay_prioritization.pdf"
+        },
+        {
+          "text": "Code on GitHub",
+          "url": "https://github.com/hansmeyertischbein/hansmeyertischbein.github.io/tree/main/priority"
+        }
+      ]
+    },
+    {
+      "date": "2026-08-24",
+      "topic": "Finance",
+      "title": "Market concentration calculator",
+      "url": "/hhi/",
+      "text": "Calculates the Herfindahl–Hirschman Index for any market and shows what a merger would do to concentration. Comes loaded with the Norwegian non-life insurance market.",
+      "tools": "Competition economics, JavaScript",
+      "links": [
+        {
+          "text": "Open the calculator",
+          "url": "/hhi/"
+        },
+        {
+          "text": "Code on GitHub",
+          "url": "https://github.com/hansmeyertischbein/hansmeyertischbein.github.io/tree/main/hhi"
+        }
+      ]
+    },
+    {
+      "date": "2026-06-02",
+      "topic": "Insurance",
+      "title": "Young adults and insurance loyalty",
+      "url": "/if-study/",
+      "text": "Group project in Methods and Insight at BI: a market study of what drives loyalty among 18–29-year-olds in Norway, with If P&amp;C Insurance as the case. Three focus groups, 187 survey respondents and four customer segments from cluster analysis.",
+      "tools": "JMP, focus groups, cluster analysis, ANOVA, regression",
+      "links": [
+        {
+          "text": "Read the summary",
+          "url": "/if-study/"
+        },
+        {
+          "text": "Full report (PDF, Norwegian)",
+          "url": "/If_young_adults_segmentation.pdf"
+        }
+      ]
+    }
+  ]
+}
