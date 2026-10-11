@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" media="(prefers-color-scheme: light)" content="#FBFCFD">
+<meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0F1626">
+<meta name="color-scheme" content="light dark">
+<title>How I work with AI agents – Hans Meyer Tischbein</title>
+<meta name="description" content="The AI agents behind this site and my working day: what they do, how their output is checked, and where they went wrong.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="How I work with AI agents">
+<meta property="og:description" content="The AI agents behind this site and my working day: what they do, how their output is checked, and where they went wrong.">
+<meta property="og:url" content="https://hansmeyertischbein.github.io/ai-agents/">
+<meta property="og:image" content="https://hansmeyertischbein.github.io/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="HMT">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,500&family=Public+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/site.css?v=3">
+<link rel="stylesheet" href="/assets/tools.css?v=1">
+<link rel="stylesheet" href="/assets/charts.css?v=1">
+<link rel="stylesheet" href="agents.css?v=1">
+</head>
+<body>
+
+<header class="nav">
+  <div class="wrap">
+    <a class="nav-name" href="/">Hans Meyer Tischbein</a>
+    <ul class="nav-links">
+      <li><a href="/cv/">CV</a></li>
+      <li><a href="/projects/">Projects</a></li>
+    </ul>
+  </div>
+</header>
+
+<main>
+  <div class="wrap">
+    <header class="page-head">
+      <h1>How I work with AI agents</h1>
+      <p class="lede">I use AI agents for work that repeats on a schedule: reading the news before the market opens, keeping analyses on this site up to date, and planning my day. This page shows what they do, how their work is checked, and where they have gone wrong.</p>
+      <ul class="page-links">
+        <li><a href="#agents">The agents</a></li>
+        <li><a href="#checks">How the output is checked</a></li>
+        <li><a href="#wrong">Where it went wrong</a></li>
+      </ul>
+    </header>
+
+    <section class="block" aria-labelledby="flow-h">
+      <h2 id="flow-h">One run, start to finish</h2>
+      <p>Every agent follows the same pattern. A schedule starts it, it works from written instructions, and nothing reaches the site or me before it has passed the checks.</p>
+      <ol class="flow" aria-label="Steps in one agent run">
+        <li><span class="flow-n">1</span><strong>Trigger</strong><span>A fixed time, or the day of a Norges Bank decision</span></li>
+        <li><span class="flow-n">2</span><strong>Instructions</strong><span>A method file in the code repository, versioned like code</span></li>
+        <li><span class="flow-n">3</span><strong>Research</strong><span>Web search and the original sources: Norges Bank, Statistics Norway, company reports</span></li>
+        <li><span class="flow-n">4</span><strong>Compute</strong><span>Numbers go through scripts, not through the model's head</span></li>
+        <li class="flow-gate"><span class="flow-n">5</span><strong>Checks</strong><span>Sources linked, figures cross-checked, page tested on phone and desktop</span></li>
+        <li><span class="flow-n">6</span><strong>Publish</strong><span>Commit to GitHub, the site rebuilds</span></li>
+        <li><span class="flow-n">7</span><strong>Report</strong><span>A short message to me with the result and the link, or exactly what failed</span></li>
+      </ol>
+      <p class="note">If a check fails, the run stops at step 5 and tells me why. Half-finished work is never published.</p>
+    </section>
+
+    <section class="block" id="agents" aria-labelledby="agents-h">
+      <h2 id="agents-h">The agents</h2>
+      <p class="chart-title">When they run in a normal week</p>
+      <p class="chart-sub">Oslo time. Rate decisions come on top, eight times a year.</p>
+      <div class="week" id="week" role="img" aria-label="Weekly schedule: morning digest at 06:56, pre-market brief at 08:45 and post-open brief at 09:15 on weekdays, market analysis on Sundays at 17:52"></div>
+      <ul class="chart-legend" id="week-legend"></ul>
+
+      <div class="agent-cards">
+        <article class="agent">
+          <h3>Weekly market analysis</h3>
+          <p class="agent-when">Sundays at 17:52</p>
+          <p>Picks a market not covered before, researches it from primary sources and writes a market and competitor analysis with a qualitative PESTEL and SWOT. It adds the page to this site and the projects feed, tests it and publishes.</p>
+          <p class="agent-links"><a href="/markets/norwegian-grocery-retail/">First issue: Norwegian grocery retail</a> · <a href="https://github.com/hansmeyertischbein/hansmeyertischbein.github.io/blob/main/markets/METHOD.md">Method</a></p>
+        </article>
+        <article class="agent">
+          <h3>Taylor rule after each rate decision</h3>
+          <p class="agent-when">The day of every Norges Bank decision</p>
+          <p>Fetches the decision, the newest inflation and GDP figures and, four times a year, the projections in the Monetary Policy Report. A script rebuilds the data and checks every series before the page is published.</p>
+          <p class="agent-links"><a href="/taylor-rule/">Taylor rule for Norges Bank</a> · <a href="https://github.com/hansmeyertischbein/hansmeyertischbein.github.io/blob/main/taylor-rule/METHOD.md">Method</a></p>
+        </article>
+        <article class="agent">
+          <h3>Market briefs</h3>
+          <p class="agent-when">Weekdays at 08:45 and 09:15</p>
+          <p>Before Oslo Børs opens: overnight markets, rates and bond yields, oil and the krone, company news and the day's calendar, plus three articles worth reading. Fifteen minutes after the open: the first moves and why. Each brief starts with a one-page chart dashboard.</p>
+          <p class="agent-links">Private, sent to my phone</p>
+        </article>
+        <article class="agent">
+          <h3>Morning digest and day plan</h3>
+          <p class="agent-when">Weekdays at 06:56</p>
+          <p>Reads new email, suggests replies and calendar entries, and ranks the day's tasks with the cost-of-delay method from my <a href="/priority/">prioritisation tool</a>. It may only read. Sending a reply or adding an event needs my go-ahead for that exact item.</p>
+          <p class="agent-links">Private, sent to my phone</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="block" id="checks" aria-labelledby="checks-h">
+      <h2 id="checks-h">How the output is checked</h2>
+      <div class="table-wrap">
+        <table class="data-table rules">
+          <thead><tr><th>Rule</th><th>Why</th><th>Example</th></tr></thead>
+          <tbody>
+            <tr><td>Every number links to a source the agent opened</td><td>A model can produce a plausible number from memory that is out of date or wrong</td><td>Each market analysis ends with a numbered source list</td></tr>
+            <tr><td>Never estimate and present it as fact</td><td>A gap is better than a made-up figure</td><td>The briefs write "n/a" for any price they could not confirm</td></tr>
+            <tr><td>Fetch data twice, in two forms, and compare</td><td>Data read through a language model can be garbled without any error message</td><td>Inflation is fetched as an index and as a 12-month rate; they must agree within 0.2 points</td></tr>
+            <tr><td>Calculate in code</td><td>Scripts give the same answer every time and can be checked</td><td>The Taylor rule, output gap and project feed are built by Python scripts with built-in assertions</td></tr>
+            <tr><td>Look at the result</td><td>A page can be correct and still broken on a phone</td><td>Every page is opened at 390 and 1,100 pixels wide before publishing</td></tr>
+            <tr><td>Read-only unless told otherwise</td><td>Actions that affect other people need a human decision</td><td>The digest drafts replies; it sends nothing until I answer "gjør 3"</td></tr>
+            <tr><td>Fail loudly</td><td>A silent failure is worse than a failed run</td><td>Every run ends with a message, including what went wrong</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="block" id="wrong" aria-labelledby="wrong-h">
+      <h2 id="wrong-h">Where it went wrong, and what changed</h2>
+      <div class="incidents">
+        <article>
+          <h3>A shifted inflation series</h3>
+          <p>When building the Taylor rule page, the first fetch of Statistics Norway's inflation data came back with 142 values for 144 months. The summary filled them in order, which moved every figure in the later years by two months. Nothing looked obviously wrong.</p>
+          <p class="fix"><strong>Fix:</strong> fetch the data with one labelled value per line, fetch the index as well, and let the build script reject any month where the two disagree.</p>
+        </article>
+        <article>
+          <h3>Formulas printed as code</h3>
+          <p>The PDF behind the prioritisation tool showed several formulas as raw LaTeX in grey boxes instead of typeset maths. The text was right, but a reader could not use it.</p>
+          <p class="fix"><strong>Fix:</strong> the formulas were typeset and the PDF replaced. Generated documents are now opened and looked at, not only built.</p>
+        </article>
+        <article>
+          <h3>A tool that looked finished but was not</h3>
+          <p>The first version of the CV generator rendered a nice page but did not produce a usable file, and its example used my own CV.</p>
+          <p class="fix"><strong>Fix:</strong> rebuilt on the method behind my real CV, tested by downloading and opening the files, with a fictional example person.</p>
+        </article>
+        <article>
+          <h3>Pages that scrolled sideways on a phone</h3>
+          <p>Several pages were fine on a laptop and overflowed on a phone: a grid that would not shrink, a chart marker outside its track, buttons that wrapped badly.</p>
+          <p class="fix"><strong>Fix:</strong> every publish now checks the page width at 390 pixels and looks at screenshots before it goes live.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="block" aria-labelledby="learn-h">
+      <h2 id="learn-h">What I have learned about instructing agents</h2>
+      <ul>
+        <li><strong>Write the method down, outside the prompt.</strong> A method file in the repository can be read, improved and versioned. The scheduled prompt just says "follow the method".</li>
+        <li><strong>Say what good looks like.</strong> Sections, tone, units, which sources to prefer, and what not to do.</li>
+        <li><strong>Separate judgement from arithmetic.</strong> Let the model research, explain and judge; let code compute.</li>
+        <li><strong>Make failure an expected outcome.</strong> Tell the agent exactly what to do when a source is missing or a check fails.</li>
+        <li><strong>Keep a human on decisions that affect others.</strong> Agents prepare; I approve.</li>
+      </ul>
+    </section>
+  </div>
+</main>
+
+<footer>
+  <div class="wrap">Oslo, Norway</div>
+</footer>
+
+<script src="agents.js?v=1"></script>
+</body>
+</html>

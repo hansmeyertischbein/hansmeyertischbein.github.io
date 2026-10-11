@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" media="(prefers-color-scheme: light)" content="#FBFCFD">
+<meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0F1626">
+<meta name="color-scheme" content="light dark">
+<title>Case interview trainer – Hans Meyer Tischbein</title>
+<meta name="description" content="Practise consulting case interviews with a timer, exhibits, answer checks, model answers and a mental maths drill.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Case interview trainer">
+<meta property="og:description" content="Practise consulting case interviews with a timer, exhibits, answer checks, model answers and a mental maths drill.">
+<meta property="og:url" content="https://hansmeyertischbein.github.io/case-trainer/">
+<meta property="og:image" content="https://hansmeyertischbein.github.io/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="HMT">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,500&family=Public+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/site.css?v=3">
+<link rel="stylesheet" href="/assets/tools.css?v=1">
+<link rel="stylesheet" href="/assets/charts.css?v=1">
+<link rel="stylesheet" href="trainer.css?v=1">
+</head>
+<body>
+
+<header class="nav">
+  <div class="wrap">
+    <a class="nav-name" href="/">Hans Meyer Tischbein</a>
+    <ul class="nav-links">
+      <li><a href="/cv/">CV</a></li>
+      <li><a href="/projects/">Projects</a></li>
+    </ul>
+  </div>
+</header>
+
+<main>
+  <div class="wrap">
+    <header class="page-head">
+      <h1>Case interview trainer</h1>
+      <p class="lede">Practise consulting cases the way they run in an interview: read the brief, ask questions, structure the problem, work through the numbers against the clock and give a recommendation. Then compare with a model answer.</p>
+      <ul class="page-links">
+        <li><a href="#cases">Cases</a></li>
+        <li><a href="#drill">Mental maths drill</a></li>
+        <li><a href="#approach">How to approach a case</a></li>
+      </ul>
+    </header>
+
+    <section class="block" id="cases" aria-labelledby="cases-h">
+      <h2 id="cases-h">Pick a case</h2>
+      <p>The companies and numbers are made up for practice. Your notes and results stay in this browser.</p>
+      <ul class="case-list" id="case-list"></ul>
+    </section>
+
+    <section class="block" id="case" aria-labelledby="case-h" hidden>
+      <h2 id="case-h"></h2>
+      <div class="workbar">
+        <div class="timer" role="timer" aria-live="off">
+          <span class="timer-time" id="t-time">0:00</span>
+          <span class="timer-target" id="t-target"></span>
+          <button type="button" class="btn" id="t-toggle">Start</button>
+          <button type="button" class="btn btn-quiet" id="t-reset">Reset</button>
+        </div>
+        <nav class="steps" aria-label="Case steps" id="steps">
+          <button type="button" data-step="0">1 Brief</button>
+          <button type="button" data-step="1">2 Structure</button>
+          <button type="button" data-step="2">3 Analysis</button>
+          <button type="button" data-step="3">4 Answer</button>
+        </nav>
+      </div>
+
+      <div class="case-step" data-step="0">
+        <p class="case-brief" id="c-brief"></p>
+        <h3>Ask the interviewer</h3>
+        <p class="note">Ask your own questions first, out loud. Open one to see the interviewer's answer.</p>
+        <div class="clarify" id="c-clarify"></div>
+        <p style="margin-top:1.5rem"><button type="button" class="btn btn-primary" data-go="1">Next: structure</button></p>
+      </div>
+
+      <div class="case-step" data-step="1" hidden>
+        <p>Take two minutes. Break the problem into three to five parts that do not overlap and together cover the question. Write it down before you look at the model structure.</p>
+        <label class="notes-label">Your structure and notes<textarea class="field notes" id="c-notes" placeholder="e.g. Profit = revenue − costs&#10;Revenue: volume × price …"></textarea></label>
+        <p style="margin-top:1rem"><button type="button" class="btn" id="c-show-tree">Show a model structure</button></p>
+        <div id="c-tree" hidden></div>
+        <p style="margin-top:1.5rem"><button type="button" class="btn btn-primary" data-go="2">Next: analysis</button></p>
+      </div>
+
+      <div class="case-step" data-step="2" hidden>
+        <div id="c-exhibits"></div>
+        <h3>Questions</h3>
+        <p class="note">Do the maths on paper first. Answers within a small margin count as correct.</p>
+        <div id="c-questions"></div>
+        <p style="margin-top:1.5rem"><button type="button" class="btn btn-primary" data-go="3">Next: recommendation</button></p>
+      </div>
+
+      <div class="case-step" data-step="3" hidden>
+        <p>Answer first, then the two or three reasons, then risks and next steps. Aim for one minute out loud.</p>
+        <label class="notes-label">Your recommendation<textarea class="field notes" id="c-rec" placeholder="I recommend … because … The main risk is … Next, I would …"></textarea></label>
+        <p style="margin-top:1rem"><button type="button" class="btn" id="c-show-model">Show the model answer</button></p>
+        <div id="c-model" hidden></div>
+        <h3>Score yourself</h3>
+        <ul class="checklist" id="c-check"></ul>
+        <p class="control-actions"><button type="button" class="btn btn-primary" id="c-save">Save this attempt</button> <span class="hint" id="c-saved" aria-live="polite"></span></p>
+        <div class="history" id="c-history"></div>
+      </div>
+    </section>
+
+    <section class="block" id="drill" aria-labelledby="drill-h">
+      <div class="block-head">
+        <h2 id="drill-h">Mental maths drill</h2>
+        <span class="score" id="d-score" aria-live="polite"></span>
+      </div>
+      <p>Ten quick calculations of the kind that come up in every case: percentages, growth, big multiplications and break-even. Answers within 2% count. New numbers every round.</p>
+      <p class="control-actions"><button type="button" class="btn btn-primary" id="d-new">Start a new round</button> <span class="hint" id="d-time"></span></p>
+      <div id="d-list"></div>
+    </section>
+
+    <section class="block" id="approach" aria-labelledby="ap-h">
+      <h2 id="ap-h">How to approach a case</h2>
+      <ol>
+        <li><strong>Listen and repeat back.</strong> Restate the question and the objective in one sentence, so you solve the right problem.</li>
+        <li><strong>Clarify.</strong> Ask two or three questions that change the analysis: the goal, the time frame, what success looks like.</li>
+        <li><strong>Structure.</strong> Ask for a minute, then lay out three to five parts that do not overlap and together answer the question. Tailor it to the case, not a memorised framework.</li>
+        <li><strong>Start with a hypothesis.</strong> Say where you think the answer lies and which part you want to look at first, and why.</li>
+        <li><strong>Do the maths out loud.</strong> Round to easy numbers, keep units, and check the order of magnitude.</li>
+        <li><strong>Say what each number means.</strong> After every result, one sentence: so what for the client?</li>
+        <li><strong>Recommend.</strong> Answer first, then the reasons, risks and next steps. Commit to an answer even if the data is incomplete.</li>
+      </ol>
+    </section>
+  </div>
+</main>
+
+<footer>
+  <div class="wrap">Oslo, Norway</div>
+</footer>
+
+<script src="/assets/charts.js?v=1"></script>
+<script src="cases.js?v=1"></script>
+<script src="trainer.js?v=1"></script>
+</body>
+</html>

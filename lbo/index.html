@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" media="(prefers-color-scheme: light)" content="#FBFCFD">
+<meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0F1626">
+<meta name="color-scheme" content="light dark">
+<title>LBO calculator – Hans Meyer Tischbein</title>
+<meta name="description" content="A leveraged buyout model of a fictional company: price, debt and plan in, IRR, money multiple, value bridge and sensitivity out.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="LBO calculator">
+<meta property="og:description" content="A leveraged buyout model of a fictional company: price, debt and plan in, IRR, money multiple, value bridge and sensitivity out.">
+<meta property="og:url" content="https://hansmeyertischbein.github.io/lbo/">
+<meta property="og:image" content="https://hansmeyertischbein.github.io/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="HMT">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,500&family=Public+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/site.css?v=3">
+<link rel="stylesheet" href="/assets/tools.css?v=1">
+<link rel="stylesheet" href="/assets/charts.css?v=1">
+</head>
+<body>
+
+<header class="nav">
+  <div class="wrap">
+    <a class="nav-name" href="/">Hans Meyer Tischbein</a>
+    <ul class="nav-links">
+      <li><a href="/cv/">CV</a></li>
+      <li><a href="/projects/">Projects</a></li>
+    </ul>
+  </div>
+</header>
+
+<main>
+  <div class="wrap">
+    <header class="page-head">
+      <h1>LBO calculator</h1>
+      <p class="lede">A private equity fund buys a company with mostly borrowed money, pays the debt down with the company's cash and sells after a few years. Change the price, the debt and the plan, and see what return the fund makes and where it comes from.</p>
+      <p class="page-meta"><span>The company, TargetCo, is fictional. Figures in NOK million.</span></p>
+      <ul class="page-links">
+        <li><a href="#model">The model, year by year</a></li>
+        <li><a href="#sens">Sensitivity</a></li>
+        <li><a href="https://github.com/hansmeyertischbein/hansmeyertischbein.github.io/tree/main/lbo">Code on GitHub</a></li>
+      </ul>
+    </header>
+
+    <section class="block" aria-labelledby="in-h">
+      <h2 id="in-h">The deal</h2>
+      <h3 style="margin-top:0">Entry</h3>
+      <div class="fields">
+        <label>Revenue, last year<input class="field" type="number" inputmode="decimal" enterkeyhint="done" id="l-rev" value="1000" step="50" min="1"></label>
+        <label>EBITDA margin, %<input class="field" type="number" inputmode="decimal" enterkeyhint="done" id="l-m0" value="20" step="0.5"></label>
+        <label>Entry multiple, EV/EBITDA<input class="field" type="number" inputmode="decimal" enterkeyhint="done" id="l-em" value="9" step="0.5" min="1"></label>
+        <label>Deal fees, % of EV<input class="field" type="number" inputmode="decimal" enterkeyhint="done" id="l-fee" value="2" step="0.5" min="0"></label>
+      </div>
+      <h3>Debt</h3>
+      <div class="fields">
+        <label>Senior loan, × EBITDA<input class="field" type="number" inputmode="decimal" enterkeyhint="done" id="l-sd" value="3.5" step="0.25" min="0"></label>
+        <label>Senior interest, %<input class="field" type="number" inputmode="decimal" enterkeyhint="done" id="l-si" value="8" step="0.25" min="0"></label>
+        <label>Senior amortisation, % a year<input class="field" type="number" inputmode="decimal" enterkeyhint="done" id="l-sa" value="5" step="1" min="0"></label>
+        <label>Junior loan, × EBITDA<input class="field" type="number" inputmode="decimal" enterkeyhint="done" id="l-jd" value="1" step="0.25" min="0"></label>
+        <label>Junior interest, %<input class="field" type="number" inputmode="decimal" enterkeyhint="done" id="l-ji" value="11" step="0.25" min="0"><span class="hint">Paid in cash, repaid at exit</span></label>
+        <label>Cash sweep, % of spare cash<input class="field" type="number" inputmode="decimal" enterkeyhint="done" id="l-sw" value="100" step="10" min="0" max="100"></label>
+      </div>
+      <h3>Plan and exit</h3>
+      <div class="fields">
+        <label>Revenue growth, % a year<input class="field" type="number" inputmode="decimal" enterkeyhint="done" id="l-g" value="5" step="0.5"></label>
+        <label>EBITDA margin at exit, %<input class="field" type="number" inputmode="decimal" enterkeyhint="done" id="l-m1" value="22" step="0.5"></label>
+        <label>Capex, % of revenue<input class="field" type="number" inputmode="decimal" enterkeyhint="done" id="l-cx" value="4" step="0.5" min="0"></label>
+        <label>Depreciation, % of revenue<input class="field" type="number" inputmode="decimal" enterkeyhint="done" id="l-da" value="3" step="0.5" min="0"></label>
+        <label>Working capital, % of revenue growth<input class="field" type="number" inputmode="decimal" enterkeyhint="done" id="l-nwc" value="10" step="1"></label>
+        <label>Tax rate, %<input class="field" type="number" inputmode="decimal" enterkeyhint="done" id="l-tax" value="22" step="1" min="0"><span class="hint">Norway's corporate rate</span></label>
+        <label>Years held<input class="field" type="number" inputmode="numeric" enterkeyhint="done" id="l-n" value="5" step="1" min="1" max="10"></label>
+        <label>Exit multiple, EV/EBITDA<input class="field" type="number" inputmode="decimal" enterkeyhint="done" id="l-xm" value="9" step="0.5" min="0"></label>
+      </div>
+      <p class="hint" style="margin-top:1rem"><button type="button" class="btn btn-quiet" id="l-reset">Reset to the base case</button></p>
+    </section>
+
+    <section class="block" aria-labelledby="ret-h">
+      <h2 id="ret-h">Return</h2>
+      <p class="verdict" id="verdict"></p>
+      <dl class="kpis" id="kpis"></dl>
+      <div class="two-charts">
+        <div>
+          <p class="chart-title">Where the gain comes from</p>
+          <p class="chart-sub">Equity in, the four drivers, equity out. NOK million.</p>
+          <div id="chart-bridge"></div>
+        </div>
+        <div>
+          <p class="chart-title">Debt is paid down</p>
+          <p class="chart-sub">Net debt at year end, NOK million</p>
+          <div id="chart-debt"></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="block" aria-labelledby="su-h">
+      <h2 id="su-h">Sources and uses at entry</h2>
+      <div class="two-charts">
+        <div class="table-wrap"><table class="data-table" id="sources"></table></div>
+        <div class="table-wrap"><table class="data-table" id="uses"></table></div>
+      </div>
+    </section>
+
+    <section class="block" id="model" aria-labelledby="m-h">
+      <h2 id="m-h">The model, year by year</h2>
+      <div class="table-wrap"><table class="data-table" id="proj"></table></div>
+      <p class="hint">Interest is charged on the debt at the start of each year, which avoids a circular model. Cash left after interest, tax, capex, working capital and scheduled amortisation is swept into early repayment, senior loan first. The model assumes no cash on the balance sheet at entry.</p>
+    </section>
+
+    <section class="block" id="sens" aria-labelledby="s-h">
+      <h2 id="s-h">Sensitivity</h2>
+      <p>The return depends most on the price paid and the price received. Each cell is the IRR with everything else as above. The outlined cell is the current case.</p>
+      <h3>IRR by entry and exit multiple</h3>
+      <div class="table-wrap"><table class="data-table heat" id="sens-mult"></table></div>
+      <h3>IRR by revenue growth and senior debt</h3>
+      <div class="table-wrap"><table class="data-table heat" id="sens-lev"></table></div>
+    </section>
+
+    <section class="block" aria-labelledby="h-h">
+      <h2 id="h-h">How to read it</h2>
+      <ul>
+        <li><strong>IRR</strong> is the annual return on the equity the fund puts in. Funds typically aim for 20% or more before fees.</li>
+        <li><strong>Money multiple (MoM)</strong> is equity out divided by equity in. A 2.0× over five years is about 15% a year.</li>
+        <li><strong>EBITDA growth</strong> creates value at the entry multiple. <strong>Multiple expansion</strong> is selling at a higher multiple than you paid, which a careful case does not assume. <strong>Debt paydown</strong> moves value from lenders to owners as cash repays debt.</li>
+        <li>More debt raises the IRR when things go to plan and the risk of losing everything when they do not. Try a growth rate of −5%.</li>
+      </ul>
+      <p class="note">The model is simplified for teaching: annual periods, no minimum cash, no management equity, no interest limitation rule and no transaction structure. Real LBO models are monthly or quarterly for the first years and include covenants.</p>
+    </section>
+  </div>
+</main>
+
+<footer>
+  <div class="wrap">Oslo, Norway</div>
+</footer>
+
+<script src="/assets/charts.js?v=1"></script>
+<script src="lbo.js?v=1"></script>
+</body>
+</html>

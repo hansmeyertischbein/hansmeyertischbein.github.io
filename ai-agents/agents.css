@@ -1,0 +1,36 @@
+/* How I work with AI agents */
+.flow { list-style: none; margin: 1.5rem 0 1rem; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0.75rem; }
+@media (max-width: 40rem) {
+  .flow { grid-template-columns: minmax(0, 1fr); gap: 0.5rem; }
+  .flow li { grid-template-columns: 1.6rem minmax(0, 1fr); column-gap: 0.6rem; padding: 0.7rem 0.8rem; }
+  .flow-n { grid-row: span 2; }
+}
+.flow li { position: relative; display: grid; gap: 0.25rem; align-content: start; padding: 0.85rem 0.9rem 0.9rem; border: 1px solid var(--rule); border-radius: 8px; font-size: 0.875rem; color: var(--muted); }
+.flow li strong { color: var(--ink); font-size: 0.95rem; }
+.flow-n { font: 400 1.4rem/1 var(--serif); color: var(--c1); }
+.flow li.flow-gate { border-color: var(--ink); border-width: 2px; }
+.flow li.flow-gate .flow-n { color: var(--ink); }
+
+.week { margin: 0.75rem 0 0; }
+.week svg { display: block; width: 100%; height: auto; }
+.week text { font-family: var(--sans); font-size: 12px; fill: var(--muted); }
+.week .day { fill: var(--ink); font-weight: 600; }
+.week .grid { stroke: var(--c-grid); }
+.week .mark { stroke: var(--paper); stroke-width: 2; }
+
+.agent-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 19rem), 1fr)); gap: 1rem; margin-top: 2rem; }
+.agent { border: 1px solid var(--rule); border-radius: 8px; padding: 1rem 1.1rem 1.1rem; display: grid; gap: 0.5rem; align-content: start; }
+.agent h3 { margin: 0; font: 500 1.2rem/1.25 var(--serif); color: var(--ink); }
+.agent p { margin: 0 !important; font-size: 0.95rem; }
+.agent-when { color: var(--muted); font-size: 0.85rem !important; font-variant-numeric: tabular-nums; }
+.agent-links { font-size: 0.875rem !important; color: var(--muted); }
+
+.rules td { white-space: normal; text-align: left !important; vertical-align: top; min-width: 11rem; }
+.rules th { text-align: left !important; }
+.rules td:first-child { font-weight: 600; }
+
+.incidents { display: grid; gap: 0; border-top: 1px solid var(--rule); }
+.incidents article { padding: 1.25rem 0; border-bottom: 1px solid var(--rule); max-width: 40rem; }
+.incidents h3 { margin: 0 0 0.5rem; font: 500 1.2rem/1.3 var(--serif); color: var(--ink); }
+.incidents p { margin: 0 0 0.5rem; }
+.incidents .fix { padding-left: 0.9rem; border-left: 3px solid var(--c3); margin: 0; }
