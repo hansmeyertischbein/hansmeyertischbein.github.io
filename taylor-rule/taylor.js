@@ -144,8 +144,8 @@
     });
     var today = new Date().toISOString().slice(0, 10);
     var next = D.norges_bank.next_meetings.filter(function (d) { return d >= today; });
-    $('next-meetings').textContent = 'Only changes are listed. Next decisions: ' + next.slice(0, 4).map(longDate).join(', ') + '. The page is updated the same day.';
-    if (next.length) $('m-next').textContent = 'Next update: ' + longDate(next[0]);
+    $('next-meetings').textContent = 'Only changes are listed. Next decisions: ' + next.slice(0, 4).map(longDate).join(', ') + '. The page is updated on the 1st and 15th of every month.';
+    if (next.length) $('m-next').textContent = 'Next rate decision: ' + longDate(next[0]);
     $('m-updated').textContent = 'Updated after the decision of ' + longDate(D.norges_bank.decision_date) + '. CPI-ATE to ' + monthName(D.latest.cpi_month) + ', GDP to ' + qLabel(D.latest.gdp_quarter) + '.';
   }
 

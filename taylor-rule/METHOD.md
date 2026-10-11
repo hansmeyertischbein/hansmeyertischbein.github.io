@@ -1,7 +1,7 @@
 # Taylor rule for Norges Bank: update method
 
-Instructions for the agent that updates `/taylor-rule/` after every Norges Bank policy rate
-decision. The page reads `taylor-rule/data.json`, which is built by
+Instructions for the agent that updates `/taylor-rule/` twice a month, on the 1st and 15th,
+with any new rate decision, inflation figures, GDP figures and Monetary Policy Report. The page reads `taylor-rule/data.json`, which is built by
 `tools/build_taylor.py` from the raw files in `taylor-rule/data/`. Never edit
 `data.json` by hand. The site is in English; the message to Hans is in Norwegian.
 
@@ -13,16 +13,16 @@ verified, leave the old file unchanged for that series and say so in the report.
 
 1. Open Norges Bank's list of decisions:
    https://www.norges-bank.no/en/topics/monetary-policy/policy-rate/Key-policy-rate-Monetary-policy-meetings-and-changes-in-the-policy-rate/
-2. If the policy rate changed at today's meeting, add a line to `data/policy_rate.csv`
+2. If the policy rate changed at any meeting since `decision_date`, add a line to `data/policy_rate.csv`
    (`announced` = announcement date YYYY-MM-DD, `rate_pct` = new rate with two decimals).
    The file lists changes only, so add nothing when the rate is unchanged.
 3. Confirm the decision against the press release for the day on norges-bank.no.
-4. In `data/norges_bank.json` set `decision_date` to today's announcement date and
+4. In `data/norges_bank.json` set `decision_date` to the latest announcement date and
    `policy_rate` to the rate now in force.
 
 ## 2. Monetary Policy Report (March, June, September and December meetings)
 
-When the decision comes with a new Monetary Policy Report, update in `data/norges_bank.json`:
+When a new Monetary Policy Report has come out since the last update, update in `data/norges_bank.json`:
 
 - `report` and `report_url` (the report's landing page on norges-bank.no)
 - `neutral_real_rate_low` and `neutral_real_rate_high` (the report's estimate of the
@@ -82,9 +82,10 @@ runs can be created for them.
 
 ## 7. Publish and report
 
-- Commit with the message `Update Taylor rule after Norges Bank decision <date>` and push to
+- Commit with the message `Update Taylor rule data <date>` and push to
   `main`.
-- Send Hans a short message in Norwegian: the decision (rate and change), what the Taylor rule
+- If nothing was new, change nothing and send no message. Otherwise send Hans a short
+  message in Norwegian: what was new (decision, inflation month, GDP quarter, report), what the Taylor rule
   now says with the default settings, the difference to the policy rate, and the link
   https://hansmeyertischbein.github.io/taylor-rule/ . If anything failed, say exactly what,
   and do not publish half-updated data.

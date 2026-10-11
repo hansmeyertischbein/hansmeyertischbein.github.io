@@ -7,11 +7,11 @@
   ],
   "entries": [
     {
-      "date": "2026-10-11",
+      "date": "2026-10-10",
       "topic": "Finance",
       "title": "Taylor rule for Norges Bank",
       "url": "/taylor-rule/",
-      "text": "What a simple Taylor rule says Norway’s policy rate should be, against what Norges Bank actually set since 2015, with data from Norges Bank and Statistics Norway. An AI agent updates it after every rate decision.",
+      "text": "What a simple Taylor rule says Norway’s policy rate should be, against what Norges Bank actually set since 2015, with data from Norges Bank and Statistics Norway. An AI agent updates it twice a month.",
       "tools": "Monetary policy, Hodrick-Prescott filter, Python, JavaScript",
       "links": [
         {
@@ -25,7 +25,7 @@
       ]
     },
     {
-      "date": "2026-10-11",
+      "date": "2026-10-09",
       "topic": "Finance",
       "title": "Bonds and the yield curve",
       "url": "/bonds/",
@@ -43,7 +43,7 @@
       ]
     },
     {
-      "date": "2026-10-11",
+      "date": "2026-10-04",
       "topic": "Finance",
       "title": "Option pricing",
       "url": "/options/",
@@ -61,7 +61,7 @@
       ]
     },
     {
-      "date": "2026-10-11",
+      "date": "2026-09-27",
       "topic": "Finance",
       "title": "LBO calculator",
       "url": "/lbo/",
@@ -79,7 +79,7 @@
       ]
     },
     {
-      "date": "2026-10-11",
+      "date": "2026-09-23",
       "topic": "Strategy and decisions",
       "title": "Case interview trainer",
       "url": "/case-trainer/",
@@ -125,7 +125,7 @@
       ]
     },
     {
-      "date": "2026-10-11",
+      "date": "2026-09-20",
       "topic": "Other",
       "title": "CV generator",
       "url": "/cv-generator/",
@@ -143,7 +143,7 @@
       ]
     },
     {
-      "date": "2026-09-28",
+      "date": "2026-09-06",
       "topic": "Finance",
       "title": "What does Gjensidige’s share price assume?",
       "url": "/valuation/",
@@ -161,7 +161,7 @@
       ]
     },
     {
-      "date": "2026-09-21",
+      "date": "2026-09-02",
       "topic": "Insurance",
       "title": "Who makes money on insurance itself?",
       "url": "/combined-ratio/",
@@ -175,7 +175,7 @@
       ]
     },
     {
-      "date": "2026-09-07",
+      "date": "2026-08-30",
       "topic": "Insurance",
       "title": "Simulating a year of claims",
       "url": "/claims-simulation/",
@@ -197,7 +197,7 @@
       ]
     },
     {
-      "date": "2026-08-31",
+      "date": "2026-08-19",
       "topic": "Finance",
       "title": "Portfolio and CAPM calculator",
       "url": "/portfolio/",
@@ -215,7 +215,7 @@
       ]
     },
     {
-      "date": "2026-08-17",
+      "date": "2026-08-09",
       "topic": "Strategy and decisions",
       "title": "Case: student contents insurance",
       "url": "/student-insurance-case/",
@@ -229,7 +229,7 @@
       ]
     },
     {
-      "date": "2026-09-14",
+      "date": "2026-08-23",
       "topic": "Insurance",
       "title": "Careless or grossly careless?",
       "url": "/gross-negligence/",
@@ -243,7 +243,7 @@
       ]
     },
     {
-      "date": "2026-10-05",
+      "date": "2026-09-13",
       "topic": "Strategy and decisions",
       "title": "What does it cost to wait?",
       "url": "/priority/",
@@ -265,7 +265,7 @@
       ]
     },
     {
-      "date": "2026-08-24",
+      "date": "2026-08-16",
       "topic": "Finance",
       "title": "Market concentration calculator",
       "url": "/hhi/",
