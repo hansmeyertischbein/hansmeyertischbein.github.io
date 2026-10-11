@@ -57,32 +57,52 @@ textarea.field { resize: vertical; line-height: 1.45; font-family: var(--sans); 
 .fit.over { color: #9A3B1E; font-weight: 600; }
 @media (prefers-color-scheme: dark) { .fit.over { color: #F0A58A; } }
 
-/* The A4 page, in print units so it matches the Word and PDF output */
+/* The A4 page, in print units so it matches the Word and PDF output.
+   --s scales all text and spacing so a long CV still fits on one page. */
 .cv-page {
+  --s: 1;
   width: 595.3pt; height: 841.9pt; transform-origin: top left;
   background: #fff; color: #111; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 8px 24px rgba(16, 30, 60, 0.12);
-  font-family: Carlito, Calibri, "Segoe UI", Arial, sans-serif; font-size: 10pt; line-height: 1.22;
+  font-family: Carlito, Calibri, "Segoe UI", Arial, sans-serif; font-size: calc(10pt * var(--s)); line-height: 1.22;
   -webkit-font-smoothing: auto; font-feature-settings: normal;
 }
 .cv-content { height: 100%; padding: 19pt 40pt 20pt; overflow: hidden; }
 .cv-content p { margin: 0; }
-.cv-name { font-size: 17pt; font-weight: 700; color: #1F3864; text-transform: uppercase; line-height: 1.15; margin-bottom: 1pt !important; }
-.cv-contact { font-size: 9pt; color: #333; padding-bottom: 5pt; border-bottom: 1.5pt solid #1F3864; }
+.cv-name { font-size: 1.7em; font-weight: 700; color: #1F3864; text-transform: uppercase; line-height: 1.15; margin-bottom: 0.1em !important; }
+.cv-contact { font-size: 0.9em; color: #333; padding-bottom: 0.55em; border-bottom: 1.5pt solid #1F3864; }
 .cv-contact a { color: #1155CC; text-decoration: underline; }
-.cv-dot { padding: 0 6pt; }
-.cv-h { font: 700 10pt/1.2 Carlito, Calibri, Arial, sans-serif; color: #1F3864; text-transform: uppercase; letter-spacing: 0.5pt; margin: 8pt 0 4pt; padding-bottom: 2pt; border-bottom: 0.75pt solid #1F3864; }
-.cv-p { margin-bottom: 2pt !important; }
-.cv-entry { margin-top: 3pt; }
-.cv-eh { display: flex; justify-content: space-between; gap: 12pt; }
-.cv-et { font-size: 10.5pt; font-weight: 700; }
+.cv-dot { padding: 0 0.66em; }
+.cv-h { font-family: Carlito, Calibri, Arial, sans-serif; font-size: 1em; font-weight: 700; line-height: 1.2; color: #1F3864; text-transform: uppercase; letter-spacing: 0.05em; margin: 0.8em 0 0.4em; padding-bottom: 0.2em; border-bottom: 0.75pt solid #1F3864; }
+.cv-p { margin-bottom: 0.2em !important; }
+.cv-entry { margin-top: 0.3em; }
+.cv-eh { display: flex; justify-content: space-between; gap: 1.2em; }
+.cv-et { font-size: 1.05em; font-weight: 700; }
 .cv-ed { font-style: italic; color: #333; white-space: nowrap; }
-.cv-ul { margin: 1pt 0 0; padding-left: 36pt; list-style: none; }
+.cv-ul { margin: 0.1em 0 0; padding-left: 3.6em; list-style: none; }
 .cv-ul li { position: relative; }
-.cv-ul li::before { content: "●"; position: absolute; left: -18pt; font-size: 9pt; }
-.cv-courses { font-size: 9.5pt; margin-top: 2pt !important; }
-.cv-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 0 10pt; padding: 0 5pt; }
-.cv-sub { font-weight: 700; color: #1F3864; margin: 1pt 0 1pt !important; }
-.cv-line { margin-bottom: 1pt !important; }
+.cv-ul li::before { content: ""; position: absolute; left: -1.62em; top: 0.47em; width: 0.42em; height: 0.42em; border-radius: 50%; background: #111; }
+.cv-courses { font-size: 0.95em; margin-top: 0.2em !important; }
+.cv-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 0 1em; padding: 0 0.5em; }
+.cv-sub { font-weight: 700; color: #1F3864; margin: 0.1em 0 !important; }
+.cv-line { margin-bottom: 0.1em !important; }
+
+/* Import report and writing checks */
+.import-report { margin-top: 0.9rem; padding: 0.75rem 0.9rem; border: 1px solid var(--rule); border-radius: 6px; font-size: 0.875rem; }
+.import-report p { margin: 0 0 0.4rem; }
+.import-report ul { margin: 0.25rem 0 0; padding-left: 1.1rem; color: var(--muted); }
+.import-report li { margin: 0.2rem 0; overflow-wrap: anywhere; }
+.check-list { list-style: none; margin: 0.6rem 0 0; padding: 0; display: grid; gap: 0.4rem; }
+.check-list li { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 0.2rem 0.75rem; align-items: start; padding: 0.6rem 0.75rem; border: 1px solid var(--rule); border-left: 3px solid var(--navy); border-radius: 4px; font-size: 0.875rem; }
+.check-list .where { color: var(--muted); font-size: 0.8rem; grid-column: 1; }
+.check-list .what { grid-column: 1; color: var(--ink); }
+.check-list .quote { grid-column: 1; color: var(--muted); font-style: italic; overflow-wrap: anywhere; }
+.check-list button { grid-column: 2; grid-row: 1 / span 3; align-self: center; }
+.check-more { font-size: 0.875rem; color: var(--muted); }
+.ai-help { margin-top: 1rem; border-top: 1px solid var(--rule); padding-top: 0.75rem; }
+.ai-help summary { cursor: pointer; color: var(--navy); font-size: 0.95rem; width: fit-content; }
+.flash { animation: flash 1.2s var(--ease-out); }
+@keyframes flash { from { box-shadow: 0 0 0 3px color-mix(in srgb, var(--navy) 45%, transparent); } to { box-shadow: 0 0 0 0 transparent; } }
+@media (prefers-reduced-motion: reduce) { .flash { animation: none; } }
 
 @media (max-width: 60rem) {
   .workspace { grid-template-columns: minmax(0, 1fr); }

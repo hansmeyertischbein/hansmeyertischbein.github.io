@@ -129,8 +129,8 @@
       "topic": "Other",
       "title": "CV generator",
       "url": "/cv-generator/",
-      "text": "Write a CV once and download a clean one-page version as a Word file or PDF, with a live preview, a check that it fits on one page, and English or Norwegian headings.",
-      "tools": "JavaScript, docx, print CSS",
+      "text": "Upload a CV as PDF or Word, or start from scratch, and download a clean one-page version as a Word file or PDF. The text scales to fit one page, and a writing check flags bullet points without numbers or with weak verbs.",
+      "tools": "JavaScript, docx, jsPDF, pdf.js",
       "links": [
         {
           "text": "Open the generator",
