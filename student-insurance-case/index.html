@@ -3,6 +3,9 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" media="(prefers-color-scheme: light)" content="#FBFCFD">
+<meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0F1626">
+<meta name="color-scheme" content="light dark">
 <title>Case: student contents insurance – Hans Meyer Tischbein</title>
 <meta name="description" content="A consulting-style market sizing case for contents insurance among students in Norway, with an interactive estimate and a recommendation.">
 <meta property="og:type" content="website">
@@ -18,8 +21,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,500&family=Public+Sans:wght@400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/site.css">
-<link rel="stylesheet" href="case.css">
+<link rel="stylesheet" href="/site.css?v=2">
+<link rel="stylesheet" href="case.css?v=2">
 </head>
 <body>
 
@@ -72,11 +75,11 @@
     <section class="block">
       <div class="block-head"><h2>3. Estimate</h2><button class="btn btn-quiet" type="button" id="reset">Reset</button></div>
       <div class="fields">
-        <label>Students<input class="field" id="students" type="number" inputmode="numeric" step="1000"><span class="hint">308,097 in Norwegian higher education in 2025 (HK-dir).</span></label>
-        <label>Living with parents, %<input class="field" id="home" type="number" inputmode="decimal" step="1"><span class="hint">Assumption. 14% in our survey of 18–29-year-olds.</span></label>
-        <label>Covered by parents’ policy, %<input class="field" id="parents" type="number" inputmode="decimal" step="1"><span class="hint">Assumption. Check each insurer’s terms.</span></label>
-        <label>Of the rest, own policy, %<input class="field" id="bought" type="number" inputmode="decimal" step="1"><span class="hint">Assumption. Young adults often don’t know what they have.</span></label>
-        <label>Average premium, NOK per year<input class="field" id="premium" type="number" inputmode="numeric" step="100"><span class="hint">Assumption for a small rented home.</span></label>
+        <label>Students<input class="field" id="students" type="number" enterkeyhint="done" inputmode="numeric" step="1000"><span class="hint">308,097 in Norwegian higher education in 2025 (HK-dir).</span></label>
+        <label>Living with parents, %<input class="field" id="home" type="number" enterkeyhint="done" inputmode="decimal" step="1"><span class="hint">Assumption. 14% in our survey of 18–29-year-olds.</span></label>
+        <label>Covered by parents’ policy, %<input class="field" id="parents" type="number" enterkeyhint="done" inputmode="decimal" step="1"><span class="hint">Assumption. Check each insurer’s terms.</span></label>
+        <label>Of the rest, own policy, %<input class="field" id="bought" type="number" enterkeyhint="done" inputmode="decimal" step="1"><span class="hint">Assumption. Young adults often don’t know what they have.</span></label>
+        <label>Average premium, NOK per year<input class="field" id="premium" type="number" enterkeyhint="done" inputmode="numeric" step="100"><span class="hint">Assumption for a small rented home.</span></label>
       </div>
       <dl class="outputs" style="margin-top:2rem">
         <div><dt>Market today</dt><dd id="o-market"></dd></div>
@@ -122,6 +125,6 @@
 <footer>
   <div class="wrap">Oslo, Norway</div>
 </footer>
-<script src="case.js"></script>
+<script src="case.js?v=2"></script>
 </body>
 </html>

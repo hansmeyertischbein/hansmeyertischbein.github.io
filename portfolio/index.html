@@ -3,6 +3,9 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" media="(prefers-color-scheme: light)" content="#FBFCFD">
+<meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0F1626">
+<meta name="color-scheme" content="light dark">
 <title>Portfolio and CAPM calculator – Hans Meyer Tischbein</title>
 <meta name="description" content="An interactive efficient frontier for two assets, the best risk-adjusted mix, and a CAPM calculator for the required return on equity.">
 <meta property="og:type" content="website">
@@ -18,7 +21,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,500&family=Public+Sans:wght@400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/site.css">
+<link rel="stylesheet" href="/site.css?v=2">
 </head>
 <body>
 
@@ -47,13 +50,13 @@
       <div class="block-head"><h2>Two assets</h2><button class="btn btn-quiet" type="button" id="reset">Reset</button></div>
       <div class="fields">
         <label>Asset A<input class="field" id="aName" type="text"></label>
-        <label>Expected return A, %<input class="field" id="aRet" type="number" inputmode="decimal" step="0.5"></label>
-        <label>Volatility A, %<input class="field" id="aVol" type="number" inputmode="decimal" min="0" step="0.5"></label>
+        <label>Expected return A, %<input class="field" id="aRet" type="number" enterkeyhint="done" inputmode="decimal" step="0.5"></label>
+        <label>Volatility A, %<input class="field" id="aVol" type="number" enterkeyhint="done" inputmode="decimal" min="0" step="0.5"></label>
         <label>Asset B<input class="field" id="bName" type="text"></label>
-        <label>Expected return B, %<input class="field" id="bRet" type="number" inputmode="decimal" step="0.5"></label>
-        <label>Volatility B, %<input class="field" id="bVol" type="number" inputmode="decimal" min="0" step="0.5"></label>
-        <label>Correlation<input class="field" id="rho" type="number" inputmode="decimal" min="-1" max="1" step="0.1"></label>
-        <label>Risk-free rate, %<input class="field" id="rf" type="number" inputmode="decimal" step="0.1"></label>
+        <label>Expected return B, %<input class="field" id="bRet" type="number" enterkeyhint="done" inputmode="decimal" step="0.5"></label>
+        <label>Volatility B, %<input class="field" id="bVol" type="number" enterkeyhint="done" inputmode="decimal" min="0" step="0.5"></label>
+        <label>Correlation<input class="field" id="rho" type="number" enterkeyhint="done" inputmode="decimal" min="-1" max="1" step="0.1"></label>
+        <label>Risk-free rate, %<input class="field" id="rf" type="number" enterkeyhint="done" inputmode="decimal" step="0.1"></label>
       </div>
       <p class="hint">Default returns and volatilities are illustrative long-run assumptions, not forecasts. The risk-free rate is the ten-year Norwegian government yield in November 2025.</p>
 
@@ -73,9 +76,9 @@
     <section class="block" id="capm">
       <h2>Required return (CAPM)</h2>
       <div class="fields">
-        <label>Risk-free rate, %<input class="field" id="cRf" type="number" inputmode="decimal" step="0.1"></label>
-        <label>Beta<input class="field" id="cBeta" type="number" inputmode="decimal" step="0.1"><span class="hint">1 moves with the market; below 1 is less sensitive.</span></label>
-        <label>Market risk premium, %<input class="field" id="cMrp" type="number" inputmode="decimal" step="0.25"><span class="hint">5% is the median in PwC’s 2025 survey of the Norwegian market.</span></label>
+        <label>Risk-free rate, %<input class="field" id="cRf" type="number" enterkeyhint="done" inputmode="decimal" step="0.1"></label>
+        <label>Beta<input class="field" id="cBeta" type="number" enterkeyhint="done" inputmode="decimal" step="0.1"><span class="hint">1 moves with the market; below 1 is less sensitive.</span></label>
+        <label>Market risk premium, %<input class="field" id="cMrp" type="number" enterkeyhint="done" inputmode="decimal" step="0.25"><span class="hint">5% is the median in PwC’s 2025 survey of the Norwegian market.</span></label>
       </div>
       <dl class="outputs" style="margin-top:1.5rem"><div><dt>Required return on equity</dt><dd id="o-capm"></dd></div></dl>
     </section>
@@ -100,6 +103,6 @@
 <footer>
   <div class="wrap">Oslo, Norway</div>
 </footer>
-<script src="portfolio.js"></script>
+<script src="portfolio.js?v=2"></script>
 </body>
 </html>

@@ -21,8 +21,8 @@
 .remove { width: 2.25rem; height: 2.25rem; padding: 0; display: grid; place-items: center; }
 .remove svg { width: 14px; height: 14px; stroke: currentColor; stroke-width: 2; }
 .task details { margin-top: 0.35rem; }
-.task summary { cursor: pointer; font-size: 0.85rem; color: var(--muted); padding: 0.2rem 0; width: max-content; }
-.task summary:hover { color: var(--ink); }
+.task summary { cursor: pointer; font-size: 0.85rem; color: var(--muted); padding: 0.5rem 0; width: max-content; }
+@media (hover: hover) and (pointer: fine) { .task summary:hover { color: var(--ink); } }
 .more { display: grid; grid-template-columns: repeat(3, minmax(0, 8.5rem)) auto; gap: 0.75rem 1rem; align-items: end; padding: 0.6rem 0 0.4rem; }
 .more .check { display: flex; align-items: center; gap: 0.5rem; color: var(--ink); font-size: 0.9rem; padding-bottom: 0.55rem; }
 .more .check input { width: 1.05rem; height: 1.05rem; accent-color: var(--navy); }
@@ -75,7 +75,7 @@
   .more { grid-template-columns: repeat(3, minmax(0, 1fr)); }
   .more .check { grid-column: 1 / -1; padding-bottom: 0; }
   .settings { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.6rem; }
-  .task select { font-size: 0.9rem; padding-left: 0.45rem; padding-right: 0.2rem; }
+  .task select { padding-left: 0.45rem; padding-right: 0.2rem; }
   .settings label { font-size: 0.8rem; }
 }
 @media (min-width: 40.01rem) {

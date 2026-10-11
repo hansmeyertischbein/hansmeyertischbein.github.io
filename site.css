@@ -6,9 +6,9 @@
   --rule: #DDE2EA;
   --serif: "Newsreader", Georgia, "Times New Roman", serif;
   --sans: "Public Sans", -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
   box-sizing: border-box;
-  padding-top: env(safe-area-inset-top, 0px);
-  padding-bottom: env(safe-area-inset-bottom, 0px);
 }
 @media (prefers-color-scheme: dark) {
   :root {
@@ -20,7 +20,12 @@
   }
 }
 *, *::before, *::after { box-sizing: inherit; }
-html { scroll-behavior: smooth; scroll-padding-top: 4.5rem; }
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: calc(4.5rem + env(safe-area-inset-top, 0px));
+  -webkit-tap-highlight-color: transparent;
+  -webkit-text-size-adjust: 100%;
+}
 @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
 
 body {
@@ -32,14 +37,15 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 a { color: var(--navy); text-underline-offset: 0.2em; text-decoration-thickness: 1px; }
-a:hover { text-decoration-thickness: 2px; }
+
 :focus-visible { outline: 2px solid var(--navy); outline-offset: 3px; border-radius: 2px; }
 
-.wrap { max-width: 46rem; margin: 0 auto; padding: 0 1.5rem; }
+.wrap { max-width: 46rem; margin: 0 auto; padding: 0 max(1.5rem, env(safe-area-inset-right, 0px)) 0 max(1.5rem, env(safe-area-inset-left, 0px)); }
 
 /* Navigation */
 header.nav {
-  position: sticky; top: env(safe-area-inset-top, 0px); z-index: 10;
+  position: sticky; top: 0; z-index: 10;
+  padding-top: env(safe-area-inset-top, 0px);
   background: var(--paper);
   border-bottom: 1px solid var(--rule);
 }
@@ -47,7 +53,8 @@ header.nav .wrap { display: flex; align-items: baseline; justify-content: space-
 .nav-name { font: 500 1.05rem var(--serif); color: var(--ink); text-decoration: none; }
 .nav-links { display: flex; gap: 1.5rem; margin: 0; padding: 0; list-style: none; font-size: 0.95rem; }
 .nav-links a { color: var(--muted); text-decoration: none; }
-.nav-links a:hover, .nav-links a[aria-current="true"] { color: var(--ink); }
+.nav-links a[aria-current="true"] { color: var(--ink); }
+.nav-links a { padding: 0.5rem 0; }
 
 /* Intro */
 .intro { padding: 5.5rem 0 4rem; }
@@ -71,7 +78,8 @@ h3:first-of-type { margin-top: 0; }
 .cv-files { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--rule); }
 .cv-files li { border-bottom: 1px solid var(--rule); }
 .cv-files a { display: flex; justify-content: space-between; align-items: baseline; padding: 1.1rem 0; text-decoration: none; color: var(--ink); font: 400 1.5rem/1.2 var(--serif); }
-.cv-files a:hover span:first-child { text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 0.2em; }
+.cv-files a { transition: background-color 160ms ease; }
+.cv-files a:active { background-color: color-mix(in srgb, var(--navy) 6%, transparent); }
 .cv-files .cv-meta { font: 500 0.875rem var(--sans); color: var(--muted); }
 
 /* Projects */
@@ -83,7 +91,7 @@ h3:first-of-type { margin-top: 0; }
 .project .links { display: flex; flex-wrap: wrap; gap: 0.4rem 1.25rem; font-size: 0.95rem; }
 
 
-footer { padding: 2.5rem 0 3rem; border-top: 1px solid var(--rule); color: var(--muted); font-size: 0.9rem; }
+footer { padding: 2.5rem 0 calc(3rem + env(safe-area-inset-bottom, 0px)); border-top: 1px solid var(--rule); color: var(--muted); font-size: 0.9rem; }
 
 @media (max-width: 34rem) {
   .intro { padding: 3.5rem 0 3rem; }
@@ -133,13 +141,17 @@ figcaption { margin-top: 0.75rem; color: var(--muted); font-size: 0.875rem; max-
 .segment p { grid-column: 1 / -1; margin: 0; max-width: 36rem; }
 
 /* ---------- Tool controls ---------- */
-input, select, button { font: inherit; color: inherit; }
+input, select, button, textarea { font: inherit; color: inherit; }
+/* 16px minimum stops iOS Safari zooming the page when a field gets focus */
+input, select, textarea { font-size: 16px; }
 .field { box-sizing: border-box; width: 100%; padding: 0.5rem 0.6rem; border: 1px solid var(--rule); border-radius: 4px; background: var(--paper); }
 .field:focus-visible { outline: 2px solid var(--navy); outline-offset: 0; border-color: var(--navy); }
-.btn { padding: 0.5rem 0.9rem; border: 1px solid var(--rule); border-radius: 4px; background: transparent; cursor: pointer; font-size: 0.95rem; }
-.btn:hover { border-color: var(--muted); }
+.btn {
+  padding: 0.5rem 0.9rem; border: 1px solid var(--rule); border-radius: 4px; background: transparent; cursor: pointer; font-size: 0.95rem;
+  transition: transform 160ms var(--ease-out), border-color 150ms ease, color 150ms ease, background-color 150ms ease;
+}
+.btn:active { transform: scale(0.97); background-color: color-mix(in srgb, var(--navy) 6%, transparent); }
 .btn-quiet { border-color: transparent; color: var(--muted); padding: 0.4rem 0.5rem; }
-.btn-quiet:hover { color: var(--ink); border-color: transparent; }
 figure svg { max-width: 30rem; }
 
 /* ---------- Shared tool and article components ---------- */
@@ -182,3 +194,21 @@ input[type="range"] { width: 100%; accent-color: var(--navy); }
 .projects-group > h3 { margin: 0 0 0.25rem; }
 .projects-group h3 + .project { border-top: 0; padding-top: 0.75rem; }
 @media (max-width: 34rem) { .data-table th, .data-table td { padding: 0.5rem 0.45rem; } }
+
+/* ---------- Touch and pointer ---------- */
+/* Controls respond on press, without the 300ms double-tap wait, and their labels can't be long-press selected */
+button, .btn, summary, input[type="range"], input[type="checkbox"] { touch-action: manipulation; }
+button, .btn, summary { user-select: none; -webkit-user-select: none; }
+a { touch-action: manipulation; }
+/* Hover only where a precise pointer can hover; on touch it would stick after a tap */
+@media (hover: hover) and (pointer: fine) {
+  a:hover { text-decoration-thickness: 2px; }
+  .nav-links a:hover { color: var(--ink); }
+  .cv-files a:hover span:first-child { text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 0.2em; }
+  .btn:hover { border-color: var(--muted); }
+  .btn-quiet:hover { color: var(--ink); border-color: transparent; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .btn, .cv-files a { transition: border-color 150ms ease, color 150ms ease, background-color 150ms ease; }
+  .btn:active { transform: none; }
+}

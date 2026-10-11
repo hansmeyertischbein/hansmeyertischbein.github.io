@@ -78,6 +78,7 @@ function renderRows(focusId) {
     share.step = '0.1';
     share.value = Number.isFinite(f.share) ? f.share : '';
     share.placeholder = '0';
+    share.setAttribute('enterkeyhint', 'done');
     share.setAttribute('aria-label', `Market share of ${nameOf(f, i)} in percent`);
     share.addEventListener('input', () => { f.share = parseFloat(share.value.replace(',', '.')); update(); });
 
@@ -112,7 +113,7 @@ function update() {
   // Result
   el('hhi-value').textContent = fmt(Math.round(h));
   el('hhi-label').textContent = cls.label;
-  el('marker').style.left = `${Math.min(h, 3000) / 3000 * 100}%`;
+  el('marker').style.transform = `translateX(${Math.min(h, 3000) / 3000 * 100}%)`;
   el('peek-value').textContent = fmt(Math.round(h));
   el('peek-label').textContent = cls.band === 'none' ? '' : cls.label;
 

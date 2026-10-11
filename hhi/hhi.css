@@ -12,8 +12,9 @@
 .band-low { width: 33.333%; opacity: 0.12; border-radius: 5px 0 0 5px; }
 .band-mid { width: 26.667%; opacity: 0.3; }
 .band-high { width: 40%; opacity: 0.55; border-radius: 0 5px 5px 0; }
-.marker { position: absolute; top: -6px; width: 4px; height: 22px; margin-left: -2px; border-radius: 2px; background: var(--ink); left: 0; transition: left 0.25s ease; }
-@media (prefers-reduced-motion: reduce) { .marker { transition: none; } }
+.marker-track { position: absolute; inset: 0; transform: translateX(0%); transition: transform 200ms var(--ease-in-out); will-change: transform; }
+.marker { position: absolute; left: 0; top: -6px; width: 4px; height: 22px; margin-left: -2px; border-radius: 2px; background: var(--ink); }
+@media (prefers-reduced-motion: reduce) { .marker-track { transition: none; } }
 .scale-ticks { position: relative; height: 1rem; margin-top: 0.6rem; font-size: 0.8rem; color: var(--muted); font-variant-numeric: tabular-nums; }
 .scale-ticks span { position: absolute; transform: translateX(-50%); white-space: nowrap; }
 .scale-ticks span:first-child { transform: none; }
