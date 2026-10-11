@@ -98,8 +98,12 @@ textarea.field { resize: vertical; line-height: 1.45; font-family: var(--sans); 
 .check-list .quote { grid-column: 1; color: var(--muted); font-style: italic; overflow-wrap: anywhere; }
 .check-list button { grid-column: 2; grid-row: 1 / span 3; align-self: center; }
 .check-more { font-size: 0.875rem; color: var(--muted); }
-.ai-help { margin-top: 1rem; border-top: 1px solid var(--rule); padding-top: 0.75rem; }
-.ai-help summary { cursor: pointer; color: var(--navy); font-size: 0.95rem; width: fit-content; }
+.ai-steps { list-style: none; margin: 0.9rem 0 0; padding: 0; display: grid; gap: 0.9rem; }
+.ai-steps li { display: grid; grid-template-columns: 1.75rem minmax(0, 1fr); gap: 0.6rem; align-items: start; }
+.ai-steps p { margin: 0.15rem 0 0; font-size: 0.95rem; }
+.ai-steps .file-actions { margin-top: 0.5rem; align-items: center; }
+.ai-n { display: grid; place-items: center; width: 1.75rem; height: 1.75rem; border-radius: 50%; border: 1px solid var(--ink); font-size: 0.85rem; font-weight: 600; font-variant-numeric: tabular-nums; }
+a.btn { display: inline-block; text-decoration: none; color: var(--ink); }
 .flash { animation: flash 1.2s var(--ease-out); }
 @keyframes flash { from { box-shadow: 0 0 0 3px color-mix(in srgb, var(--navy) 45%, transparent); } to { box-shadow: 0 0 0 0 transparent; } }
 @media (prefers-reduced-motion: reduce) { .flash { animation: none; } }
