@@ -1,0 +1,112 @@
+/* Layout */
+.wrap.wide, .cvgen header.nav .wrap, .cvgen footer .wrap { max-width: 78rem; }
+.page-head .lede { max-width: 40rem; }
+
+.toolbar {
+  position: sticky; top: calc(3.5rem + env(safe-area-inset-top, 0px)); z-index: 5;
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 0.75rem;
+  padding: 0.75rem 0; background: var(--paper); border-bottom: 1px solid var(--rule);
+}
+.actions { display: flex; gap: 0.5rem; }
+.btn-primary { background: var(--ink); border-color: var(--ink); color: var(--paper); }
+.btn:disabled { opacity: 0.5; cursor: default; transform: none; }
+@media (hover: hover) and (pointer: fine) { .btn-primary:hover { border-color: var(--ink); opacity: 0.9; } }
+
+.seg { display: inline-flex; padding: 3px; border: 1px solid var(--rule); border-radius: 999px; }
+.seg-btn {
+  border: 0; background: transparent; padding: 0.4rem 0.85rem; border-radius: 999px; font-size: 0.9rem; color: var(--muted); cursor: pointer;
+  touch-action: manipulation; user-select: none; -webkit-user-select: none;
+  transition: transform 160ms var(--ease-out), background-color 150ms ease, color 150ms ease;
+}
+.seg-btn:active { transform: scale(0.97); }
+.seg-btn[aria-pressed="true"] { background: var(--ink); color: var(--paper); }
+.view-tabs { display: none; }
+
+.workspace { display: grid; grid-template-columns: minmax(0, 26rem) minmax(0, 1fr); gap: 2.5rem; align-items: start; padding: 1.75rem 0 3rem; }
+
+/* Editor */
+.editor fieldset { border: 0; margin: 0 0 2rem; padding: 0; min-width: 0; }
+.editor legend { font: 500 1.35rem/1.2 var(--serif); padding: 0; margin-bottom: 0.9rem; }
+.f { display: grid; grid-template-columns: minmax(0, 1fr); gap: 0.3rem; font-size: 0.875rem; color: var(--muted); margin-bottom: 0.9rem; }
+.f .field { color: var(--ink); }
+.f .hint { font-size: 0.8rem; margin: 0; }
+textarea.field { resize: vertical; line-height: 1.45; font-family: var(--sans); }
+.grid2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 0.9rem; }
+.grid2 > .f:first-child { grid-column: 1 / -1; }
+
+.entries { display: grid; grid-template-columns: minmax(0, 1fr); gap: 0.6rem; margin-bottom: 0.9rem; justify-items: start; }
+.entry-card { width: 100%; border: 1px solid var(--rule); border-radius: 6px; background: var(--paper); }
+.entry-card summary {
+  display: flex; justify-content: space-between; gap: 1rem; align-items: baseline;
+  padding: 0.75rem 0.9rem; cursor: pointer; list-style: none; touch-action: manipulation;
+}
+.entry-card summary::-webkit-details-marker { display: none; }
+.entry-name { font-weight: 600; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.entry-when { color: var(--muted); font-size: 0.875rem; white-space: nowrap; font-variant-numeric: tabular-nums; }
+.entry-fields { padding: 0 0.9rem 0.6rem; }
+.entry-actions { display: flex; flex-wrap: wrap; gap: 0.25rem; margin: -0.25rem 0 0 -0.5rem; }
+.file-actions { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.75rem; }
+.file-btn { position: relative; display: inline-block; }
+.file-btn input { position: absolute; inset: 0; opacity: 0; cursor: pointer; font-size: 0; }
+.file-btn:focus-within { outline: 2px solid var(--navy); outline-offset: 2px; }
+
+/* Preview */
+.preview { position: sticky; top: calc(8.5rem + env(safe-area-inset-top, 0px)); min-width: 0; }
+.stage { position: relative; width: 100%; overflow: hidden; }
+.fit { margin: 0.75rem 0 0; font-size: 0.875rem; color: var(--muted); }
+.fit.over { color: #9A3B1E; font-weight: 600; }
+@media (prefers-color-scheme: dark) { .fit.over { color: #F0A58A; } }
+
+/* The A4 page, in print units so it matches the Word and PDF output */
+.cv-page {
+  width: 595.3pt; height: 841.9pt; transform-origin: top left;
+  background: #fff; color: #111; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 8px 24px rgba(16, 30, 60, 0.12);
+  font-family: Carlito, Calibri, "Segoe UI", Arial, sans-serif; font-size: 10pt; line-height: 1.22;
+  -webkit-font-smoothing: auto; font-feature-settings: normal;
+}
+.cv-content { height: 100%; padding: 19pt 40pt 20pt; overflow: hidden; }
+.cv-content p { margin: 0; }
+.cv-name { font-size: 17pt; font-weight: 700; color: #1F3864; text-transform: uppercase; line-height: 1.15; margin-bottom: 1pt !important; }
+.cv-contact { font-size: 9pt; color: #333; padding-bottom: 5pt; border-bottom: 1.5pt solid #1F3864; }
+.cv-contact a { color: #1155CC; text-decoration: underline; }
+.cv-dot { padding: 0 6pt; }
+.cv-h { font: 700 10pt/1.2 Carlito, Calibri, Arial, sans-serif; color: #1F3864; text-transform: uppercase; letter-spacing: 0.5pt; margin: 8pt 0 4pt; padding-bottom: 2pt; border-bottom: 0.75pt solid #1F3864; }
+.cv-p { margin-bottom: 2pt !important; }
+.cv-entry { margin-top: 3pt; }
+.cv-eh { display: flex; justify-content: space-between; gap: 12pt; }
+.cv-et { font-size: 10.5pt; font-weight: 700; }
+.cv-ed { font-style: italic; color: #333; white-space: nowrap; }
+.cv-ul { margin: 1pt 0 0; padding-left: 36pt; list-style: none; }
+.cv-ul li { position: relative; }
+.cv-ul li::before { content: "●"; position: absolute; left: -18pt; font-size: 9pt; }
+.cv-courses { font-size: 9.5pt; margin-top: 2pt !important; }
+.cv-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 0 10pt; padding: 0 5pt; }
+.cv-sub { font-weight: 700; color: #1F3864; margin: 1pt 0 1pt !important; }
+.cv-line { margin-bottom: 1pt !important; }
+
+@media (max-width: 60rem) {
+  .workspace { grid-template-columns: minmax(0, 1fr); }
+  .view-tabs { display: inline-flex; }
+  .preview { position: static; }
+  body[data-view="edit"] .preview { display: none; }
+  body[data-view="preview"] .editor { display: none; }
+}
+@media (max-width: 34rem) {
+  .toolbar { gap: 0.5rem; }
+  .actions { order: 3; width: 100%; }
+  .actions .btn { flex: 1; }
+  .grid2 { grid-template-columns: minmax(0, 1fr); }
+}
+
+/* Print: only the CV page, at full size */
+@page { size: A4; margin: 0; }
+@media print {
+  body * { visibility: hidden; }
+  .cv-page, .cv-page * { visibility: visible; }
+  html, body { background: #fff !important; }
+  header.nav, footer, .page-head, .toolbar, .editor, .fit { display: none !important; }
+  .workspace { display: block; padding: 0; }
+  .preview, .stage { position: static; height: auto !important; overflow: visible; }
+  .cv-page { position: absolute; left: 0; top: 0; transform: none !important; box-shadow: none; }
+  body[data-view="edit"] .preview { display: block; }
+}
