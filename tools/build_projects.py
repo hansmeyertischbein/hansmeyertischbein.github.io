@@ -22,7 +22,7 @@ import re
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 BASE = 'https://hansmeyertischbein.github.io'
 CSS_VERSION = 3        # /site.css?v=N
-FEED_CSS_VERSION = 4   # projects/projects.css?v=N
+FEED_CSS_VERSION = 5   # projects/projects.css?v=N
 FEED_JS_VERSION = 1    # projects/projects.js?v=N
 
 
