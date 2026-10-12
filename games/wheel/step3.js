@@ -2,6 +2,7 @@
 (function () {
   'use strict';
   const $ = id => document.getElementById(id);
+  if (window.GameAudio) GameAudio.init('wheel');
   let st = Wheel.load();
   if (location.hash) history.replaceState(null, '', location.pathname);
   if (!Wheel.valid(st)) { location.replace('/games/wheel/'); return; }
@@ -56,6 +57,8 @@
     const won = left[idx];
     results.push(won.name);
     $('result').textContent = st.picks > 1 ? `Pick ${results.length}: ${won.name}` : won.name;
+    if (window.GameAudio) GameAudio.sfx('fanfare');
+    showWinner(won.name);
     $('d' + won.i).classList.add('won');
     spinning = false;
     if (!st.repeat && results.length < st.picks) {
@@ -72,6 +75,33 @@
     status();
   }
   $('spin').addEventListener('click', spin);
+  // tapping the wheel spins it too, which is the only control in full screen
+  $('wheel').addEventListener('click', spin);
+  const posterEl = $('poster');
+  function isFull() { return document.fullscreenElement === posterEl || document.webkitFullscreenElement === posterEl || posterEl.classList.contains('fs'); }
+  function enterFull() {
+    const req = posterEl.requestFullscreen || posterEl.webkitRequestFullscreen;
+    if (req) { const p = req.call(posterEl); if (p && p.catch) p.catch(() => posterEl.classList.add('fs')); }
+    else posterEl.classList.add('fs');
+    document.body.classList.add('wheel-full');
+  }
+  function exitFull() {
+    if (document.fullscreenElement || document.webkitFullscreenElement) (document.exitFullscreen || document.webkitExitFullscreen).call(document);
+    posterEl.classList.remove('fs'); document.body.classList.remove('wheel-full');
+  }
+  ['fullscreenchange', 'webkitfullscreenchange'].forEach(ev => document.addEventListener(ev, () => {
+    if (!document.fullscreenElement && !document.webkitFullscreenElement && !posterEl.classList.contains('fs')) document.body.classList.remove('wheel-full');
+  }));
+  $('full').addEventListener('click', enterFull);
+  $('exit-full').addEventListener('click', e => { e.stopPropagation(); exitFull(); });
+  document.addEventListener('keydown', e => {
+    if (!isFull()) return;
+    if (e.key === 'Escape') exitFull();
+    else if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); spin(); }
+  });
+  function showWinner(name) {
+    const b = $('fs-result'); b.textContent = name; b.classList.remove('on'); void b.offsetWidth; b.classList.add('on');
+  }
   $('reset-draw').addEventListener('click', () => { if (spinning) return; left = all.map((x, i) => ({ ...x, i })); results = []; angle = 0; $('result').textContent = ''; poster(); status(); });
   $('print').addEventListener('click', () => {
     // print the full wheel, not one with elements already picked

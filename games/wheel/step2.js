@@ -2,6 +2,7 @@
 (function () {
   'use strict';
   const $ = id => document.getElementById(id);
+  if (window.GameAudio) GameAudio.init('wheel');
   let st = Wheel.load();
   if (location.hash) history.replaceState(null, '', location.pathname);
   if (!Wheel.valid(st)) { location.replace('/games/wheel/'); return; }

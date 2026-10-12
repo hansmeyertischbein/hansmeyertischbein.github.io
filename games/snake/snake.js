@@ -2,6 +2,8 @@
 (function () {
   'use strict';
   const $ = id => document.getElementById(id);
+  const A = window.GameAudio || { init() {}, sfx() {}, tempo() {} };
+  A.init('snake');
   const N = 20, canvas = $('board'), ctx = canvas.getContext('2d');
   const DIRS = { up: [0, -1], down: [0, 1], left: [-1, 0], right: [1, 0] };
   const OPP = { up: 'down', down: 'up', left: 'right', right: 'left' };
@@ -34,12 +36,13 @@
     const body = eating ? snake : snake.slice(0, -1);
     if (x < 0 || y < 0 || x >= N || y >= N || body.some(s => s[0] === x && s[1] === y)) return die();
     snake.unshift([x, y]);
-    if (eating) { score++; $('score').textContent = score; placeFood(); } else snake.pop();
+    if (eating) { score++; $('score').textContent = score; placeFood(); A.sfx('eat'); A.tempo(Math.min(176, 138 + snake.length)); } else snake.pop();
     draw();
     timer = setTimeout(tick, speed());
   }
   function die() {
     running = false; over = true; clearTimeout(timer);
+    A.sfx('die'); A.tempo(138);
     const key = 'snake-best-' + (walls ? 'walls' : 'wrap'), best = Games.load(key, 0);
     if (score > best) Games.save(key, score);
     showBest();

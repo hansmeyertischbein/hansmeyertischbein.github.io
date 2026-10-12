@@ -125,9 +125,26 @@ window.Wheel = (function () {
     const base = Math.ceil(current / 360) * 360;
     const end = base + turns * 360 + targetDeg;
     const ms = reduced ? 400 : 4200;
+    ticks(wheel, current, end, ms);
     wheel.g.style.transition = `transform ${ms}ms cubic-bezier(0.12, 0.8, 0.18, 1)`;
     wheel.g.style.transform = `rotate(${end}deg)`;
     return new Promise(res => setTimeout(() => res(end), ms + 50));
+  }
+
+  // a tick each time a slice edge passes the pointer, timed along the same easing curve as the animation
+  function ticks(wheel, from, to, ms) {
+    if (!window.GameAudio) return;
+    const edges = wheel.slices.map(sl => sl.a0 * 180 / Math.PI);
+    const bez = (u, p1, p2) => 3 * (1 - u) * (1 - u) * u * p1 + 3 * (1 - u) * u * u * p2 + u * u * u;
+    let last = -1, prevR = from;
+    for (let k = 1; k <= 1500; k++) {
+      const u = k / 1500, time = bez(u, 0.12, 0.18) * ms / 1000, r = from + bez(u, 0.8, 1) * (to - from);
+      for (const e of edges) {
+        const n = Math.floor((r + e) / 360) - Math.floor((prevR + e) / 360);
+        if (n > 0 && time - last > 0.035) { GameAudio.sfx('tick', null, time); last = time; }
+      }
+      prevR = r;
+    }
   }
 
   /* ---------- step bar ---------- */

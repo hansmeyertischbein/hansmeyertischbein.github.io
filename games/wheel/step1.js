@@ -2,6 +2,7 @@
 (function () {
   'use strict';
   const $ = id => document.getElementById(id);
+  if (window.GameAudio) GameAudio.init('wheel');
   let st = Wheel.load();
   // drop the state from the address bar once it is read
   if (location.hash) history.replaceState(null, '', location.pathname);
