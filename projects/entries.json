@@ -3,12 +3,27 @@
     "Finance",
     "Insurance",
     "Strategy and decisions",
+    "Games",
     "Other"
   ],
   "entries": [
     {
+      "date": "2026-10-12",
+      "topic": "Games",
+      "title": "Spin the wheel",
+      "url": "/games/wheel/",
+      "text": "A fair prize wheel in three steps: choose the elements, set the probability of each and how many picks to make, then spin it or print a poster with the wheel and every probability to one decimal. Each slice is exactly as wide as its probability.",
+      "tools": "JavaScript, SVG, probability",
+      "links": [
+        {
+          "text": "Make a wheel",
+          "url": "/games/wheel/"
+        }
+      ]
+    },
+    {
       "date": "2026-10-11",
-      "topic": "Other",
+      "topic": "Games",
       "title": "Games: Sudoku, Snake, 2048 and Minesweeper",
       "url": "/games/",
       "text": "Four classics built for a phone and a keyboard: swipe and tap controls, saved games and best scores, light and dark mode. Every Sudoku is generated in the browser and has exactly one solution.",
