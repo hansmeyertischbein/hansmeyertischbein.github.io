@@ -1,5 +1,6 @@
 (function () {
   'use strict';
+  if (window.GameAudio) GameAudio.init('lobby');
   const t = k => { const v = Games.load(k, null); return v ? Games.time(v) : null; };
   const lines = {
     sudoku: () => ['easy', 'medium', 'hard'].map(l => (t('sudoku-best-' + l) ? `${l[0].toUpperCase() + l.slice(1)} ${t('sudoku-best-' + l)}` : null)).filter(Boolean).join(' · '),

@@ -2,6 +2,8 @@
 (function () {
   'use strict';
   const $ = id => document.getElementById(id);
+  const A = window.GameAudio || { init() {}, sfx() {}, tempo() {} };
+  A.init('sudoku');
   const CLUES = { easy: 40, medium: 32, hard: 26 };
   const ROW = i => Math.floor(i / 9), COL = i => i % 9, BOX = i => Math.floor(ROW(i) / 3) * 3 + Math.floor(COL(i) / 3);
   const PEERS = Array.from({ length: 81 }, (_, i) => {
@@ -142,10 +144,12 @@
     if (notesMode) {
       if (S.values[i]) return;
       S.notes[i] ^= 1 << n;
+      A.sfx('click');
     } else {
       S.values[i] = S.values[i] === n ? 0 : n;
       S.notes[i] = 0;
       if (S.values[i]) PEERS[i].forEach(j => { if (S.notes[j] & (1 << n)) { step.peers.push([j, S.notes[j]]); S.notes[j] &= ~(1 << n); } });
+      if (S.values[i]) A.sfx(S.check && S.values[i] !== S.solution[i] ? 'error' : 'place'); else A.sfx('click');
       if (!Games.reduced()) { cells[i].classList.remove('pop'); void cells[i].offsetWidth; cells[i].classList.add('pop'); }
     }
     S.history.push(step);
@@ -156,6 +160,7 @@
     if (S.won || S.puzzle[sel] || (!S.values[sel] && !S.notes[sel])) return;
     S.history.push({ i: sel, v: S.values[sel], notes: S.notes[sel], peers: [] });
     S.values[sel] = 0; S.notes[sel] = 0;
+    A.sfx('click');
     after();
   }
   function undo() {
@@ -184,6 +189,7 @@
   }
   function win() {
     S.won = true;
+    A.sfx('win', null, 0.15);
     const key = 'sudoku-best-' + S.level, best = Games.load(key, null);
     const record = !S.hints && (!best || S.elapsed < best);
     if (record) Games.save(key, S.elapsed);

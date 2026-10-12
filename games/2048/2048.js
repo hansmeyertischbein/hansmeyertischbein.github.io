@@ -2,6 +2,8 @@
 (function () {
   'use strict';
   const $ = id => document.getElementById(id);
+  const A = window.GameAudio || { init() {}, sfx() {}, tempo() {} };
+  A.init('2048');
   const N = 4, layer = $('tiles');
   let tiles = [], score = 0, best = Games.load('2048-best', 0), nextId = 1, prev = null, won = false, keepGoing = false, busy = false;
   const els = new Map();
@@ -86,6 +88,7 @@
     }
     if (!moved) return;
     prev = before; busy = true;
+    if (merges.length) A.sfx('merge', Math.max(...merges.map(m => m[1].v * 2))); else A.sfx('move');
     tiles.forEach(t => { const el = els.get(t.id); el.style.setProperty('--x', t.x); el.style.setProperty('--y', t.y); });
     const finish = () => {
       merges.forEach(([gone, keep]) => {
@@ -98,8 +101,8 @@
       if (score > best) { best = score; Games.save('2048-best', best); }
       const t = spawn(); if (t) addEl(t, 'new');
       busy = false; hud(); persist();
-      if (!won && tiles.some(t => t.v >= 2048)) { won = true; persist(); show('You made 2048', `Score ${score}. Keep going for a bigger tile, or start again.`, true); }
-      else if (!canMove()) show('Game over', `Score ${score}${score >= best && score > 0 ? ', a new best' : ''}.`, false);
+      if (!won && tiles.some(t => t.v >= 2048)) { A.sfx('win'); won = true; persist(); show('You made 2048', `Score ${score}. Keep going for a bigger tile, or start again.`, true); }
+      else if (!canMove()) A.sfx('die'), show('Game over', `Score ${score}${score >= best && score > 0 ? ', a new best' : ''}.`, false);
     };
     if (Games.reduced()) finish(); else setTimeout(finish, 115);
   }

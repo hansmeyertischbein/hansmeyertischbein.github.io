@@ -2,6 +2,8 @@
 (function () {
   'use strict';
   const $ = id => document.getElementById(id);
+  const A = window.GameAudio || { init() {}, sfx() {}, tempo() {} };
+  A.init('minesweeper');
   const LEVELS = { easy: [9, 9, 10], medium: [16, 16, 40], hard: [16, 30, 99] };
   let level = Games.load('mines-level', 'easy'), rows, cols, mines, cells, btns = [], started, over, opened, flags, t0, elapsed, flagMode = false;
   const board = $('board');
@@ -59,6 +61,7 @@
     if (c.flag) return;
     if (c.open) { chord(i); return; }
     if (c.mine) { lose(i); return; }
+    A.sfx('reveal');
     // flood fill from empty squares
     const stack = [i];
     while (stack.length) {
@@ -79,10 +82,12 @@
   function flag(i) {
     if (over || cells[i].open) return;
     cells[i].flag = !cells[i].flag; flags += cells[i].flag ? 1 : -1;
+    A.sfx(cells[i].flag ? 'flag' : 'click');
     if (navigator.vibrate) try { navigator.vibrate(12); } catch (e) { /* ignore */ }
     paint(); hud();
   }
   function lose(i) {
+    A.sfx('boom');
     over = true; elapsed = Date.now() - t0;
     cells.forEach((c, j) => { if (c.mine) c.open = true; });
     paint(); btns[i].classList.add('boom');
@@ -90,6 +95,7 @@
     setTimeout(() => show('Boom', 'You hit a mine. Try again.'), Games.reduced() ? 0 : 500);
   }
   function win() {
+    A.sfx('win');
     over = true; elapsed = Date.now() - t0;
     cells.forEach(c => { if (c.mine && !c.flag) { c.flag = true; flags++; } });
     const key = 'mines-best-' + level, best = Games.load(key, null), record = !best || elapsed < best;

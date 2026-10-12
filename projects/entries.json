@@ -12,7 +12,7 @@
       "topic": "Games",
       "title": "Spin the wheel",
       "url": "/games/wheel/",
-      "text": "A fair prize wheel in three steps: choose the elements, set the probability of each and how many picks to make, then spin it or print a poster with the wheel and every probability to one decimal. Each slice is exactly as wide as its probability.",
+      "text": "A fair prize wheel in three steps: choose the elements, set the probability of each and how many picks to make, then spin it or print a poster with the wheel and every probability to one decimal. Each slice is exactly as wide as its probability. Full screen shows only the wheel and the odds, for a screen or a projector.",
       "tools": "JavaScript, SVG, probability",
       "links": [
         {
@@ -26,8 +26,8 @@
       "topic": "Games",
       "title": "Games: Sudoku, Snake, 2048 and Minesweeper",
       "url": "/games/",
-      "text": "Four classics built for a phone and a keyboard: swipe and tap controls, saved games and best scores, light and dark mode. Every Sudoku is generated in the browser and has exactly one solution.",
-      "tools": "JavaScript, canvas, game design",
+      "text": "Four classics built for a phone and a keyboard: swipe and tap controls, saved games and best scores, light and dark mode. Each game has its own music, generated live in the browser, and sound effects you can turn off. Every Sudoku is generated in the browser and has exactly one solution.",
+      "tools": "JavaScript, canvas, Web Audio, game design",
       "links": [
         {
           "text": "Play",
