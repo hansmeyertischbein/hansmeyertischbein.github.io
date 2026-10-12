@@ -7,7 +7,7 @@
 <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0F1626">
 <meta name="color-scheme" content="light dark">
 <title>Simulating a year of claims – Hans Meyer Tischbein</title>
-<meta name="description" content="A Monte Carlo simulation of an insurer’s annual claims: how often premiums fall short, the worst year in 200 and the capital needed.">
+<meta name="description" content="A Monte Carlo simulation of an insurer’s annual claims with a deductible: how often premiums fall short, the worst year in 200 and the capital needed.">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Simulating a year of claims">
 <meta property="og:description" content="A Monte Carlo simulation of an insurer’s annual claims: how often premiums fall short, the worst year in 200 and the capital needed.">
@@ -54,6 +54,7 @@
         <label>Claims per policy per year, %<input class="field" id="freq" type="number" enterkeyhint="done" inputmode="decimal" min="0" step="0.5"></label>
         <label>Average claim, NOK<input class="field" id="severity" type="number" enterkeyhint="done" inputmode="numeric" min="1" step="1000"></label>
         <label>Claim size variation<input class="field" id="cv" type="number" enterkeyhint="done" inputmode="decimal" min="0" step="0.5"><span class="hint">Coefficient of variation. Higher means more rare, very large claims.</span></label>
+        <label>Deductible per claim, NOK<input class="field" id="deductible" type="number" enterkeyhint="done" inputmode="numeric" min="0" step="1000"><span class="hint">Paid by the customer on each claim. NOK 8,000 is the statutory deductible for natural damage in Norway.</span></label>
         <label>Premium above expected claims, %<input class="field" id="loading" type="number" enterkeyhint="done" inputmode="decimal" step="1"></label>
         <label>Chance of a storm year, %<input class="field" id="stormProb" type="number" enterkeyhint="done" inputmode="decimal" min="0" step="1"></label>
         <label>Policies that claim in a storm, %<input class="field" id="stormShare" type="number" enterkeyhint="done" inputmode="decimal" min="0" step="1"></label>
@@ -73,26 +74,44 @@
         <div><dt>Worst year in 200</dt><dd id="o-var"></dd></div>
         <div><dt>Capital needed</dt><dd id="o-capital"></dd></div>
         <div><dt>Relative volatility</dt><dd id="o-cv"></dd></div>
+        <div><dt>Deductible</dt><dd id="o-ded"></dd></div>
       </dl>
     </section>
 
     <section class="block">
       <h2>How it works</h2>
-      <p>Each simulated year starts by drawing the number of claims. With many independent policies that each have a small chance of a claim, the count follows a Poisson distribution. Each claim then gets a size drawn from a lognormal distribution, which is skewed: most claims are small, a few are very large. Adding the claims gives the total for that year, and repeating this thousands of times gives a distribution of possible years.</p>
+      <p>Each simulated year starts by drawing the number of claims. With many independent policies that each have a small chance of a claim, the count follows a Poisson distribution. Each claim then gets a size drawn from a lognormal distribution, which is skewed: most claims are small, a few are very large. The insurer pays each claim less the deductible, and nothing for claims below it. Adding the payments gives the total for that year, and repeating this thousands of times gives a distribution of possible years.</p>
+      <p>Expected claims are calculated exactly, not simulated: for a lognormal claim X and deductible d, the expected payment is E[X]·N((μ + σ² − ln d)/σ) − d·N((μ − ln d)/σ), where N is the standard normal distribution.</p>
       <p>A storm adds a second source of claims that hits many policies at the same time. That one feature changes the risk more than any other, because it breaks the assumption that policies are independent.</p>
       <p>The capital figure follows the logic of Solvency II, the European rulebook for insurers, which sets the capital requirement at the loss an insurer should be able to absorb in the worst year in 200. Here it is simplified to the gap between that year’s claims and the premium, ignoring costs, investment income and reinsurance.</p>
     </section>
 
     <section class="block">
       <h2>What to try</h2>
-      <p><strong>Grow the portfolio.</strong> Without storms, relative volatility falls with the square root of the number of policies: ten times as many policies cuts it to about a third. That is the law of large numbers, and the reason insurance works at all. Running the Python version gives 34.5% for 1,000 policies, 11.1% for 10,000 and 3.5% for 100,000.</p>
-      <p><strong>Then turn storms on.</strong> With storms, the same three portfolios give 35.8%, 15.4% and 11.4%. Growth no longer helps much, because a storm hits everyone at once. Correlated risk cannot be diversified away by writing more policies, only by spreading geography, buying reinsurance or holding capital.</p>
+      <p><strong>Grow the portfolio.</strong> Without storms, relative volatility falls with the square root of the number of policies: ten times as many policies cuts it to about a third. That is the law of large numbers, and the reason insurance works at all. Running the Python version with an NOK 8,000 deductible gives 41.8% for 1,000 policies, 13.5% for 10,000 and 4.3% for 100,000.</p>
+      <p><strong>Then turn storms on.</strong> With storms, the same three portfolios give 42.8%, 17.2% and 11.6%. Growth no longer helps much, because a storm hits everyone at once. Correlated risk cannot be diversified away by writing more policies, only by spreading geography, buying reinsurance or holding capital.</p>
+      <p><strong>Change the deductible.</strong> With the default portfolio, going from no deductible to NOK 8,000 cuts expected claims from about NOK 24.5 million to 19.6 million and the worst year in 200 from about NOK 42 million to 35 million. Relative volatility rises slightly, from 15.0% to 16.9%, because the deductible removes many small, predictable claims and leaves the large ones. A deductible lowers the premium a customer needs to pay far more than it lowers the insurer’s risk.</p>
       <p><strong>Make claims more skewed.</strong> Raising the variation keeps the average the same but fattens the tail. The expected claims hardly move, while the worst year in 200 and the capital requirement climb. Averages hide the risk that capital is there for.</p>
+    </section>
+
+    <section class="block" id="naturskade">
+      <h2>Storms in Norway: Norsk Naturskadepool</h2>
+      <div class="callout"><p>In Norway, storm, flood, landslide, storm surge and similar natural damage to buildings and contents insured against fire is covered by law under the Natural Damage Insurance Act. The insurer handles and pays the claim, but Norsk Naturskadepool then shares natural damage payouts among the insurers in proportion to their market share. A single Norwegian insurer therefore does not carry its own storm losses alone, as it does in this simulation.</p></div>
+      <p>The natural damage deductible is set by regulation and is the same for everyone: NOK 8,000 per event under the current rules. In 2024 the Ministry of Finance consulted on a new natural damage act and proposed raising it to NOK 13,000, so check the current amount before relying on it. The natural damage premium is a fixed rate of the fire insurance sum, 0.070 per mille in 2024.</p>
+      <p>The storm in this model is an illustration of correlated risk, not of how Norwegian natural damage is settled. The pool spreads the cost of a storm across the whole market, but every insurer still takes its share of a bad year.</p>
     </section>
 
     <section class="block">
       <h2>Limitations</h2>
-      <p>Real portfolios mix products with different claim patterns, prices change with risk, claims are settled over several years, and reinsurance caps the largest losses. The model leaves all of that out to keep the mechanics visible. It is a teaching model, not a capital model.</p>
+      <p>Real portfolios mix products with different claim patterns, prices change with risk, claims are settled over several years, and reinsurance caps the largest losses. The model applies one deductible to every claim, while real policies often have different deductibles for different covers. It leaves all of that out to keep the mechanics visible. It is a teaching model, not a capital model.</p>
+    </section>
+
+    <section class="block">
+      <h2>Sources</h2>
+      <ol class="sources">
+        <li>Ministry of Finance, <a href="https://regjeringen.no/contentassets/c66450e9853d41aa91c395f74e3920fa/horingsnotat-ny-naturskadeforsikringslov-mv..pdf">consultation paper on a new natural damage insurance act</a> (Norwegian), 2024: how Norsk Naturskadepool shares payouts by market share, the NOK 8,000 deductible and the proposal of NOK 13,000, the 2024 premium rate and the list of natural perils.</li>
+        <li>Lovdata, <a href="https://lovdata.no/dokument/NL/lov/1989-06-16-70">Act on natural damage insurance (naturskadeforsikringsloven)</a>.</li>
+      </ol>
     </section>
 
   </div>
@@ -101,6 +120,6 @@
 <footer>
   <div class="wrap">Oslo, Norway</div>
 </footer>
-<script src="claims.js?v=2"></script>
+<script src="claims.js?v=3"></script>
 </body>
 </html>

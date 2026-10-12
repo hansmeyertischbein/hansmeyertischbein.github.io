@@ -193,7 +193,7 @@
       "topic": "Insurance",
       "title": "Simulating a year of claims",
       "url": "/claims-simulation/",
-      "text": "A Monte Carlo simulation of an insurer’s annual claims that shows how often premiums fall short and how much capital the worst year in 200 requires. Also written in Python.",
+      "text": "A Monte Carlo simulation of an insurer’s annual claims that shows how often premiums fall short and how much capital the worst year in 200 requires. Also written in Python. Now with a deductible per claim and a note on how Norsk Naturskadepool shares storm losses in Norway.",
       "tools": "Monte Carlo simulation, Solvency II, JavaScript, Python",
       "links": [
         {

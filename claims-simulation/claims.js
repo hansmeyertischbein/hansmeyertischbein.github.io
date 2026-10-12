@@ -4,6 +4,7 @@
 // Each simulated year: number of claims ~ Poisson(policies × frequency),
 // each claim ~ lognormal with the chosen mean and coefficient of variation.
 // With some probability a storm hits and a share of policies claim at once.
+// The insurer pays each claim less the deductible, and nothing for claims below it.
 
 /* ---------- Random numbers (seeded, so a run can be repeated) ---------- */
 function mulberry32(seed) {
@@ -30,6 +31,21 @@ function lognormalParams(m, c) {
   return { mu: Math.log(m) - s2 / 2, sigma: Math.sqrt(s2) };
 }
 
+// Standard normal CDF (Abramowitz and Stegun 7.1.26, error below 1.5e-7)
+function normCdf(x) {
+  const t = 1 / (1 + 0.3275911 * Math.abs(x) / Math.SQRT2);
+  const y = 1 - (((((1.061405429 * t - 1.453152027) * t) + 1.421413741) * t - 0.284496736) * t + 0.254829592) * t * Math.exp(-x * x / 2);
+  return x >= 0 ? 0.5 * (1 + y) : 0.5 * (1 - y);
+}
+// Expected payment per claim after the deductible: E[max(X - d, 0)] for lognormal X
+function expectedPayment(m, c, d) {
+  if (d <= 0) return m;
+  const { mu, sigma } = lognormalParams(m, c);
+  if (sigma === 0) return Math.max(m - d, 0);
+  const ld = Math.log(d);
+  return m * normCdf((mu + sigma * sigma - ld) / sigma) - d * normCdf((mu - ld) / sigma);
+}
+
 /* ---------- Simulation ---------- */
 function simulate(p, years, seed) {
   const rand = mulberry32(seed);
@@ -39,7 +55,7 @@ function simulate(p, years, seed) {
     let n = poisson(p.policies * p.freq, rand);
     if (rand() < p.stormProb) n += poisson(p.policies * p.stormShare, rand);
     let sum = 0;
-    for (let i = 0; i < n; i++) sum += Math.exp(mu + sigma * normal(rand));
+    for (let i = 0; i < n; i++) { const x = Math.exp(mu + sigma * normal(rand)) - p.deductible; if (x > 0) sum += x; }
     totals[y] = sum;
   }
   return totals;
@@ -52,7 +68,7 @@ function quantile(sorted, q) {
 
 /* ---------- UI ---------- */
 const el = id => document.getElementById(id);
-const DEFAULTS = { policies: 10000, freq: 8, severity: 30000, cv: 3, loading: 15, stormProb: 3, stormShare: 5 };
+const DEFAULTS = { policies: 10000, freq: 8, severity: 30000, cv: 3, deductible: 8000, loading: 15, stormProb: 3, stormShare: 5 };
 const fmtNok = n => {
   const a = Math.abs(n);
   if (a >= 1e9) return 'NOK ' + (n / 1e9).toFixed(2) + 'bn';
@@ -66,7 +82,7 @@ function read() {
   const g = id => parseFloat(String(el(id).value).replace(',', '.'));
   return {
     policies: Math.max(1, Math.round(g('policies'))), freq: g('freq') / 100, severity: g('severity'),
-    cv: g('cv'), loading: g('loading') / 100, stormProb: g('stormProb') / 100, stormShare: g('stormShare') / 100
+    cv: g('cv'), deductible: Math.max(0, g('deductible') || 0), loading: g('loading') / 100, stormProb: g('stormProb') / 100, stormShare: g('stormShare') / 100
   };
 }
 
@@ -83,7 +99,11 @@ function run() {
   const totals = simulate(p, years, seed);
   const sorted = Float64Array.from(totals).sort();
   const mean = totals.reduce((a, b) => a + b, 0) / years;
-  const expected = p.policies * (p.freq + p.stormProb * p.stormShare) * p.severity;
+  const perClaim = expectedPayment(p.severity, p.cv, p.deductible);
+  const expected = p.policies * (p.freq + p.stormProb * p.stormShare) * perClaim;
+  const gross = p.policies * (p.freq + p.stormProb * p.stormShare) * p.severity;
+  const { mu, sigma } = lognormalParams(p.severity, p.cv);
+  const below = p.deductible > 0 ? (sigma > 0 ? normCdf((Math.log(p.deductible) - mu) / sigma) : (p.severity <= p.deductible ? 1 : 0)) : 0;
   const premium = expected * (1 + p.loading);
   const var995 = quantile(sorted, 0.995);
   const lossYears = totals.filter(t => t > premium).length / years;
@@ -96,6 +116,9 @@ function run() {
   el('o-var').innerHTML = `${fmtNok(var995)}<small>${(var995 / premium).toFixed(2)}x the premium</small>`;
   el('o-capital').innerHTML = `${fmtNok(capital)}<small>${pct(capital / premium, 0)} of premium</small>`;
   el('o-cv').innerHTML = `${pct(sd / mean, 1)}<small>standard deviation ÷ mean</small>`;
+  el('o-ded').innerHTML = p.deductible > 0
+    ? `${pct(1 - expected / gross, 0)}<small>of the claims cost is carried by customers. ${pct(below, 0)} of claims are smaller than the deductible</small>`
+    : `0%<small>no deductible</small>`;
   el('summary').textContent = `In ${years.toLocaleString('en-US')} simulated years, claims beat premiums ${pct(lossYears)} of the time. To survive the worst year in 200, the insurer needs about ${fmtNok(capital)} of capital on top of the premium, ${pct(capital / premium, 0)} of a year’s premium income.`;
   el('meta').textContent = `${years.toLocaleString('en-US')} years simulated in ${Math.round(performance.now() - t0)} ms. Seed ${seed}.`;
 
