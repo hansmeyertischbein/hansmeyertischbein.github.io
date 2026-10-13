@@ -1,0 +1,27 @@
+/* Betenkning: overtid for deltidsansatte */
+.article h3 { margin: 2rem 0 0.75rem; color: var(--ink); font: 600 1rem/1.4 var(--sans); }
+.article section > h3:first-of-type { margin-top: 1.25rem; }
+.data-table.cases td { white-space: normal; text-align: left; vertical-align: top; }
+.data-table.cases td:nth-child(2) { white-space: nowrap; }
+.data-table.cases td:last-child { min-width: 16rem; }
+.sides { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 19rem), 1fr)); gap: 0.5rem 2rem; }
+.sides > div { min-width: 0; }
+.sides h3 { margin-top: 0.5rem; }
+.check { display: inline-flex; gap: 0.5rem; align-items: center; margin: 1.25rem 0 0; font-size: 0.95rem; cursor: pointer; }
+.check input { width: 1.1rem; height: 1.1rem; accent-color: var(--navy); }
+#kalkulator .verdict { margin-top: 1.5rem; }
+#k-err:empty { display: none; }
+.callout.conclusion { border-left-width: 4px; background: color-mix(in srgb, var(--navy) 6%, transparent); padding: 1rem 1.1rem; border-radius: 0 6px 6px 0; max-width: 38rem; }
+.article .kpis dd small { max-width: 14rem; }
+.data-table tr.hl td { border-bottom: 0; }
+[hidden] { display: none !important; }
+@media (max-width: 40rem) {
+  .data-table.cases thead { display: none; }
+  .data-table.cases, .data-table.cases tbody, .data-table.cases tr { display: block; min-width: 0; }
+  .data-table.cases tr { padding: 0.75rem 0; border-bottom: 1px solid var(--rule); }
+  .data-table.cases td { display: inline; border: 0; padding: 0; }
+  .data-table.cases td:first-child { font-weight: 600; }
+  .data-table.cases td:nth-child(2)::before { content: " · "; color: var(--muted); }
+  .data-table.cases td:nth-child(2) { color: var(--muted); }
+  .data-table.cases td:last-child { display: block; min-width: 0; margin-top: 0.3rem; }
+}
