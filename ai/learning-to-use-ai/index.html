@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" media="(prefers-color-scheme: light)" content="#FBFCFD">
+<meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0F1626">
+<meta name="color-scheme" content="light dark">
+<title>Learning to use AI proficiently – Hans Meyer Tischbein</title>
+<meta name="description" content="A guide to using AI as a trained employee instead of a slot machine, based on a Dan Koe podcast episode and applied to market analysis. With figures, prompt templates and a prompt builder.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Learning to use AI proficiently">
+<meta property="og:description" content="A guide to using AI as a trained employee instead of a slot machine, based on a Dan Koe podcast episode and applied to market analysis. With figures, prompt templates and a prompt builder.">
+<meta property="og:url" content="https://hansmeyertischbein.github.io/ai/learning-to-use-ai/">
+<meta property="og:image" content="https://hansmeyertischbein.github.io/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="HMT">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,500&family=Public+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/site.css?v=3">
+<link rel="stylesheet" href="/assets/tools.css?v=1">
+<link rel="stylesheet" href="/assets/charts.css?v=1">
+<link rel="stylesheet" href="guide.css?v=1">
+</head>
+<body>
+
+<header class="nav">
+  <div class="wrap">
+    <a class="nav-name" href="/">Hans Meyer Tischbein</a>
+    <ul class="nav-links">
+      <li><a href="/cv/">CV</a></li>
+      <li><a href="/projects/">Projects</a></li>
+    </ul>
+  </div>
+</header>
+
+<main>
+  <div class="wrap article">
+    <header class="page-head">
+      <h1>Learning to use AI proficiently</h1>
+      <p class="lede">Most people use AI like a slot machine: type a vague request, pull the lever, hope for something good. This guide follows one episode of The Koe Cast that argues for the opposite, treating AI as an employee you train. It then applies the method to market analysis.</p>
+      <p class="page-meta"><span>A guide based on Dan Koe, The Koe Cast, 27 Nov 2025</span><span>My own comments are marked</span></p>
+      <ul class="page-links">
+        <li><a href="#builder">Prompt builder</a></li>
+        <li><a href="#market">Applied to market analysis</a></li>
+        <li><a href="#source">Source</a></li>
+      </ul>
+    </header>
+
+    <aside class="g-source" aria-label="Source">
+      <p><strong>Source:</strong> Dan Koe, <a href="https://open.spotify.com/episode/03xhkk3XCO6ie9R2v3AbaB">«How To Use AI Better Than 99% Of People (This Changed My Life)»</a>, The Koe Cast, 27 November 2025, 34 min. It was first published as a <a href="https://youtu.be/xCkZbMkMKD4">YouTube video</a>, and Koe wrote it up in his newsletter as <a href="https://letters.thedankoe.com/p/how-to-use-ai-better-than-99-of-people">«How to use AI better than 99% of people»</a>.</p>
+      <p>Sections 1–7 summarise his method in his order. Section 8 applies it to market analysis instead of his YouTube example. Paragraphs marked <span class="g-take-tag">My take</span> are my own comments. The prompt templates are my own wording, written from the method. The episode's advert for Koe's software is left out.</p>
+    </aside>
+
+    <nav class="g-toc" aria-label="Contents">
+      <ol>
+        <li><a href="#problem">The problem: AI as a slot machine</a></li>
+        <li><a href="#idea">The core idea: narrow the context</a></li>
+        <li><a href="#teach">Step 1: Teach the AI the task</a></li>
+        <li><a href="#prompt">Step 2: Turn the instructions into a prompt</a></li>
+        <li><a href="#method">The method in one picture</a></li>
+        <li><a href="#library">Build a prompt library</a></li>
+        <li><a href="#thinking">AI as a thinking partner</a></li>
+        <li><a href="#market">Applied: a market analysis</a></li>
+        <li><a href="#take">What holds up, and what doesn't</a></li>
+        <li><a href="#checklist">Checklist</a></li>
+      </ol>
+    </nav>
+
+    <section aria-labelledby="problem">
+      <h2 id="problem"><span class="g-n">1</span>The problem: AI as a slot machine</h2>
+      <p>Koe's starting point is that most people stop at using AI as a new kind of search engine. They ask a question, take whatever comes back and conclude that AI is useful but not life-changing. He compares it to a slot machine: you pull the lever and hope.</p>
+      <p>His alternative is to see AI as a <strong>digital employee</strong> that does exactly what it is told. An employee given a one-line brief guesses. When AI guesses, it falls back on the average of what it has read, which is mostly mediocre advice from the internet. Koe also points out that consumer chatbots are tuned to be pleasant to the average user, so their default answers drift towards the average too.</p>
+      <figure class="g-fig">
+        <div class="g-vs">
+          <div class="g-card g-bad">
+            <svg viewBox="0 0 120 70" aria-hidden="true" class="g-icon"><rect x="6" y="8" width="108" height="54" rx="8" class="g-st"/><rect x="18" y="20" width="24" height="30" rx="3" class="g-st"/><rect x="48" y="20" width="24" height="30" rx="3" class="g-st"/><rect x="78" y="20" width="24" height="30" rx="3" class="g-st"/><text x="30" y="41" class="g-q">?</text><text x="60" y="41" class="g-q">?</text><text x="90" y="41" class="g-q">?</text></svg>
+            <h3>Slot machine</h3>
+            <ul>
+              <li>One-line request</li>
+              <li>The AI fills the gaps by guessing</li>
+              <li>Generic output, then «try again»</li>
+              <li>You learn nothing you can reuse</li>
+            </ul>
+          </div>
+          <div class="g-card g-good">
+            <svg viewBox="0 0 120 70" aria-hidden="true" class="g-icon"><rect x="34" y="6" width="52" height="60" rx="5" class="g-st"/><rect x="48" y="2" width="24" height="9" rx="3" class="g-fill"/><line x1="44" y1="24" x2="76" y2="24" class="g-ln"/><line x1="44" y1="34" x2="76" y2="34" class="g-ln"/><line x1="44" y1="44" x2="70" y2="44" class="g-ln"/><line x1="44" y1="54" x2="64" y2="54" class="g-ln"/></svg>
+            <h3>Digital employee</h3>
+            <ul>
+              <li>A detailed brief, often 500–2,000 words</li>
+              <li>The AI asks for what it is missing</li>
+              <li>Output in your style and to your standard</li>
+              <li>The brief is saved and improved over time</li>
+            </ul>
+          </div>
+        </div>
+        <figcaption>Figure 1. Two ways to use the same chatbot. Koe's claim is that the difference in results comes from the brief, not from the tool.</figcaption>
+      </figure>
+      <p>His example is a script for a YouTube video. Ask for «a viral script about productivity» and the AI knows nothing about your format, tone, audience or the frameworks you use. Successful creators succeed because of exactly those things, so the AI has to guess at all of them.</p>
+    </section>
+
+    <section aria-labelledby="idea">
+      <h2 id="idea"><span class="g-n">2</span>The core idea: narrow the context</h2>
+      <p>The whole method rests on one sentence: <strong>your job is to narrow the context so the AI has to guess less.</strong> Every instruction, example and fact about your situation removes possible answers that do not fit.</p>
+      <figure class="g-fig">
+        <div class="g-funnel">
+          <div><svg viewBox="0 0 120 90" aria-hidden="true" data-dots="60"></svg><p><strong>Vague request</strong><br>Almost any answer fits</p></div>
+          <div><svg viewBox="0 0 120 90" aria-hidden="true" data-dots="22"></svg><p><strong>+ How to do the task</strong><br>Answers that follow a method</p></div>
+          <div><svg viewBox="0 0 120 90" aria-hidden="true" data-dots="5"></svg><p><strong>+ Your context</strong><br>Answers that fit you</p></div>
+        </div>
+        <figcaption>Figure 2. Each layer of context removes answers that do not fit. The highlighted dot is the answer you actually wanted.</figcaption>
+      </figure>
+      <p>That is why Koe argues for long prompts. A good prompt is not a clever phrase but a brief with several parts:</p>
+      <figure class="g-fig">
+        <div class="g-vs">
+          <div class="g-card g-bad">
+            <p class="g-label">Short prompt</p>
+            <p class="g-mono">Write a market analysis of Norwegian grocery retail.</p>
+          </div>
+          <div class="g-card g-good">
+            <p class="g-label">A brief</p>
+            <dl class="g-anatomy">
+              <div><dt>Role</dt><dd>Equity analyst writing for an investment committee</dd></div>
+              <div><dt>Task</dt><dd>Market analysis with a clear recommendation</dd></div>
+              <div><dt>Method</dt><dd>Step-by-step instructions taken from a strong example</dd></div>
+              <div><dt>Context</dt><dd>Questions the AI asks you first, one at a time</dd></div>
+              <div><dt>Rules</dt><dd>Cite sources, flag uncertainty, no filler</dd></div>
+              <div><dt>Output</dt><dd>Sections, length and format</dd></div>
+            </dl>
+          </div>
+        </div>
+        <figcaption>Figure 3. The same request as a one-liner and as a brief. The rest of the method is about filling in the method and context parts without writing everything by hand.</figcaption>
+      </figure>
+    </section>
+
+    <section aria-labelledby="teach">
+      <h2 id="teach"><span class="g-n">3</span>Step 1: Teach the AI the task</h2>
+      <p>If the AI does not know how a task should be done, and you cannot explain it either, the output will disappoint. So the first step is to get detailed, expert-level instructions for the task. Koe gives four ways to get them.</p>
+      <figure class="g-fig">
+        <ol class="g-routes">
+          <li><span class="g-rn">1</span><h3>Write them yourself</h3><p>Best when you already know the task well. Costly, because you have to put your whole thought process into words.</p><p class="g-effort" aria-label="Effort: high">Effort <i class="on"></i><i class="on"></i><i class="on"></i></p></li>
+          <li><span class="g-rn">2</span><h3>Ask the AI for a guide</h3><p>Best for well-established tasks with little variation, such as describing a customer avatar.</p><p class="g-effort" aria-label="Effort: low">Effort <i class="on"></i><i></i><i></i></p></li>
+          <li><span class="g-rn">3</span><h3>Feed it an expert source</h3><p>Paste a book chapter, article or video transcript from someone who is good at the task, and have the AI turn it into a step-by-step guide.</p><p class="g-effort" aria-label="Effort: medium">Effort <i class="on"></i><i class="on"></i><i></i></p></li>
+          <li><span class="g-rn">4</span><h3>Emulate an example you like</h3><p>Koe's favourite. Paste something that works, have the AI break down its structure and why it works, line by line, and turn that into a guide.</p><p class="g-effort" aria-label="Effort: medium">Effort <i class="on"></i><i class="on"></i><i></i></p></li>
+        </ol>
+        <div class="g-arrow" aria-hidden="true"></div>
+        <p class="g-result">Detailed instructions for the task</p>
+        <figcaption>Figure 4. Four routes to the same result. Routes 3 and 4 give the AI a standard to aim for that is better than its default.</figcaption>
+      </figure>
+      <p>Two prompts for routes 3 and 4:</p>
+      <div class="g-prompt" data-title="Route 3: expert source to guide"><pre>Below is [a chapter / an article / a transcript] by [expert] about [task].
+
+Turn it into a step-by-step guide that someone could follow without having read the original. For each step, give:
+- what to do
+- why it matters
+- a common mistake
+
+Keep the author's own frameworks and terms. Mark anything you add that is not in the source.
+
+"""
+[paste the material]
+"""</pre></div>
+      <div class="g-prompt" data-title="Route 4: break down an example"><pre>Below is an example of [type of work] that works very well.
+
+1. Break down its structure, section by section.
+2. For each section, explain the techniques it uses and why they work on the reader.
+3. Then write a step-by-step guide for producing something with the same structure on a different topic, without copying its wording.
+
+"""
+[paste the example]
+"""</pre></div>
+      <p class="g-take"><span class="g-take-tag">My take</span> Route 4 is the most useful for analytical work too. A strong equity research note or consulting report is a better standard than anything the AI produces by default. Use material you have the right to use, and never paste confidential work documents into a consumer chatbot.</p>
+    </section>
+
+    <section aria-labelledby="prompt">
+      <h2 id="prompt"><span class="g-n">4</span>Step 2: Turn the instructions into a prompt</h2>
+      <p>Instructions alone are still generic. They describe how to do the task, but not for you: your company, your product, your audience. Koe's answer is a <strong>metaprompt</strong>, a prompt whose only job is to write other prompts. He calls it the secret sauce.</p>
+      <p>You open a new chat, paste the metaprompt, describe the prompt you want and paste the instructions from step 1. The AI writes a finished prompt. You then run that prompt in a fresh chat, where it works in phases:</p>
+      <figure class="g-fig">
+        <ol class="g-flow">
+          <li><span class="g-step">Chat 1</span><strong>Metaprompt + instructions</strong><span>You describe the prompt you want and paste the instructions from step 1.</span></li>
+          <li><span class="g-step">Out</span><strong>A finished prompt</strong><span>Saved in your prompt library.</span></li>
+          <li><span class="g-step">Chat 2</span><strong>Run the prompt</strong>
+            <ol class="g-phases">
+              <li><b>Phase 1</b> Gather context. The AI asks you one question at a time.</li>
+              <li><b>Phase 2</b> Plan. It proposes an approach you can adjust.</li>
+              <li><b>Phase 3</b> Execute and coach. A first draft, then specific improvements.</li>
+            </ol>
+          </li>
+        </ol>
+        <figcaption>Figure 5. Two chats: one to write the prompt, one to use it. Koe's own example is a 30-day personal brand coach built from a YouTube video. His newsletter version has two phases, context and execution. The episode adds an action plan in between.</figcaption>
+      </figure>
+      <p>The key detail is phase 1. Instead of you guessing what context to provide, the prompt makes the AI interview you, one question at a time, until it knows enough. That is how the brief in figure 3 gets its context without you writing it.</p>
+      <p class="g-take"><span class="g-take-tag">My take</span> Koe recommended Claude Opus 4.1 with extended thinking and found the newer Sonnet 4.5 too restrictive. That advice dates quickly. The method does not depend on the model, and newer models generally follow long instructions better.</p>
+
+      <div class="g-builder" id="builder">
+        <h3>Prompt builder</h3>
+        <p>Fill in the fields and copy the metaprompt into a new chat. It asks the AI to write a prompt for you, not to do the task. Start from an example, or write your own.</p>
+        <div class="seg" role="group" aria-label="Examples">
+          <button type="button" data-preset="market" aria-pressed="true">Market analysis</button>
+          <button type="button" data-preset="coach" aria-pressed="false">Personal brand coach</button>
+          <button type="button" data-preset="exam" aria-pressed="false">Exam revision</button>
+          <button type="button" data-preset="blank" aria-pressed="false">Blank</button>
+        </div>
+        <div class="fields g-fields">
+          <label>The prompt is for<input class="field" id="b-task" type="text"></label>
+          <label>Who uses it, and the goal<input class="field" id="b-goal" type="text"></label>
+          <label class="g-wide">Instructions from step 1<textarea class="field" id="b-ins" rows="5"></textarea><span class="hint">Paste the guide or breakdown here. Leave empty to have the AI fill it in.</span></label>
+        </div>
+        <fieldset class="g-checks">
+          <legend>Phases and rules</legend>
+          <label><input type="checkbox" id="b-p1" checked> Phase 1: ask one question at a time</label>
+          <label><input type="checkbox" id="b-p2" checked> Phase 2: propose a plan first</label>
+          <label><input type="checkbox" id="b-p3" checked> Phase 3: draft, then coach</label>
+          <label><input type="checkbox" id="b-src" checked> Cite sources and flag uncertainty</label>
+          <label><input type="checkbox" id="b-blunt"> Blunt, critical feedback</label>
+        </fieldset>
+        <div class="g-out">
+          <div class="g-out-head"><span>Metaprompt</span><button type="button" class="btn" id="b-copy">Copy</button></div>
+          <textarea class="field g-mono" id="b-out" rows="16" readonly aria-label="Generated metaprompt"></textarea>
+          <p class="hint" id="b-msg" role="status"></p>
+        </div>
+      </div>
+    </section>
+
+    <section aria-labelledby="method">
+      <h2 id="method"><span class="g-n">5</span>The method in one picture</h2>
+      <p>Koe sums it up in four moves: get expert instructions, use the metaprompt to describe the prompt you want, give that prompt a context phase and an execution phase, and paste the instructions in. The result is saved, used and improved.</p>
+      <figure class="g-fig g-center">
+        <svg class="g-cycle" viewBox="0 0 360 300" role="img" aria-labelledby="cyc-t">
+          <title id="cyc-t">A cycle of four steps: teach, prompt, run and refine, then back to teach</title>
+          <defs><marker id="ah" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" class="g-mk"/></marker></defs>
+          <path d="M150 52 A115 115 0 0 1 292 128" class="g-arc" marker-end="url(#ah)"/>
+          <path d="M296 176 A115 115 0 0 1 210 258" class="g-arc" marker-end="url(#ah)"/>
+          <path d="M150 258 A115 115 0 0 1 64 176" class="g-arc" marker-end="url(#ah)"/>
+          <path d="M68 128 A115 115 0 0 1 128 62" class="g-arc g-dash" marker-end="url(#ah)"/>
+          <g class="g-node"><circle cx="180" cy="42" r="34"/><text x="180" y="38">Teach</text><text x="180" y="54" class="g-sm">step 1</text></g>
+          <g class="g-node"><circle cx="300" cy="152" r="34"/><text x="300" y="148">Prompt</text><text x="300" y="164" class="g-sm">metaprompt</text></g>
+          <g class="g-node"><circle cx="180" cy="262" r="34"/><text x="180" y="258">Run</text><text x="180" y="274" class="g-sm">3 phases</text></g>
+          <g class="g-node"><circle cx="60" cy="152" r="34"/><text x="60" y="148">Refine</text><text x="60" y="164" class="g-sm">save it</text></g>
+          <text x="180" y="148" class="g-mid">You orchestrate,</text><text x="180" y="166" class="g-mid">the AI executes</text>
+        </svg>
+        <figcaption>Figure 6. The method as a loop. Koe admits a prompt rarely works perfectly the first time. The dashed arrow is where it gets better.</figcaption>
+      </figure>
+    </section>
+
+    <section aria-labelledby="library">
+      <h2 id="library"><span class="g-n">6</span>Build a prompt library</h2>
+      <p>Once a task has been turned into a prompt, you never have to start from zero again. Koe's advice is to document every repeatable skill this way. It lowers the mental load of starting each task, and it gives you a process you can improve, rather than a habit you repeat.</p>
+      <figure class="g-fig">
+        <div class="g-shelf">
+          <div><h3>Thinking</h3><ul><li>Sparring partner</li><li>Creative thought partner</li><li>First-principles coach</li></ul></div>
+          <div><h3>Business</h3><ul><li>Customer avatar</li><li>Offer blueprint</li><li>Landing page copy</li><li>Digital product outline</li></ul></div>
+          <div><h3>Content</h3><ul><li>Content ideas</li><li>Newsletter outline</li><li>Personal brand plan</li></ul></div>
+          <div class="g-added"><h3>Analysis <small>added here</small></h3><ul><li>Market analysis chain</li><li>Fact-check</li><li>Case interview drill</li></ul></div>
+        </div>
+        <figcaption>Figure 7. A prompt library sorted by area. The first three shelves are from Koe's examples. The fourth is my addition and is worked through in section 8.</figcaption>
+      </figure>
+      <p>For a one-person business, Koe builds one prompt per job: a customer avatar prompt, an offer blueprint based on Alex Hormozi's material, and copywriting prompts made from classic books such as <cite>Breakthrough Advertising</cite> and <cite>Great Leads</cite>. For content, he prefers prompts that help him outline and think, not prompts that write for him.</p>
+    </section>
+
+    <section aria-labelledby="thinking">
+      <h2 id="thinking"><span class="g-n">7</span>AI as a thinking partner</h2>
+      <h3>The intellectual sparring partner</h3>
+      <p>Because default models are tuned to be palatable to the average person, Koe argues that learning only from them makes your thinking average too. His fix is to make the AI reason like specific clear thinkers. For each one, he has the AI write a «worldview» document: principles, way of reasoning and key ideas. He stores these as project context and asks questions through them.</p>
+      <figure class="g-fig">
+        <div class="g-lenses">
+          <ul class="g-docs">
+            <li>Naval Ravikant<small>business</small></li>
+            <li>Daniel Schmachtenberger<small>systems</small></li>
+            <li>Mihaly Csikszentmihalyi<small>psychology</small></li>
+            <li>J. Krishnamurti<small>spirituality</small></li>
+            <li>Ken Wilber<small>integral theory</small></li>
+          </ul>
+          <div class="g-arrow g-arrow-r" aria-hidden="true"></div>
+          <div class="g-q-box"><p class="g-label">Your question</p><p>«How should I run projects for a small software team?»</p><p class="g-label">Answer through several lenses</p><p>Leverage · long-term games · designing for flow</p></div>
+        </div>
+        <figcaption>Figure 8. Worldview documents as lenses. Koe's example question got answers built on ideas such as leverage, long-term games and flow.</figcaption>
+      </figure>
+      <div class="g-prompt" data-title="Worldview document"><pre>Write a worldview document on [thinker], based on their own books, essays and interviews. Include:
+- core principles
+- how they reason about problems
+- key concepts, with short definitions
+- typical advice
+- where critics disagree with them
+
+Say which work each point comes from, and say when you are unsure.</pre></div>
+      <p class="g-take"><span class="g-take-tag">My take</span> A worldview document is the AI's paraphrase, and it can turn a thinker into a caricature. Asking for sources and for the critics' view, as in the template, helps. Reading the originals helps more.</p>
+
+      <h3>The creative thought partner</h3>
+      <p>Koe argues that good thinkers follow consistent questioning processes. His own, for writing, is six questions. He turns them into a prompt that asks one question at a time and never gives the answer, only helps you find it.</p>
+      <figure class="g-fig">
+        <ol class="g-six">
+          <li>What is the big problem?</li>
+          <li>What happens if it is not solved?</li>
+          <li>What ideal outcome do I want to inspire?</li>
+          <li>What new perspectives or experiences shed light on it?</li>
+          <li>What step-by-step process solves it, in my own words?</li>
+          <li>What quotes, stories, studies or numbers support it?</li>
+        </ol>
+        <figcaption>Figure 9. Koe's six questions, from problem to evidence. With practice they become a habit and the prompt becomes unnecessary.</figcaption>
+      </figure>
+      <div class="g-prompt" data-title="Creative thought partner"><pre>Act as a thinking coach. Help me develop an idea about [topic] by asking these questions, one at a time:
+1. What is the big problem?
+2. What happens if it is not solved?
+3. What ideal outcome do I want to inspire?
+4. What new perspectives or experiences shed light on it?
+5. What step-by-step process solves it, in my own words?
+6. What quotes, stories, studies or numbers support it?
+
+Do not answer for me. If my answer is vague, ask a sharper follow-up question before moving on. At the end, summarise my answers as an outline.</pre></div>
+    </section>
+
+    <section aria-labelledby="market">
+      <h2 id="market"><span class="g-n">8</span>Applied: a market analysis</h2>
+      <p>Koe ends with a YouTube workflow: one prompt each for the title, key points, introduction, script, b-roll and description, each feeding the next. The same chain works for analytical work. Here it is applied to the kind of <a href="/markets/norwegian-grocery-retail/">weekly market analysis</a> on this site.</p>
+      <figure class="g-fig">
+        <p class="g-koe" aria-label="Koe's YouTube chain"><span>Koe:</span> Title → Key points → Intro → Script → B-roll → Description</p>
+        <ol class="g-chain">
+          <li><b>Scope</b><span class="g-io">In: market and audience · Out: one question the analysis must answer</span></li>
+          <li><b>Size and structure</b><span class="g-io">In: scope · Out: size, growth, shares, with a source for each number</span></li>
+          <li><b>Competitors</b><span class="g-io">In: structure · Out: profile of each main player, built from a strong example</span></li>
+          <li><b>PESTEL</b><span class="g-io">In: market · Out: the external factors that actually matter, ranked</span></li>
+          <li><b>SWOT</b><span class="g-io">In: steps 2–4 · Out: one company's position</span></li>
+          <li><b>So what</b><span class="g-io">In: everything · Out: key points and what to watch</span></li>
+          <li class="g-verify"><b>Verify</b><span class="g-io">In: the draft · Out: every number checked against a second source</span></li>
+        </ol>
+        <figcaption>Figure 10. The same chain idea for a market analysis. Each step has its own prompt and passes its output to the next. The last step loops back if a number does not hold up.</figcaption>
+      </figure>
+      <p>Each step is built with the method above. For the competitor step, for example, take a well-written equity research note (route 4), have the AI break down how it profiles a company, and use the metaprompt to turn that into a prompt that first asks which market and company you are analysing.</p>
+      <details class="g-details">
+        <summary>Prompts for each step</summary>
+        <div class="g-prompt" data-title="1. Scope"><pre>I am writing a market analysis of [market] in [country] for [audience]. Ask me one question at a time until you know the purpose, the time frame and what decision the reader faces. Then propose the single question the analysis should answer, and three sub-questions.</pre></div>
+        <div class="g-prompt" data-title="2. Size and structure"><pre>For [market], find: market size, growth over the last five years, and the market shares of the main players. Give a source and date for every number. If two sources disagree, show both. Do not estimate a number without saying it is an estimate.</pre></div>
+        <div class="g-prompt" data-title="3. Competitors"><pre>Below is a breakdown of how [a strong research note] profiles a company. Use the same structure to profile each of these players in [market]: [names]. Keep each profile to the same headings, so they can be compared side by side.
+
+"""
+[paste the breakdown from route 4]
+"""</pre></div>
+        <div class="g-prompt" data-title="4. PESTEL"><pre>Run a PESTEL analysis of [market] in [country]. For each factor, give only what affects the market in the next three years, with a source. Rank the factors by impact and say which two matter most and why.</pre></div>
+        <div class="g-prompt" data-title="5. SWOT"><pre>Using the market structure, competitor profiles and PESTEL above, write a SWOT for [company]. Each point must refer back to a fact from the earlier steps. No generic points that would fit any company.</pre></div>
+        <div class="g-prompt" data-title="6. So what"><pre>Based on everything above, write five key points for [audience], most important first, and three things to watch in the coming months. Each point should be one sentence a reader could act on.</pre></div>
+        <div class="g-prompt" data-title="7. Verify"><pre>Check this draft. List every number and factual claim. For each, find a second, independent source and mark it: confirmed, different (give both figures) or not found. Do not change the draft. Only report.
+
+"""
+[paste the draft]
+"""</pre></div>
+      </details>
+      <p class="g-take"><span class="g-take-tag">My take</span> In analysis, the verify step is not optional. Koe says narrowing the context prevents hallucination. It reduces it, but it does not remove it. My own rule, from building this site, is to fetch every important number twice, in two different forms, and check one against the other. The <a href="/ai-agents/">agents behind this site</a> work the same way.</p>
+    </section>
+
+    <section aria-labelledby="take">
+      <h2 id="take"><span class="g-n">9</span>What holds up, and what doesn't</h2>
+      <div class="g-two">
+        <div>
+          <h3>Holds up</h3>
+          <ul>
+            <li>Context beats cleverness. Most poor output comes from a poor brief.</li>
+            <li>Letting the AI interview you is the fastest way to give it context.</li>
+            <li>Learning from strong examples and experts sets a higher standard than the default.</li>
+            <li>A library of tested prompts turns one-off wins into a process.</li>
+            <li>Coaching prompts that help you think age better than prompts that think for you.</li>
+          </ul>
+        </div>
+        <div>
+          <h3>Needs a caveat</h3>
+          <ul>
+            <li>Longer is not better in itself. Relevant context helps; filler dilutes it.</li>
+            <li>Narrow context reduces errors but does not prevent them. Check facts and numbers.</li>
+            <li>Model recommendations from late 2025 are already dated.</li>
+            <li>Saved instructions in projects now do much of what pasted prompts did.</li>
+            <li>The «99%» in the title is marketing, and the episode also sells software.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section aria-labelledby="checklist">
+      <h2 id="checklist"><span class="g-n">10</span>Checklist</h2>
+      <ol class="g-check">
+        <li>Pick a task you do often.</li>
+        <li>Get expert instructions for it: write them, ask for a guide, use an expert source or break down an example.</li>
+        <li>Open a new chat with the metaprompt and paste the instructions.</li>
+        <li>Make sure the prompt asks you questions first, then plans, then drafts.</li>
+        <li>Run it in a fresh chat. Note what went wrong.</li>
+        <li>Improve the prompt and save it in your library.</li>
+        <li>For anything factual, add a verify step.</li>
+      </ol>
+    </section>
+
+    <section aria-labelledby="source">
+      <h2 id="source">Source</h2>
+      <ul class="sources">
+        <li>Dan Koe, <a href="https://open.spotify.com/episode/03xhkk3XCO6ie9R2v3AbaB">«How To Use AI Better Than 99% Of People (This Changed My Life)»</a>, The Koe Cast (Spotify), 27 November 2025, 34 min.</li>
+        <li>The same episode as a <a href="https://youtu.be/xCkZbMkMKD4">YouTube video</a>.</li>
+        <li>Dan Koe, <a href="https://letters.thedankoe.com/p/how-to-use-ai-better-than-99-of-people">«How to use AI better than 99% of people»</a>, newsletter.</li>
+      </ul>
+      <p class="disclaimer">This is my summary and interpretation, written in my own words. I am not affiliated with Dan Koe. Figures, prompt templates and the market analysis application are my own.</p>
+    </section>
+  </div>
+</main>
+
+<footer>
+  <div class="wrap">Oslo, Norway</div>
+</footer>
+
+<script src="guide.js?v=1"></script>
+</body>
+</html>
