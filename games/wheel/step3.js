@@ -49,7 +49,10 @@
   }
   async function spin() {
     if (spinning || results.length >= st.picks) return;
-    spinning = true; status();
+    spinning = true; status(); hidePop();
+    // keep the wheel in sight while it spins, on a phone the Spin button sits below it
+    const r = $('wheel').getBoundingClientRect();
+    if (r.top < 0 || r.bottom > innerHeight) $('wheel').scrollIntoView({ block: 'center', behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
     $('result').textContent = '';
     document.querySelectorAll('.dist li').forEach(li => li.classList.remove('won'));
     const idx = Wheel.pick(left);
@@ -58,22 +61,47 @@
     results.push(won.name);
     $('result').textContent = st.picks > 1 ? `Pick ${results.length}: ${won.name}` : won.name;
     if (window.GameAudio) GameAudio.sfx('fanfare');
-    showWinner(won.name);
     $('d' + won.i).classList.add('won');
-    spinning = false;
-    if (!st.repeat && results.length < st.picks) {
-      // remove the winner and redraw with the remaining odds after a short pause
+    const more = results.length < st.picks;
+    showPop(won.name);
+    if (!st.repeat && more) {
+      // remove the winner and redraw with the remaining odds; Spin again waits for this
       setTimeout(() => {
         left = left.filter((_, j) => j !== idx);
         const tot = left.reduce((a, b) => a + b.p, 0);
         left = left.map(x => ({ ...x, p: x.p / tot }));
         angle = 0;
         wheel = Wheel.draw($('wheel'), left.map(x => ({ name: x.name, p: x.p })));
-        renumber(); status();
+        renumber(); spinning = false; status(); popButton();
       }, 900);
-    }
-    status();
+    } else { spinning = false; status(); popButton(); }
   }
+  // start a new round from the full wheel
+  function restart() {
+    left = all.map((x, i) => ({ ...x, i })); results = []; angle = 0;
+    $('result').textContent = ''; poster(); status();
+  }
+
+  /* The result card in the middle of the screen, with a large Spin again button */
+  function showPop(name) {
+    $('sp-label').textContent = st.picks > 1 ? `Pick ${results.length} of ${st.picks}` : 'The wheel picked';
+    $('sp-name').textContent = name;
+    popButton();
+    const pop = $('spin-pop'); pop.classList.add('on'); pop.setAttribute('aria-hidden', 'false');
+  }
+  function popButton() {
+    const b = $('sp-again'), more = results.length < st.picks;
+    b.disabled = spinning;
+    b.textContent = more ? (st.picks > 1 ? `Spin again (${results.length + 1} of ${st.picks})` : 'Spin again') : (st.picks > 1 ? 'New round' : 'Spin again');
+    if ($('spin-pop').classList.contains('on') && !spinning) b.focus({ preventScroll: true });
+  }
+  function hidePop() { const pop = $('spin-pop'); pop.classList.remove('on'); pop.setAttribute('aria-hidden', 'true'); }
+  $('sp-again').addEventListener('click', e => {
+    e.stopPropagation();
+    if (spinning) return;
+    if (results.length >= st.picks) { restart(); setTimeout(spin, 60); } else spin();
+  });
+  $('sp-close').addEventListener('click', e => { e.stopPropagation(); hidePop(); });
   $('spin').addEventListener('click', spin);
   // tapping the wheel spins it too, which is the only control in full screen
   $('wheel').addEventListener('click', spin);
@@ -97,12 +125,10 @@
   document.addEventListener('keydown', e => {
     if (!isFull()) return;
     if (e.key === 'Escape') exitFull();
-    else if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); spin(); }
+    else if ((e.key === ' ' || e.key === 'Enter') && !e.target.closest('button')) { e.preventDefault(); $('sp-again').click(); }
   });
-  function showWinner(name) {
-    const b = $('fs-result'); b.textContent = name; b.classList.remove('on'); void b.offsetWidth; b.classList.add('on');
-  }
-  $('reset-draw').addEventListener('click', () => { if (spinning) return; left = all.map((x, i) => ({ ...x, i })); results = []; angle = 0; $('result').textContent = ''; poster(); status(); });
+
+  $('reset-draw').addEventListener('click', () => { if (spinning) return; hidePop(); restart(); });
   $('print').addEventListener('click', () => {
     // print the full wheel, not one with elements already picked
     if (!st.repeat && left.length !== all.length) { left = all.map((x, i) => ({ ...x, i })); results = []; angle = 0; poster(); status(); }
