@@ -3,6 +3,7 @@
     "Finance",
     "Insurance",
     "Strategy and decisions",
+    "Legal",
     "Games",
     "Other"
   ],
@@ -316,6 +317,24 @@
         {
           "text": "Full report (PDF, Norwegian)",
           "url": "/If_young_adults_segmentation.pdf"
+        }
+      ]
+    },
+    {
+      "date": "2026-10-13",
+      "topic": "Legal",
+      "title": "Overtime pay for part-time staff",
+      "url": "/legal/overtid-deltid/",
+      "text": "A legal opinion, written in Norwegian, on whether part-time employees can claim back overtime pay for hours worked beyond their contract. It covers the EU case law, the two district court judgments from 2026, both sides’ arguments, limitation periods and cost, and ends with a likely conclusion. Includes a calculator for the claim.",
+      "tools": "Employment law, EEA law, arbeidsmiljøloven, foreldelsesloven, JavaScript",
+      "links": [
+        {
+          "text": "Les betenkningen (norsk)",
+          "url": "/legal/overtid-deltid/"
+        },
+        {
+          "text": "Til kalkulatoren",
+          "url": "/legal/overtid-deltid/#kalkulator"
         }
       ]
     }
