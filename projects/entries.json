@@ -4,6 +4,7 @@
     "Insurance",
     "Strategy and decisions",
     "Legal",
+    "AI",
     "Games",
     "Other"
   ],
@@ -118,7 +119,7 @@
     },
     {
       "date": "2026-10-11",
-      "topic": "Other",
+      "topic": "AI",
       "title": "How I work with AI agents",
       "url": "/ai-agents/",
       "text": "The scheduled agents behind this site and my working day, the rules that check their output, and four times they got it wrong.",
@@ -335,6 +336,28 @@
         {
           "text": "Til kalkulatoren",
           "url": "/legal/overtid-deltid/#kalkulator"
+        }
+      ]
+    },
+    {
+      "date": "2026-10-13",
+      "topic": "AI",
+      "title": "Learning to use AI proficiently",
+      "url": "/ai/learning-to-use-ai/",
+      "text": "A guide to using AI as an employee you train rather than a slot machine, built on a Dan Koe podcast episode. It covers teaching the AI a task, metaprompts, prompt libraries and AI as a thinking partner, then applies the method to market analysis. Includes figures, prompt templates and a prompt builder.",
+      "tools": "Prompt engineering, metaprompts, market analysis, JavaScript",
+      "links": [
+        {
+          "text": "Read the guide",
+          "url": "/ai/learning-to-use-ai/"
+        },
+        {
+          "text": "Prompt builder",
+          "url": "/ai/learning-to-use-ai/#builder"
+        },
+        {
+          "text": "Source episode (Spotify)",
+          "url": "https://open.spotify.com/episode/03xhkk3XCO6ie9R2v3AbaB"
         }
       ]
     }
