@@ -8,30 +8,20 @@
   ],
   "entries": [
     {
-      "date": "2026-10-12",
-      "topic": "Games",
-      "title": "Spin the wheel",
-      "url": "/games/wheel/",
-      "text": "A fair prize wheel in three steps: choose the elements, set the probability of each and how many picks to make, then spin it or print a poster with the wheel and every probability to one decimal. Each slice is exactly as wide as its probability. Full screen shows only the wheel and the odds, for a screen or a projector.",
-      "tools": "JavaScript, SVG, probability",
-      "links": [
-        {
-          "text": "Make a wheel",
-          "url": "/games/wheel/"
-        }
-      ]
-    },
-    {
       "date": "2026-10-11",
       "topic": "Games",
-      "title": "Games: Sudoku, Snake, 2048 and Minesweeper",
+      "title": "Games: Sudoku, Snake, 2048, Minesweeper and Spin the wheel",
       "url": "/games/",
-      "text": "Four classics built for a phone and a keyboard: swipe and tap controls, saved games and best scores, light and dark mode. Each game has its own music, generated live in the browser, and sound effects you can turn off. Every Sudoku is generated in the browser and has exactly one solution.",
+      "text": "Four classics and a fair prize wheel, built for a phone and a keyboard: swipe and tap controls, saved games and best scores, light and dark mode. Each game has its own music, generated live in the browser, and sound effects you can turn off. Spin the wheel lets you choose the elements and odds, then spin it full screen or print a poster with every probability.",
       "tools": "JavaScript, canvas, Web Audio, game design",
       "links": [
         {
           "text": "Play",
           "url": "/games/"
+        },
+        {
+          "text": "Spin the wheel",
+          "url": "/games/wheel/"
         }
       ]
     },
