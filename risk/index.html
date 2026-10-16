@@ -24,7 +24,7 @@
 <link rel="stylesheet" href="/site.css?v=3">
 <link rel="stylesheet" href="/assets/tools.css?v=1">
 <link rel="stylesheet" href="/assets/charts.css?v=1">
-<link rel="stylesheet" href="risk.css?v=2">
+<link rel="stylesheet" href="risk.css?v=3">
 </head>
 <body>
 
@@ -48,9 +48,135 @@
         <li><a href="/risk/Forecasting_risk_Oslo_Bors.pdf">Read the paper (PDF)</a></li>
         <li><a href="#now">This month’s forecasts</a></li>
         <li><a href="#lessons">What worked and what didn’t</a></li>
+        <li><a href="#glossary">Glossary</a></li>
         <li><a href="https://github.com/hansmeyertischbein/hansmeyertischbein.github.io/tree/main/risk/pipeline">Code on GitHub</a></li>
       </ul>
     </header>
+
+    <section class="block glossary-block" aria-label="Glossary" id="glossary">
+      <details class="glossary" id="glossary-box">
+        <summary><span class="g-title">Glossary</span><span class="g-sub">Every term on this page explained in plain words. Tap to open.</span></summary>
+        <div class="g-body">
+          <label class="control g-find">Find a term<input class="field" id="gl-find" type="search" inputmode="search" enterkeyhint="search" placeholder="For example AUC or HAR" autocomplete="off"></label>
+          <p class="hint" id="gl-none" hidden>No term matches.</p>
+
+          <h3>Risk measures</h3>
+          <dl>
+            <div id="g-volatility"><dt>Volatility</dt><dd>How much a share price moves up and down. Measured as the standard deviation of daily returns. A stock with 30% volatility typically moves about 30% up or down over a year, or about 2% on an ordinary day.</dd></div>
+            <div id="g-realised"><dt>Realised volatility</dt><dd>The volatility that actually happened over a period, calculated from the daily returns in that period. Here it is the target: the volatility over the next 21 trading days, which the models try to forecast.</dd></div>
+            <div id="g-annualised"><dt>Annualised</dt><dd>Scaled to a one-year figure so that numbers over different periods can be compared. Daily volatility is multiplied by the square root of 252, the number of trading days in a year.</dd></div>
+            <div id="g-log"><dt>Log volatility</dt><dd>The natural logarithm of volatility. The models forecast it in logs because volatility is always positive and skewed; in logs, going from 20% to 40% counts the same as going from 10% to 20%.</dd></div>
+            <div id="g-horizon"><dt>Horizon, 21 trading days</dt><dd>The forecast period, about one calendar month of trading.</dd></div>
+            <div id="g-fall"><dt>Large fall</dt><dd>A share closing at least 15% below its month-end price at some point in the next 21 trading days. The test also uses 10% and 20% to check that the results do not depend on the threshold.</dd></div>
+            <div id="g-intraday"><dt>Intraday range</dt><dd>The gap between a day’s highest and lowest price. Averaged over a month, it measures volatility using more information than closing prices alone (the Parkinson estimator).</dd></div>
+            <div id="g-downside"><dt>Downside volatility</dt><dd>Volatility calculated only from days when the price fell.</dd></div>
+            <div id="g-skew"><dt>Skewness</dt><dd>Whether large moves tend to be up or down. Negative skewness means large falls are more common than large rises.</dd></div>
+            <div id="g-kurt"><dt>Fat tails, kurtosis</dt><dd>How often extreme days happen compared with a normal distribution. Fat tails mean more very large moves than a bell curve would suggest.</dd></div>
+            <div id="g-beta"><dt>Beta</dt><dd>How much a stock tends to move when the whole market moves. A beta of 1.5 means it typically moves 1.5% when the market moves 1%.</dd></div>
+            <div id="g-idio"><dt>Stock-specific volatility</dt><dd>The part of a stock’s volatility that the market does not explain, for example company news.</dd></div>
+            <div id="g-dd52"><dt>Fall from 52-week high</dt><dd>How far the price is below its highest close over the last year.</dd></div>
+            <div id="g-var"><dt>Value at Risk, VaR 95%</dt><dd>A loss that should be exceeded only one month in twenty. A one-month VaR of −8% means that in 95% of months the share should not fall more than 8%.</dd></div>
+            <div id="g-exceed"><dt>VaR breach, exceedance</dt><dd>A month in which the loss was larger than the VaR. If the VaR is right, this happens in about 5% of cases.</dd></div>
+          </dl>
+
+          <h3>Data</h3>
+          <dl>
+            <div id="g-osebx"><dt>OSEBX</dt><dd>Oslo Børs Benchmark Index, the main index of the Norwegian stock market. It includes dividends.</dd></div>
+            <div id="g-universe"><dt>Universe</dt><dd>The stocks included in a given month. Here: stocks with at least a year of history, a median daily turnover of at least NOK 5 million and a share price of at least NOK 1, decided at each month end.</dd></div>
+            <div id="g-turnover"><dt>Turnover (trading)</dt><dd>The value of shares traded in a day: price times number of shares.</dd></div>
+            <div id="g-liquidity"><dt>Liquidity, Amihud illiquidity</dt><dd>How easily a share can be traded without moving the price. Amihud’s measure is the average price move per krone traded; a high value means an illiquid stock.</dd></div>
+            <div id="g-adjusted"><dt>Adjusted close</dt><dd>A closing price corrected for dividends and splits, so that returns are not distorted when a company pays out cash or changes its number of shares.</dd></div>
+            <div id="g-split"><dt>Split</dt><dd>When a company divides each share into several, or merges several into one. The price changes, but the value of the holding does not.</dd></div>
+            <div id="g-survivor"><dt>Survivorship bias</dt><dd>The error that comes from only looking at companies that still exist. Companies that went bankrupt or were taken over are missing, so returns look better and risk looks lower than they really were.</dd></div>
+            <div id="g-lookahead"><dt>Look-ahead bias</dt><dd>Using information that was not available at the time of the forecast. Even a few hours can matter: VIX and oil close after Oslo Børs, so they are lagged by one day here.</dd></div>
+            <div id="g-crosscheck"><dt>Cross-check, second source</dt><dd>Comparing the data with an independent source to catch errors. Here Yahoo Finance prices are compared with Euronext, the company that runs Oslo Børs.</dd></div>
+            <div id="g-isin"><dt>ISIN</dt><dd>A twelve-character international code that identifies a security, for example NO0010096985 for Equinor.</dd></div>
+            <div id="g-sector"><dt>Sector dummies</dt><dd>Yes/no inputs that tell the model which industry a company belongs to, such as energy, shipping or seafood.</dd></div>
+            <div id="g-action"><dt>GitHub Action</dt><dd>A program that runs automatically on GitHub’s servers on a schedule. Here it fetches the data and makes new forecasts on the first day of each month.</dd></div>
+          </dl>
+
+          <h3>Market data used as inputs</h3>
+          <dl>
+            <div id="g-vix"><dt>VIX</dt><dd>An index of the volatility that US option prices imply for the S&amp;P 500 over the next month. Often called the fear index.</dd></div>
+            <div id="g-brent"><dt>Brent</dt><dd>The benchmark price for North Sea crude oil, important for many Norwegian companies.</dd></div>
+            <div id="g-policy"><dt>Policy rate</dt><dd>Norges Bank’s key interest rate, the rate banks get on deposits in the central bank.</dd></div>
+            <div id="g-nok"><dt>USD/NOK</dt><dd>The price of one US dollar in Norwegian kroner. A rise means a weaker krone.</dd></div>
+          </dl>
+
+          <h3>Models</h3>
+          <dl>
+            <div id="g-ewma"><dt>EWMA</dt><dd>Exponentially weighted moving average. Today’s volatility estimate, where recent days count more than older days. Used in the RiskMetrics system since 1996. Needs no fitting.</dd></div>
+            <div id="g-har"><dt>HAR</dt><dd>Heterogeneous autoregressive model (Corsi, 2009). A linear regression that forecasts volatility from volatility over the last day, week, month and quarter. Simple, and known to be hard to beat. The main reference here.</dd></div>
+            <div id="g-reference"><dt>Reference model, benchmark</dt><dd>A simple model that a new model must beat to be worth using.</dd></div>
+            <div id="g-ml"><dt>Machine learning</dt><dd>Models that learn patterns from data without the relationships being written down in advance, and that can capture non-linear effects and interactions.</dd></div>
+            <div id="g-lgbm"><dt>LightGBM, gradient boosting</dt><dd>Builds many small decision trees one after another, each one correcting the errors of the trees before it.</dd></div>
+            <div id="g-rf"><dt>Random forest</dt><dd>Builds hundreds of decision trees on random subsets of the data and inputs, and averages their answers.</dd></div>
+            <div id="g-tree"><dt>Decision tree</dt><dd>A model that splits the data step by step with yes/no questions, for example “is last month’s volatility above 30%?”.</dd></div>
+            <div id="g-mlp"><dt>Neural network, MLP</dt><dd>A model of layers of simple units that transform the inputs step by step. Here: two hidden layers, averaged over five versions with different random starting points.</dd></div>
+            <div id="g-ensemble"><dt>ML average, ensemble</dt><dd>The average forecast of LightGBM, random forest and the neural network. Averaging different models usually reduces errors.</dd></div>
+            <div id="g-logit"><dt>Logistic regression</dt><dd>A regression for yes/no outcomes that gives a probability between 0 and 1. Here the reference model for large falls, using two volatility measures.</dd></div>
+            <div id="g-twostep"><dt>Two-step model</dt><dd>First the machine learning model forecasts volatility; then a logistic regression turns that forecast into a probability of a large fall.</dd></div>
+            <div id="g-input"><dt>Input, feature</dt><dd>A piece of information the model uses, such as last month’s volatility or the oil price change.</dd></div>
+            <div id="g-hyper"><dt>Settings, hyperparameters</dt><dd>Choices about a model’s structure that are not learned from the data directly, such as the number of leaves in each tree. Chosen on held-out data.</dd></div>
+            <div id="g-early"><dt>Early stopping</dt><dd>Stopping training when the model stops improving on held-out data, to avoid learning noise.</dd></div>
+            <div id="g-overfit"><dt>Overfitting</dt><dd>When a model learns random noise in the training data and therefore does worse on new data.</dd></div>
+            <div id="g-calibration"><dt>Calibration</dt><dd>Whether the probabilities mean what they say. If the model says 20% for a hundred stocks, about twenty of them should fall.</dd></div>
+            <div id="g-platt"><dt>Platt scaling, recalibration</dt><dd>Adjusting a model’s probabilities with a small logistic regression fitted on held-out data, to make them better calibrated.</dd></div>
+            <div id="g-shap"><dt>SHAP values</dt><dd>A method that splits each forecast into contributions from each input. The average size of the contributions shows which inputs the model relies on most.</dd></div>
+          </dl>
+
+          <h3>Testing and evaluation</h3>
+          <dl>
+            <div id="g-oos"><dt>Out of sample</dt><dd>Tested on data the model has not seen during training. The only kind of test that says how a model would have done in real life.</dd></div>
+            <div id="g-wf"><dt>Walk-forward test</dt><dd>For each year, the models are trained only on data from before that year and then tested on the year. Then the window moves forward a year and it is repeated.</dd></div>
+            <div id="g-holdout"><dt>Held-out block, validation</dt><dd>The last two years of each training window, kept aside to choose settings and calibrate the models, so that these choices are not made on the data they are later tested on.</dd></div>
+            <div id="g-test"><dt>Test period</dt><dd>January 2015 to August 2026, the months used to measure how good the forecasts are.</dd></div>
+            <div id="g-stockmonth"><dt>Stock-month</dt><dd>One stock in one month: one forecast and one outcome.</dd></div>
+            <div id="g-mse"><dt>MSE, mean squared error</dt><dd>The average of the squared forecast errors. Lower is better. Here measured on log volatility.</dd></div>
+            <div id="g-qlike"><dt>QLIKE</dt><dd>A loss function for variance forecasts that punishes forecasting too little risk more than forecasting too much. Standard in volatility research (Patton, 2011).</dd></div>
+            <div id="g-variance"><dt>Variance</dt><dd>Volatility squared.</dd></div>
+            <div id="g-dm"><dt>Diebold–Mariano test</dt><dd>A test of whether two forecasting models are equally accurate. A small p-value means the difference is unlikely to be chance.</dd></div>
+            <div id="g-nw"><dt>Newey–West standard errors</dt><dd>A way of measuring uncertainty that allows errors in neighbouring months to be correlated, which would otherwise make results look more certain than they are.</dd></div>
+            <div id="g-p"><dt>p-value</dt><dd>The probability of seeing a difference at least this large if there were really no difference. Below 0.05 is usually called statistically significant.</dd></div>
+            <div id="g-sig"><dt>Statistically significant</dt><dd>Unlikely to be due to chance, given the test and the data. It says nothing about whether the difference is large or useful.</dd></div>
+            <div id="g-rank"><dt>Rank correlation</dt><dd>How well the model puts stocks in the right order from calm to volatile, from −1 to 1. Spearman’s correlation, averaged over months.</dd></div>
+            <div id="g-auc"><dt>AUC</dt><dd>Area under the ROC curve. The probability that the model gives a higher risk to a stock that fell than to one that did not. 0.5 is guessing, 1 is perfect.</dd></div>
+            <div id="g-brier"><dt>Brier score</dt><dd>The average squared difference between the forecast probability and what happened (1 for a fall, 0 otherwise). Lower is better.</dd></div>
+            <div id="g-brierskill"><dt>Brier skill</dt><dd>How much better the Brier score is than always forecasting the historical fall rate. 0% means no better, negative means worse.</dd></div>
+            <div id="g-logloss"><dt>Log loss</dt><dd>A score for probabilities that punishes confident wrong forecasts heavily. Lower is better.</dd></div>
+            <div id="g-base"><dt>Base rate</dt><dd>How often the event happens on average. About 9% of stock-months had a 15% fall.</dd></div>
+            <div id="g-top10"><dt>Top-10% hit rate</dt><dd>Of the tenth of stocks the model rates riskiest each month, the share that actually fell.</dd></div>
+            <div id="g-decile"><dt>Decile</dt><dd>One of ten equal groups after sorting, for example by forecast probability. D1 is the safest tenth, D10 the riskiest.</dd></div>
+            <div id="g-bootstrap"><dt>Bootstrap, month-block</dt><dd>Measuring uncertainty by redrawing the data at random thousands of times and recalculating the result. Whole months are drawn together, because stocks in the same month move together.</dd></div>
+            <div id="g-ci"><dt>95% interval</dt><dd>The range that contains the true difference with 95% confidence. If it does not include zero, the difference is unlikely to be chance.</dd></div>
+            <div id="g-kupiec"><dt>Kupiec test</dt><dd>A test of whether the VaR is breached as often as it should be, for example 5% of the time for a 95% VaR.</dd></div>
+            <div id="g-crisis"><dt>Stress periods</dt><dd>The Covid crash (February–May 2020) and the energy and rates shock of 2022, shown separately because models often fail when conditions change suddenly.</dd></div>
+          </dl>
+
+          <h3>Portfolio</h3>
+          <dl>
+            <div id="g-lowrisk"><dt>Low-risk portfolio</dt><dd>The ten stocks with the lowest forecast volatility, in equal amounts, bought at each month end and held for a month.</dd></div>
+            <div id="g-equal"><dt>Equal weight</dt><dd>The same amount invested in each stock.</dd></div>
+            <div id="g-rebalance"><dt>Rebalancing</dt><dd>Updating the portfolio to the new selection, here at each month end.</dd></div>
+            <div id="g-pturn"><dt>Turnover (portfolio)</dt><dd>The share of the portfolio replaced each month. High turnover means higher trading costs.</dd></div>
+            <div id="g-costs"><dt>Trading costs</dt><dd>The cost of buying and selling, here assumed to be 0.2% of each trade.</dd></div>
+            <div id="g-annret"><dt>Annual return</dt><dd>The average yearly growth of an investment, compounded.</dd></div>
+            <div id="g-sharpe"><dt>Sharpe ratio</dt><dd>Return above the risk-free rate divided by volatility. Return per unit of risk; higher is better.</dd></div>
+            <div id="g-rf"><dt>Risk-free rate</dt><dd>The return on a safe investment, here approximated by Norges Bank’s policy rate.</dd></div>
+            <div id="g-mdd"><dt>Worst fall, maximum drawdown</dt><dd>The largest fall from a peak to a later low in the value of the portfolio.</dd></div>
+            <div id="g-growth"><dt>Growth of NOK 1</dt><dd>What one krone invested at the start would have grown to.</dd></div>
+          </dl>
+
+          <h3>The live forecasts</h3>
+          <dl>
+            <div id="g-official"><dt>Official forecast</dt><dd>Made from the close on the last trading day of a month, saved before the outcome is known, and never changed. Only these count in the track record.</dd></div>
+            <div id="g-preview"><dt>Preview</dt><dd>A forecast made in the middle of a month. It already knows part of the month, so it is shown but never scored.</dd></div>
+            <div id="g-track"><dt>Track record</dt><dd>The score of every official forecast once the outcome is known, compared with HAR.</dd></div>
+            <div id="g-advice"><dt>Not investment advice</dt><dd>The forecasts are statistical estimates for research and learning, and can be badly wrong.</dd></div>
+          </dl>
+        </div>
+      </details>
+    </section>
 
     <section class="block" aria-labelledby="sum-h">
       <h2 id="sum-h">The short answer</h2>
@@ -221,6 +347,6 @@
 </footer>
 
 <script src="/assets/charts.js?v=2"></script>
-<script src="risk.js?v=4"></script>
+<script src="risk.js?v=5"></script>
 </body>
 </html>
