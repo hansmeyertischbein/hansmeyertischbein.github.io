@@ -1,0 +1,248 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage{fontspec}
+\setmainfont{texgyretermes}[Path=/usr/share/texmf/fonts/opentype/public/tex-gyre/, Extension=.otf, UprightFont=*-regular, BoldFont=*-bold, ItalicFont=*-italic, BoldItalicFont=*-bolditalic, Ligatures=TeX]
+\setsansfont{texgyreheros}[Path=/usr/share/texmf/fonts/opentype/public/tex-gyre/, Extension=.otf, UprightFont=*-regular, BoldFont=*-bold, ItalicFont=*-italic, BoldItalicFont=*-bolditalic]
+\usepackage[margin=2.5cm]{geometry}
+\usepackage{microtype,booktabs,graphicx,xcolor,amsmath,enumitem,array,tabularx,float,longtable}
+\usepackage[font=small,labelfont=bf,skip=4pt]{caption}
+\usepackage[hidelinks]{hyperref}
+\usepackage[authoryear,round]{natbib}
+\definecolor{navy}{HTML}{1F3A68}
+\hypersetup{pdftitle={Forecasting risk on Oslo Børs with machine learning}, pdfauthor={Hans Meyer Tischbein}, pdfsubject={Volatility and large-fall forecasts for Norwegian stocks}, pdfkeywords={volatility, machine learning, HAR, Oslo Børs, risk}}
+\setlength{\parskip}{0.35em}
+\setlength{\parindent}{0pt}
+\setlist{itemsep=0.15em, topsep=0.3em}
+\renewcommand{\arraystretch}{1.12}
+\newcommand{\worked}[1]{\par\smallskip\noindent\colorbox{black!4}{\parbox{\dimexpr\linewidth-2\fboxsep}{\small #1}}\par\smallskip}
+
+\title{\textbf{Forecasting risk on Oslo Børs with machine learning}\\[0.3em]\large Volatility and large falls, <<FIRST>> to <<LAST>>}
+\author{Hans Meyer Tischbein\\\small Master in Business, Finance major, BI Norwegian Business School}
+\date{October 2026}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+\noindent Can machine learning forecast the risk of Norwegian stocks better than the simple models the industry uses? I forecast next-month volatility and the probability of a fall of at least 15\% for about <<AVG>> Oslo Børs stocks a month, in a walk-forward test over <<MONTHS>> months from <<FIRST>> to <<LAST>> where every model is trained only on data known at the forecast date. For volatility, an average of LightGBM, random forest and a neural network has <<MLGAIN>>\% lower mean squared error than the HAR model (Diebold--Mariano $t=<<DMT>>$), and beats it in eleven of twelve years. For large falls, machine learning trained directly on the event does not beat a two-variable logistic regression. A two-step model that feeds the machine learning volatility forecast into a logistic regression does: its AUC rises from <<AUCREF>> to <<AUCVL>>, with a month-block bootstrap interval that just excludes zero, and the gain holds at 10\% and 20\% thresholds. The volatility forecasts give a well-calibrated one-month VaR and a low-risk portfolio with lower volatility than OSEBX, but no higher return. The paper reports what did not work alongside what did, and how each problem was handled. Live forecasts are published and scored every month.
+\end{abstract}
+
+\section{Introduction}
+Risk forecasts drive position limits, margin requirements, capital charges and portfolio construction. The standard tools are simple: an exponentially weighted moving average (EWMA), as in RiskMetrics \citep{riskmetrics1996}, or the heterogeneous autoregressive (HAR) model of \citet{corsi2009}, which regresses future volatility on volatility over the last day, week and month. HAR is known to be hard to beat. Machine learning has improved return forecasts in large US samples \citep{gu2020}, and tree-based models capture non-linear effects and interactions that a linear HAR cannot. Whether that carries over to a small market such as Oslo Børs, with few stocks, a heavy weight on energy, shipping and seafood, and patchy liquidity, is an open question.
+
+This paper asks two questions. First, does machine learning forecast next-month volatility of Norwegian stocks better than HAR and EWMA? Second, can it tell which stocks are about to fall sharply? Both are answered out of sample, with formal tests, and with the same data a reader can download and rerun.
+
+The answers are mixed, and the paper says so. What worked: tree models clearly beat HAR for volatility, and a two-step model improves the ranking of large falls. What did not: the neural network was no better than HAR, machine learning trained directly on falls lost to a logistic regression, the probabilities are too high for the riskiest stocks, and no model ranked falls in the Covid crash. Section~\ref{sec:lessons} lists every problem that came up and what was done about it.
+
+\section{Data}
+\label{sec:data}
+\textbf{Sources.} Daily open, high, low, close, adjusted close and volume come from Yahoo Finance, fetched by a scheduled GitHub Action because the analysis environment could not reach the source directly. OSEBX, VIX, Brent futures, USD/NOK and EUR/NOK also come from Yahoo, and the policy rate from Norges Bank. Closing prices were checked against Euronext, the exchange itself, for <<NCC>> large stocks over the last two years: the closes were identical on all but one of about 4,000 stock-days, where they differed by NOK 0.12.
+
+\textbf{Universe.} The full OSEBX constituent list requires a licence. I start from 76 current and former OSEBX companies and, at each month end, keep stocks with at least a year of trading history, a median daily turnover of at least NOK 5 million over the last three months, and a share price of at least NOK 1. This rule uses only information available at the time. Twelve of the 76 companies have left the exchange and have no data in free sources, so the sample has survivorship bias (Section~\ref{sec:limits}).
+
+\textbf{Cleaning.} The sample starts in 2004, because earlier Yahoo data contains obvious errors. I drop <<DROP0>> days without trading, remove price jumps of more than 30\% that reverse the next day, and void returns on split days that the adjusted series fails to absorb.
+
+\textbf{Targets.} At each month end $t$ and for each stock, the volatility target is realised volatility over the next 21 trading days, $\mathrm{RV}_{t+1} = \sqrt{252 \cdot \tfrac{1}{21}\sum_{k=1}^{21} r_{t+k}^2}$, modelled in logs. The fall target is 1 if the close falls at least 15\% below the month-end close at any point in those 21 days. Table~\ref{tab:sample} describes the test sample. The fall rate ranges from under 4\% in calm years to 17\% in 2020.
+
+\begin{table}[H]\centering\small
+\caption{Test sample by year. Stock-months with a known outcome; volatility is the median of next-month realised volatility.}
+\label{tab:sample}
+\begin{tabular}{lrrrr}\toprule
+Year & Stock-months & Stocks & Median volatility & Fall rate (15\%) \\\midrule
+<<T1>>
+\bottomrule\end{tabular}
+\end{table}
+
+\section{Method}
+\textbf{Inputs.} Thirty-two inputs are known at each month end: realised volatility over a day, week, month, quarter and year; EWMA volatility ($\lambda=0.94$); downside volatility; the \citet{parkinson1980} range estimator from daily highs and lows; skewness and kurtosis; past one-month and one-year returns; the fall from the 52-week high and the worst day of the quarter; beta and stock-specific volatility; turnover, the \citet{amihud2002} illiquidity measure and the share of zero-return days; market volatility and return; VIX and its change; the change and volatility of Brent and the krone; the policy rate and its change; and the month. Sector dummies are added for eleven groups. Because VIX and Brent close after Oslo Børs, all US-hours series are lagged one day.
+
+\textbf{Models.} For volatility: EWMA (no fitting), HAR estimated by pooled OLS on log volatility over a day, week, month and quarter, LightGBM \citep{ke2017}, random forest \citep{breiman2001}, a two-layer neural network (32 and 16 units, five seeds averaged), and the average of the three machine learning models. For falls: a logistic regression on log EWMA and monthly volatility as the reference; the same three machine learning models as classifiers and their average; that average recalibrated by Platt scaling; and a two-step model, a one-variable logistic regression on the machine learning volatility forecast.
+
+\textbf{Walk-forward training.} For each test year, all models are trained on stock-months whose outcomes were known before the year began, so the January forecasts use data up to November of the previous year. The last 24 months of each training window are held out once to choose LightGBM settings from a small grid with early stopping, to estimate each model's variance scale (log-volatility models under-forecast variance on average), to fit the Platt calibrator and the two-step model, and to estimate the 5\% quantile of standardised one-month returns used for VaR. Final models are then refitted on the whole window. Models are retrained once a year in the test and every month in the live version.
+
+\textbf{Evaluation.} Volatility forecasts are compared on the mean squared error of log volatility and on QLIKE \citep{patton2011}, with Diebold--Mariano tests \citep{diebold1995} on monthly average loss differences against HAR, using Newey--West standard errors with three lags. Fall forecasts are compared on AUC, the Brier score and its skill against the training base rate, log loss, and the share of the riskiest tenth each month that fell. Differences in AUC are tested with a bootstrap that resamples whole months, which keeps the cross-sectional correlation within a month. VaR is tested with \citet{kupiec1995}.
+
+\section{Results}
+\subsection{Volatility}
+Table~\ref{tab:vol} shows the main result. Both tree models beat HAR clearly: LightGBM by <<LGBGAIN>>\% and random forest by <<RFGAIN>>\% in mean squared error. The neural network does not (<<MLPGAIN>>\%, $p=<<MLPP>>$). The average of the three is the best, <<MLGAIN>>\% better than HAR, and the gain is significant on both loss functions. EWMA, the simplest rule, is worst. The machine learning average also orders stocks from calm to volatile better, with a rank correlation of 0.76 against 0.71 for HAR.
+
+\begin{table}[H]\centering\small
+\caption{Out-of-sample volatility forecasts, <<FIRST>> to <<LAST>>. MSE of log volatility; DM: Diebold--Mariano test against HAR on monthly average losses.}
+\label{tab:vol}
+\begin{tabular}{lrrrrrrr}\toprule
+Model & MSE & QLIKE & vs HAR & DM $t$ & $p$ (MSE) & $p$ (QLIKE) & Rank corr. \\\midrule
+<<T2>>
+\bottomrule\end{tabular}
+\end{table}
+
+Figure~\ref{fig:years} shows that the gain is not driven by a single period. The machine learning average beats HAR in every year except 2022, when the energy price shock and rising rates changed which stocks were risky (MSE <<Y22ML>> against <<Y22HAR>> for HAR). Figure~\ref{fig:eqnr} shows the forecasts for Equinor.
+
+\begin{figure}[H]\centering
+\includegraphics[width=\linewidth]{fig_years.pdf}
+\caption{Change in the mean squared error of the machine learning average relative to HAR, by year. Below zero is better than HAR. 2026 runs to August.}
+\label{fig:years}
+\end{figure}
+
+\begin{figure}[H]\centering
+\includegraphics[width=\linewidth]{fig_eqnr.pdf}
+\caption{Forecast and realised next-month volatility for Equinor.}
+\label{fig:eqnr}
+\end{figure}
+
+\worked{\textbf{What worked:} tree models beat HAR by about a tenth, consistently and significantly. \textbf{What did not:} the neural network was no better than HAR, and machine learning lost to HAR in 2022 and tied in the Covid crash months. \textbf{What I did:} the neural network stays in the average, as decided before the results were seen, and the live model retrains monthly to adapt faster to new regimes.}
+
+\subsection{Large falls}
+Table~\ref{tab:fall} reports the fall forecasts. Every machine learning classifier, and their average, has a lower AUC and a lower Brier skill than the two-variable logistic regression. Recalibration with Platt scaling and adding sector dummies did not change that. The month-block bootstrap interval for the AUC difference between the machine learning average and the reference is <<MLLO>> to <<MLHI>>: no evidence of a gain.
+
+\begin{table}[H]\centering\small
+\caption{Out-of-sample forecasts of a fall of at least 15\% within a month. Brier skill is against the training base rate; $p$ is a Diebold--Mariano test of the Brier score against the reference.}
+\label{tab:fall}
+\begin{tabular}{lrrrrrr}\toprule
+Model & AUC & Brier & Brier skill & Log loss & Top-10\% hit & $p$ \\\midrule
+<<T3>>
+\bottomrule\end{tabular}
+\end{table}
+
+The two-step model is the exception. Using the machine learning volatility forecast as the only input to a logistic regression raises the AUC to <<AUCVL>>, from <<AUCREF>>. The bootstrap gives a gain of <<BDIFF>> with a 95\% interval from <<BLO>> to <<BHI>>, positive in <<BSHARE>>\% of resamples. The gain is small, but it is consistent across thresholds (Table~\ref{tab:thr}). Its Brier skill is the same as the reference: it ranks stocks better without making the probability level more accurate. The interpretation is that the information in the inputs about large falls is mostly information about volatility, and machine learning extracts it better when it is asked to forecast volatility, a continuous and less noisy target, than when it is asked to classify a rare event.
+
+\begin{table}[H]\centering\small
+\caption{Sensitivity to the fall threshold. Each threshold is a separate walk-forward run.}
+\label{tab:thr}
+\begin{tabular}{lrrrrrr}\toprule
+& & \multicolumn{3}{c}{AUC} & \multicolumn{2}{c}{Brier skill} \\\cmidrule(lr){3-5}\cmidrule(lr){6-7}
+Threshold & Base rate & Reference & ML average & Two-step & Reference & Two-step \\\midrule
+<<T4>>
+\bottomrule\end{tabular}
+\end{table}
+
+Figure~\ref{fig:cal} shows the calibration. Up to the eighth decile the forecasts are close to the actual share that fell. In the riskiest tenth, the two-step model forecasts <<CALP>> on average while <<CALA>> actually fell, so the probabilities are too high where they matter most.
+
+\begin{figure}[H]\centering
+\includegraphics[width=0.62\linewidth]{fig_cal.pdf}
+\caption{Calibration of fall probabilities by forecast decile.}
+\label{fig:cal}
+\end{figure}
+
+Crises are the hard case (Table~\ref{tab:crisis}). In the Covid crash from February to May 2020, almost a third of stock-months saw a large fall and both models ranked them worse than chance (AUC <<COVIDREF>> and <<COVIDVL>>): when everything falls, past volatility says little about what falls most.
+
+\begin{table}[H]\centering\small
+\caption{Results in two stress periods.}
+\label{tab:crisis}
+\begin{tabular}{lrrrrrr}\toprule
+& & & \multicolumn{2}{c}{MSE, volatility} & \multicolumn{2}{c}{AUC, falls} \\\cmidrule(lr){4-5}\cmidrule(lr){6-7}
+Period & Stock-months & Fall rate & HAR & ML average & Reference & Two-step \\\midrule
+<<T5>>
+\bottomrule\end{tabular}
+\end{table}
+
+\worked{\textbf{What worked:} the two-step model ranks falls better than the reference at every threshold. \textbf{What did not:} machine learning trained directly on falls, Platt recalibration, sector dummies, the probabilities for the riskiest tenth, and every model in the Covid crash. \textbf{What I did:} switched to the two-step model, which is the one used live, and report the overconfidence instead of hiding it. A longer calibration window is the next thing to try.}
+
+\subsection{What the models use}
+Figure~\ref{fig:imp} shows mean absolute SHAP values \citep{lundberg2017} from the LightGBM models over all test forecasts. For volatility the largest contributions come from <<IMPV>>. The intraday range carries more information than any close-to-close measure HAR uses, which is one reason the tree models beat it. Oil price changes and the change in VIX matter for a market weighted towards energy and shipping. For falls the inputs are more spread out, with the policy rate, krone volatility and the fall from the 52-week high among the largest, which is consistent with falls being driven partly by the macro environment.
+
+\begin{figure}[H]\centering
+\includegraphics[width=\linewidth]{fig_imp.pdf}
+\caption{Share of the mean absolute SHAP value by input, top ten, LightGBM. Sector dummies are summed.}
+\label{fig:imp}
+\end{figure}
+
+\subsection{Value at Risk}
+A one-month 95\% VaR for each stock, from the machine learning volatility forecast and the held-out quantile of standardised returns, was exceeded in <<VARRATE>> of <<VARN>> stock-months, against 5\% expected (Kupiec $p=<<VARP>>$). HAR gives <<VARHAR>>. Both are well calibrated on average, but exceedances cluster: in <<VARCL>> of <<MONTHS>> months more than a fifth of the stocks breached their VaR at the same time, which a stock-by-stock VaR does not capture.
+
+\subsection{A low-risk portfolio}
+Each month end, the ten stocks with the lowest forecast volatility are bought in equal amounts and held for a month, with 0.2\% cost per trade. Table~\ref{tab:pf} and Figure~\ref{fig:pf} cover <<PFFIRST>> to <<PFLAST>>. The portfolio had lower volatility than OSEBX (<<LOWVOL>> against <<OSEVOL>>) with about the same Sharpe ratio (<<LOWSR>> against <<OSESR>>), and the ten riskiest stocks did far worse, so the forecasts sort risk well. Built from machine learning, the portfolio trades less than when built from HAR (<<TURNML>> against <<TURNHAR>> of the portfolio a month) and had a smaller worst fall (<<LOWDD>> against <<HARDD>>), but it earned less (Sharpe <<LOWSR>> against <<HARSR>>). Better risk forecasts help to control risk; they are not a way to beat the market.
+
+\begin{table}[H]\centering\small
+\caption{Monthly-rebalanced portfolios, annualised. The Sharpe ratio uses the policy rate as the risk-free rate.}
+\label{tab:pf}
+\begin{tabular}{lrrrr}\toprule
+Portfolio & Return & Volatility & Sharpe & Worst fall \\\midrule
+<<T6>>
+\bottomrule\multicolumn{5}{l}{\footnotesize $^{a}$ Contains only companies listed today, so it is inflated by survivorship bias.}
+\end{tabular}
+\end{table}
+
+\begin{figure}[H]\centering
+\includegraphics[width=\linewidth]{fig_pf.pdf}
+\caption{Growth of NOK 1, after trading costs.}
+\label{fig:pf}
+\end{figure}
+
+\section{What worked, what did not, and what I did about it}
+\label{sec:lessons}
+{\small\noindent\begin{tabularx}{\linewidth}{>{\raggedright\arraybackslash}p{2.6cm}>{\raggedright\arraybackslash}X>{\raggedright\arraybackslash}X}\toprule
+Problem & What happened & Solution \\\midrule
+Getting the data & The analysis environment could not reach Yahoo Finance or Euronext. & A GitHub Action fetches the data monthly on GitHub's servers and stores it on a separate branch, so the analysis can be rerun by anyone. \\
+Index membership & The OSEBX constituent list requires a licence. & 76 current and former members with a point-in-time liquidity and history rule. \\
+Delisted companies & 12 of the 76 have no free data. & Not solvable with free data; stated, and portfolios compared with the OSEBX index rather than only an average of survivors. \\
+Bad prices & Early data contains reversing spikes of several hundred per cent. & Start in 2004; drop non-trading days and reversed jumps above 30\%. \\
+A second source & Stooq blocks automated downloads; Euronext rejected the first request format. & Another request format worked; closes are identical on all but one of about 4,000 stock-days. One apparent mismatch was my own wrong ISIN. \\
+Look-ahead & With same-day VIX and Brent, machine learning looked better in the Covid crash. & US-hours data lagged one day; the apparent advantage disappeared. \\
+Variance scale & Log-volatility models under-forecast variance, distorting QLIKE. & Each model's scale estimated on its held-out block only. \\
+Neural network & No better than HAR. & Kept in the average as decided in advance; the tree models carry the gain. \\
+Falls & Machine learning classifiers, Platt scaling and sectors did not beat a logistic regression. & Two-step model from the volatility forecast: AUC <<AUCVL>> against <<AUCREF>>. \\
+Overconfidence & Riskiest tenth: <<CALP>> forecast, <<CALA>> actual. & Not solved; reported. \\
+Crises & No model ranked falls in the Covid crash; ML lost to HAR in 2022. & Monthly retraining live; crises reported separately. \\
+Fair live test & A mid-month forecast already knows half the month. & Mid-month runs are previews and never scored; official forecasts are saved at month end and never changed. \\
+\bottomrule\end{tabularx}}
+
+\section{Limitations}
+\label{sec:limits}
+\begin{itemize}
+\item \textbf{Survivorship bias.} Companies that left the exchange are missing. They include some of the worst falls, so the fall rate and the losses of risky stocks are probably understated, and the equal-weighted average of survivors looks better than any real portfolio could have done.
+\item \textbf{Free data.} Yahoo's adjusted prices were checked against Euronext only for large stocks and only for two years. Corporate actions in small stocks may still be wrong.
+\item \textbf{Sample size.} With about <<AVG>> stocks a month, the fall model sees fewer than four events a month on average. Small differences in AUC need the bootstrap to be taken seriously, and the two-step gain is only just significant.
+\item \textbf{One horizon and one threshold.} Results are for one month and, mainly, for 15\%. The threshold results suggest the conclusion is robust, but other horizons may differ.
+\item \textbf{Costs and implementation.} The portfolio uses a flat 0.2\% cost and closing prices, and ignores market impact in less liquid stocks.
+\end{itemize}
+
+\section{Conclusion and live test}
+Machine learning improves volatility forecasts for Oslo Børs stocks, by about a tenth against a strong benchmark, and the gain is robust across years and loss functions. For large falls it helps only indirectly, through the volatility forecast; trained directly on the event it does not beat a simple logistic regression. The forecasts give a well-calibrated VaR and a portfolio with lower risk than the index, but no excess return.
+
+A backtest, however careful, is still chosen with hindsight. The models therefore run live: on the first day of each month a GitHub Action fetches new data, retrains on everything known, and publishes forecasts for every stock together with a low-risk portfolio. A month later the forecasts are scored against HAR. The forecasts and the track record are published at \url{https://hansmeyertischbein.github.io/risk/}, and the code is in the same repository.
+
+\medskip
+{\small\textit{This paper is not investment advice. The code was developed with the help of an AI assistant; all results can be reproduced from the published code and data.}}
+
+
+\appendix
+\section{Inputs}
+All inputs are measured at the close on the last trading day of the month. Volatilities are annualised; volatility inputs enter in logs.
+
+{\small\begin{longtable}{>{\raggedright\arraybackslash}p{4.6cm}>{\raggedright\arraybackslash}p{10cm}}\toprule
+Input & Definition \\\midrule\endhead
+<<INPUTS>>
+\bottomrule\end{longtable}}
+
+\section{Model settings}
+LightGBM uses a learning rate of 0.03, 80\% row and column subsampling and L2 regularisation of 1. The number of leaves (7 or 15) and the minimum number of observations per leaf (40 or 100) are chosen each year on the held-out block, with early stopping deciding the number of trees. Random forests have 400 trees, at least 30 observations per leaf and a third of the inputs tried at each split. The neural network has two hidden layers of 32 and 16 units, L2 penalty $10^{-2}$ for volatility and $10^{-1}$ for falls, early stopping on 15\% of the training data, and is averaged over five random seeds. Missing inputs are filled with the training median for the random forest, the neural network and the regressions; LightGBM handles them directly.
+
+{\small\begin{longtable}{lrrrrrr}\toprule
+& & \multicolumn{2}{c}{LightGBM, volatility} & \multicolumn{2}{c}{LightGBM, falls} & \\\cmidrule(lr){3-4}\cmidrule(lr){5-6}
+Test year & Training rows & Leaves / min. leaf & Trees & Leaves / min. leaf & Trees & Test rows \\\midrule\endhead
+<<PARAMS>>
+\bottomrule\end{longtable}}
+
+\section{The live procedure}
+\begin{enumerate}
+\item On the first day of each month at 04:23 UTC, a GitHub Action fetches all prices and market data again and checks eight large stocks against Euronext.
+\item If the previous month is complete, the last trading day becomes the forecast date. All models are refitted on stock-months whose outcomes are known, exactly as in the walk-forward test.
+\item Forecasts for every stock in the universe are written to a file named after the month, which is never overwritten. The ten stocks with the lowest forecast volatility form the next month's portfolio.
+\item Every earlier forecast file whose outcome is now known is scored against realised volatility, realised falls and the VaR, next to HAR, and the live portfolio is valued against OSEBX.
+\item Runs in the middle of a month produce a preview that is shown on the web page but never scored.
+\end{enumerate}
+
+\bibliographystyle{plainnat}
+\begin{thebibliography}{99}
+\bibitem[Amihud(2002)]{amihud2002} Amihud, Y. (2002). Illiquidity and stock returns: cross-section and time-series effects. \textit{Journal of Financial Markets}, 5(1), 31--56.
+\bibitem[Breiman(2001)]{breiman2001} Breiman, L. (2001). Random forests. \textit{Machine Learning}, 45(1), 5--32.
+\bibitem[Corsi(2009)]{corsi2009} Corsi, F. (2009). A simple approximate long-memory model of realized volatility. \textit{Journal of Financial Econometrics}, 7(2), 174--196.
+\bibitem[Diebold and Mariano(1995)]{diebold1995} Diebold, F. X. and Mariano, R. S. (1995). Comparing predictive accuracy. \textit{Journal of Business \& Economic Statistics}, 13(3), 253--263.
+\bibitem[Gu et~al.(2020)]{gu2020} Gu, S., Kelly, B. and Xiu, D. (2020). Empirical asset pricing via machine learning. \textit{Review of Financial Studies}, 33(5), 2223--2273.
+\bibitem[Ke et~al.(2017)]{ke2017} Ke, G. et al. (2017). LightGBM: a highly efficient gradient boosting decision tree. \textit{Advances in Neural Information Processing Systems}, 30.
+\bibitem[Kupiec(1995)]{kupiec1995} Kupiec, P. (1995). Techniques for verifying the accuracy of risk measurement models. \textit{Journal of Derivatives}, 3(2), 73--84.
+\bibitem[Lundberg and Lee(2017)]{lundberg2017} Lundberg, S. M. and Lee, S.-I. (2017). A unified approach to interpreting model predictions. \textit{Advances in Neural Information Processing Systems}, 30.
+\bibitem[Parkinson(1980)]{parkinson1980} Parkinson, M. (1980). The extreme value method for estimating the variance of the rate of return. \textit{Journal of Business}, 53(1), 61--65.
+\bibitem[Patton(2011)]{patton2011} Patton, A. J. (2011). Volatility forecast comparison using imperfect volatility proxies. \textit{Journal of Econometrics}, 160(1), 246--256.
+\bibitem[J.P. Morgan/Reuters(1996)]{riskmetrics1996} J.P. Morgan/Reuters (1996). \textit{RiskMetrics -- Technical Document}, 4th edition. New York.
+\end{thebibliography}
+\end{document}

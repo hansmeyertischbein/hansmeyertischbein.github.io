@@ -340,8 +340,11 @@
           ? 'M' + x + ' ' + bot + 'V' + (top + r) + 'Q' + x + ' ' + top + ' ' + (x + r) + ' ' + top + 'H' + (x + bw - r) + 'Q' + (x + bw) + ' ' + top + ' ' + (x + bw) + ' ' + (top + r) + 'V' + bot + 'Z'
           : 'M' + x + ' ' + top + 'V' + (bot - r) + 'Q' + x + ' ' + bot + ' ' + (x + r) + ' ' + bot + 'H' + (x + bw - r) + 'Q' + (x + bw) + ' ' + bot + ' ' + (x + bw) + ' ' + (bot - r) + 'V' + top + 'Z';
         geo.rects.push(s('path', { class: 'ch-bar', d: d, fill: color(b.color) }, svg));
-        var vt = s('text', { class: 'ch-label', x: cx, y: up || b.base ? (up ? top - 6 : bot + 14) : top - 6, 'text-anchor': 'middle' }, svg);
-        vt.textContent = (b.showSign && b.value > 0 ? '+' : '') + fmt(b.value);
+        // value labels only where there is room for them; the tooltip and the table always have the numbers
+        if (slot >= 38 && c.values !== false) {
+          var vt = s('text', { class: 'ch-label', x: cx, y: up || b.base ? (up ? top - 6 : bot + 14) : top - 6, 'text-anchor': 'middle' }, svg);
+          vt.textContent = (b.showSign && b.value > 0 ? '+' : '') + fmt(b.value);
+        }
         if (i < B.length - 1 && c.connect) {
           s('line', { class: 'ch-ref', x1: cx + bw / 2, x2: padL + slot * (i + 1.5) - bw / 2, y1: Y(e), y2: Y(e) }, svg);
         }

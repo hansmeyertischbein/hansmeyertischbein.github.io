@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" media="(prefers-color-scheme: light)" content="#FBFCFD">
+<meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0F1626">
+<meta name="color-scheme" content="light dark">
+<title>Forecasting risk on Oslo Børs – Hans Meyer Tischbein</title>
+<meta name="description" content="Can machine learning forecast next month&#x27;s volatility and large falls for Norwegian stocks better than simple models? A walk-forward test from 2015 to 2026, with live monthly forecasts.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Forecasting risk on Oslo Børs">
+<meta property="og:description" content="Can machine learning forecast next month&#x27;s volatility and large falls for Norwegian stocks better than simple models? A walk-forward test from 2015 to 2026, with live monthly forecasts.">
+<meta property="og:url" content="https://hansmeyertischbein.github.io/risk/">
+<meta property="og:image" content="https://hansmeyertischbein.github.io/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="HMT">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,500&family=Public+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/site.css?v=3">
+<link rel="stylesheet" href="/assets/tools.css?v=1">
+<link rel="stylesheet" href="/assets/charts.css?v=1">
+<link rel="stylesheet" href="risk.css?v=2">
+</head>
+<body>
+
+<header class="nav">
+  <div class="wrap">
+    <a class="nav-name" href="/">Hans Meyer Tischbein</a>
+    <ul class="nav-links">
+      <li><a href="/cv/">CV</a></li>
+      <li><a href="/projects/">Projects</a></li>
+    </ul>
+  </div>
+</header>
+
+<main>
+  <div class="wrap">
+    <header class="page-head">
+      <h1>Forecasting risk on Oslo Børs with machine learning</h1>
+      <p class="lede">Can machine learning predict how much Norwegian stocks will move next month, and which ones are about to fall sharply, better than the simple models the industry uses? A test on almost twelve years of data, with every model trained only on what was known at the time, and new forecasts every month.</p>
+      <p class="page-meta"><span id="meta-test">Test period Jan 2015 – Aug 2026</span><span>Updated on the 1st of each month</span><span>Not investment advice</span></p>
+      <ul class="page-links">
+        <li><a href="/risk/Forecasting_risk_Oslo_Bors.pdf">Read the paper (PDF)</a></li>
+        <li><a href="#now">This month’s forecasts</a></li>
+        <li><a href="#lessons">What worked and what didn’t</a></li>
+        <li><a href="https://github.com/hansmeyertischbein/hansmeyertischbein.github.io/tree/main/risk/pipeline">Code on GitHub</a></li>
+      </ul>
+    </header>
+
+    <section class="block" aria-labelledby="sum-h">
+      <h2 id="sum-h">The short answer</h2>
+      <p class="verdict" id="verdict">Loading the results…</p>
+      <dl class="kpis" id="kpis"></dl>
+      <div class="wd">
+        <div class="wd-ok"><h3>What worked</h3><ul id="wd-sum-ok"></ul></div>
+        <div class="wd-no"><h3>What didn’t</h3><ul id="wd-sum-no"></ul></div>
+      </div>
+    </section>
+
+    <section class="block" aria-labelledby="now-h" id="now">
+      <h2 id="now-h">This month’s forecasts</h2>
+      <p class="status" id="now-status">Loading…</p>
+      <div class="controls now-controls">
+        <label class="control">Sector<select class="field" id="now-sector"><option value="">All sectors</option></select></label>
+        <label class="control">Find a stock<input class="field" id="now-find" type="search" inputmode="search" enterkeyhint="search" placeholder="Name or ticker" autocomplete="off"></label>
+      </div>
+      <div class="table-wrap">
+        <table class="data-table now-table" id="now-table">
+          <thead><tr><th scope="col">Stock</th><th scope="col">Forecast volatility</th><th scope="col">Chance of a 15% fall</th><th scope="col">1-month VaR 95%</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+      <p class="note">Sorted from the calmest to the most volatile stock. Forecast volatility is annualised, for the next 21 trading days, from the machine learning ensemble. The chance of a fall is the probability that the share closes at least 15% below today’s close at some point in the next month. VaR 95% is the one-month loss that should be exceeded only one month in twenty. <span class="pick-key">●</span> marks the ten stocks in the low-risk portfolio.</p>
+    </section>
+
+    <section class="block" aria-labelledby="track-h" id="track">
+      <h2 id="track-h">Live track record</h2>
+      <p id="track-intro">Every month’s official forecasts are saved before the outcome is known, and never changed. A month later they are scored here against what actually happened, next to the simple HAR model.</p>
+      <div id="track-body"></div>
+    </section>
+
+    <section class="block" aria-labelledby="vol-h" id="vol">
+      <h2 id="vol-h">Volatility: does machine learning beat the simple models?</h2>
+      <p>Each model forecasts the volatility of every stock for the next month. The reference is HAR, a regression on volatility over the last day, week, month and quarter, which is hard to beat in the research literature. EWMA, the RiskMetrics rule, is included as an even simpler reference.</p>
+      <h3>Error compared with HAR</h3>
+      <div id="chart-vol"></div>
+      <p class="note">Change in mean squared error of log volatility compared with HAR, over all test months. Below zero means a smaller error than HAR.</p>
+      <div class="table-wrap"><table class="data-table" id="vol-table"></table></div>
+      <p class="note">MSE: mean squared error of log volatility. QLIKE: a loss for variance forecasts that punishes under-forecasting risk. p-value: Diebold–Mariano test of equal accuracy against HAR, on monthly average losses with Newey–West standard errors. Rank correlation: how well the model orders stocks from calm to volatile, averaged over months.</p>
+      <h3>Year by year</h3>
+      <div id="chart-years"></div>
+      <p class="note">Change in the error of the ML average compared with HAR in each test year. Below zero is better; 2026 runs to August.</p>
+      <div class="wd">
+        <div class="wd-ok"><h3>What worked</h3><ul>
+          <li>The two tree models, random forest and LightGBM, both beat HAR clearly, and the average of the three models beat HAR in eleven of twelve years.</li>
+          <li>The intraday range (high against low) turned out to be the single most useful input, more than any of the close-to-close measures HAR uses.</li>
+        </ul></div>
+        <div class="wd-no"><h3>What didn’t, and what we did</h3><ul>
+          <li>The neural network was no better than HAR. It is kept in the average because removing it after seeing the results would be choosing with hindsight; the average still wins.</li>
+          <li>In 2022, when energy prices and interest rates jumped, machine learning was slightly worse than HAR, and in the Covid crash months it was no better. The live version retrains every month instead of once a year, to adapt faster.</li>
+        </ul></div>
+      </div>
+    </section>
+
+    <section class="block" aria-labelledby="fall-h" id="falls">
+      <h2 id="fall-h">Large falls: can they be seen coming?</h2>
+      <p>The second question is whether a stock will fall at least 15% below its month-end price at some point in the next month. That happened in <span id="fall-rate">9%</span> of stock-months in the test period, so a model is useful only if it can pick out the riskiest stocks better than chance.</p>
+      <div class="table-wrap"><table class="data-table" id="fall-table"></table></div>
+      <p class="note">AUC: the probability that the model ranks a stock that fell above one that did not (0.5 is guessing). Brier skill: how much the probabilities improve on always guessing the historical rate. Top-10% hit rate: share of the riskiest tenth each month that actually fell.</p>
+      <p id="fall-boot"></p>
+      <h3>Are the probabilities right?</h3>
+      <div id="chart-cal"></div>
+      <p class="note">Stock-months sorted into ten equal groups by forecast probability, from the two-step model. If the probabilities were perfect, the two lines would lie on top of each other.</p>
+      <h3>Does it depend on the threshold?</h3>
+      <div class="table-wrap"><table class="data-table" id="th-table"></table></div>
+      <div class="wd">
+        <div class="wd-ok"><h3>What worked</h3><ul>
+          <li>A two-step model: feed the machine learning volatility forecast into a one-variable logistic regression. It ranks falls better than the reference at all three thresholds, and the gain at 15% is unlikely to be luck.</li>
+        </ul></div>
+        <div class="wd-no"><h3>What didn’t, and what we did</h3><ul>
+          <li>Machine learning trained directly on falls did <em>not</em> beat a plain logistic regression on two volatility measures. Recalibrating its probabilities (Platt scaling) and adding sectors did not change that. The solution was the two-step model above: the gain from machine learning comes through the better volatility forecast.</li>
+          <li>The probabilities are too high for the riskiest tenth of stocks. This is not solved; the page shows it instead of hiding it.</li>
+          <li>No model could tell which stocks would fall most in the Covid crash of 2020, when almost everything fell. That is a limit of any model built on the recent past.</li>
+        </ul></div>
+      </div>
+    </section>
+
+    <section class="block" aria-labelledby="drv-h" id="drivers">
+      <h2 id="drv-h">What the models look at</h2>
+      <p>The share of the LightGBM model’s explanation that comes from each input, measured with SHAP values over all test forecasts. Sector dummies are added together.</p>
+      <div class="two-charts">
+        <div><h3>Volatility</h3><ol class="hbars" id="imp-vol"></ol></div>
+        <div><h3>Large falls</h3><ol class="hbars" id="imp-fall"></ol></div>
+      </div>
+    </section>
+
+    <section class="block" aria-labelledby="look-h" id="lookup">
+      <h2 id="look-h">Look up a stock</h2>
+      <div class="controls"><label class="control">Stock<select class="field" id="look-sel"></select></label></div>
+      <div id="chart-look"></div>
+      <p class="note" id="look-note"></p>
+    </section>
+
+    <section class="block" aria-labelledby="pf-h" id="portfolio">
+      <h2 id="pf-h">A low-risk portfolio</h2>
+      <p>At each month end, buy the ten stocks with the lowest forecast volatility in equal amounts and hold them for a month. Trading costs of 0.2% per trade are deducted. The same portfolio built from HAR, the ten riskiest stocks, and the OSEBX index are shown for comparison.</p>
+      <div id="chart-pf"></div>
+      <div class="table-wrap"><table class="data-table" id="pf-table"></table></div>
+      <div class="wd">
+        <div class="wd-ok"><h3>What worked</h3><ul id="wd-pf-ok"></ul></div>
+        <div class="wd-no"><h3>What didn’t</h3><ul id="wd-pf-no"></ul></div>
+      </div>
+    </section>
+
+    <section class="block" aria-labelledby="var-h" id="var">
+      <h2 id="var-h">Value at Risk check</h2>
+      <p id="var-text"></p>
+    </section>
+
+    <section class="block" aria-labelledby="les-h" id="lessons">
+      <h2 id="les-h">What worked, what didn’t, and what we did about it</h2>
+      <p>The full list, in the order the problems came up.</p>
+      <div class="table-wrap">
+        <table class="data-table lessons">
+          <thead><tr><th scope="col">Problem</th><th scope="col">What happened</th><th scope="col">Solution</th></tr></thead>
+          <tbody>
+            <tr><td>Getting the data</td><td>The analysis environment could not reach Yahoo Finance or Euronext.</td><td>A GitHub Action fetches the data on GitHub’s servers every month and stores it on a separate branch, so anyone can rerun the analysis.</td></tr>
+            <tr><td>Which stocks are in OSEBX</td><td>The full index list requires a licence.</td><td>76 current and former OSEBX companies, with a rule applied at each month end: at least a year of history and NOK 5 million in daily turnover.</td></tr>
+            <tr><td>Companies that left the exchange</td><td>12 of the 76, such as Adevinta and Kahoot!, have no data in free sources.</td><td>Not solvable with free data. Stated as a limitation, and portfolios are compared with the OSEBX index, which includes them, not only with an average of survivors.</td></tr>
+            <tr><td>Bad prices</td><td>Early Yahoo data has errors, such as a 296% jump that reverses the next day.</td><td>Start in 2004, drop 6,628 days without trading, and remove jumps above 30% that reverse the next day.</td></tr>
+            <tr><td>A second source</td><td>Stooq blocks automatic downloads, and Euronext rejected the first request format.</td><td>A different request format worked. Yahoo and Euronext closes match exactly for eight large stocks over two years. One mismatch was my own wrong ISIN, now fixed.</td></tr>
+            <tr><td>Look-ahead</td><td>VIX and Brent close after Oslo Børs. With same-day values, machine learning looked better in the Covid crash.</td><td>US market data is lagged one day. The apparent advantage disappeared, which showed it was look-ahead, not skill.</td></tr>
+            <tr><td>Comparing variance forecasts</td><td>Models trained on log volatility under-forecast variance on average, which distorts QLIKE.</td><td>Each model’s variance is rescaled with a factor estimated on a held-out part of its training window only.</td></tr>
+            <tr><td>Neural network</td><td>No better than HAR.</td><td>Kept in the ensemble, decided before the results; the tree models carry the gain.</td></tr>
+            <tr><td>Machine learning for falls</td><td>Did not beat a simple logistic regression. Calibration and sectors did not help.</td><td>Two-step model from the volatility forecast: AUC 0.75 against 0.73, consistent across thresholds.</td></tr>
+            <tr><td>Overconfident probabilities</td><td>The riskiest tenth gets about a third chance of falling; about a quarter actually fall.</td><td>Not solved. Shown openly; a longer calibration window is the next thing to try.</td></tr>
+            <tr><td>Crises</td><td>No model ranked falls in the Covid crash; machine learning was slightly worse in 2022.</td><td>The live model retrains monthly. Crises remain the hardest case and are reported separately.</td></tr>
+            <tr><td>A fair live test</td><td>A forecast made mid-month already knows half the month.</td><td>Mid-month runs are marked as previews and never scored. Official forecasts are saved at month end and never changed.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="block" aria-labelledby="meth-h" id="method">
+      <h2 id="meth-h">Data and method</h2>
+      <ul>
+        <li><strong>Data.</strong> Daily prices and turnover from Yahoo Finance, checked against Euronext. OSEBX, VIX, Brent, USD/NOK and EUR/NOK from Yahoo, and the policy rate from Norges Bank. <span id="m-data"></span></li>
+        <li><strong>Universe.</strong> <span id="m-universe"></span>. About <span id="m-avg">41</span> stocks a month in the test period, <span id="m-stocks">61</span> in total.</li>
+        <li><strong>Targets.</strong> Realised volatility over the next 21 trading days, annualised; and whether the close falls at least 15% below the month-end close within those 21 days.</li>
+        <li><strong>Inputs.</strong> 32 inputs known at the month end: volatility over several horizons, the intraday range, downside volatility, skewness, past returns, the fall from the 52-week high, beta, liquidity, market volatility, VIX, oil, the krone and the policy rate, plus sector.</li>
+        <li><strong>Models.</strong> LightGBM (gradient boosting), random forest and a neural network (two hidden layers, five seeds averaged), and their average. References: HAR and EWMA for volatility; a logistic regression on two volatility measures for falls.</li>
+        <li><strong>Training.</strong> Walk-forward: for each test year, the models are trained on all data whose outcome was known before the year started. The last two years of each training window are held out to choose LightGBM settings and to fit scaling and calibration. The live model does the same every month.</li>
+        <li><strong>Evaluation.</strong> Diebold–Mariano tests with Newey–West standard errors, AUC with a month-block bootstrap, Brier skill, calibration by decile, and Kupiec’s test for the VaR.</li>
+      </ul>
+      <p class="disclaimer">This is a research project, not investment advice. The forecasts are statistical estimates that can be badly wrong, especially in crises. Past results do not guarantee future results.</p>
+    </section>
+
+    <section class="block" aria-labelledby="src-h">
+      <h2 id="src-h">Sources</h2>
+      <ul class="sources-list">
+        <li>Corsi, F. (2009). A simple approximate long-memory model of realized volatility. <i>Journal of Financial Econometrics</i>, 7(2), 174–196. The HAR model.</li>
+        <li>Gu, S., Kelly, B. and Xiu, D. (2020). Empirical asset pricing via machine learning. <i>Review of Financial Studies</i>, 33(5), 2223–2273.</li>
+        <li>Patton, A. J. (2011). Volatility forecast comparison using imperfect volatility proxies. <i>Journal of Econometrics</i>, 160(1), 246–256. QLIKE.</li>
+        <li>Diebold, F. X. and Mariano, R. S. (1995). Comparing predictive accuracy. <i>Journal of Business &amp; Economic Statistics</i>, 13(3), 253–263.</li>
+        <li>Kupiec, P. (1995). Techniques for verifying the accuracy of risk measurement models. <i>Journal of Derivatives</i>, 3(2), 73–84.</li>
+        <li>Lundberg, S. M. and Lee, S.-I. (2017). A unified approach to interpreting model predictions. <i>NeurIPS</i>. SHAP values.</li>
+        <li>J.P. Morgan/Reuters (1996). <i>RiskMetrics – Technical Document</i>. EWMA.</li>
+        <li>Data: Yahoo Finance, Euronext (live.euronext.com), Norges Bank (data.norges-bank.no).</li>
+      </ul>
+    </section>
+  </div>
+</main>
+
+<footer>
+  <div class="wrap">Oslo, Norway</div>
+</footer>
+
+<script src="/assets/charts.js?v=2"></script>
+<script src="risk.js?v=4"></script>
+</body>
+</html>
