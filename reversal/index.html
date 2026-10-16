@@ -24,7 +24,7 @@
 <link rel="stylesheet" href="/site.css?v=3">
 <link rel="stylesheet" href="/assets/tools.css?v=1">
 <link rel="stylesheet" href="/assets/charts.css?v=1">
-<link rel="stylesheet" href="reversal.css?v=3">
+<link rel="stylesheet" href="reversal.css?v=4">
 </head>
 <body>
 
@@ -45,6 +45,7 @@
       <p class="lede">A simple daily strategy on Oslo Børs: when an OSEBX stock rises at least 5% in a day, short it at the next morning’s open and buy it back at that day’s close. Do big jumps fade the day after, and does anything survive trading costs?</p>
       <p class="page-meta"><span id="meta">2021–2025, five full years</span><span>Yahoo Finance data</span><span>Not investment advice</span></p>
       <ul class="page-links">
+        <li><a href="#formula">The formula</a></li>
         <li><a href="#results">Results</a></li>
         <li><a href="#costs">Trading costs</a></li>
         <li><a href="/risk/">Forecasting risk on Oslo Børs</a></li>
@@ -60,6 +61,32 @@
         <li><strong>Day 1, at the close.</strong> Buy them back. The position is never held overnight.</li>
         <li><strong>No signal, no trade.</strong> On days when no stock rose that much, the money stays in cash.</li>
       </ol>
+      <h3 id="formula">The return on one day</h3>
+      <div class="fx" role="math" aria-label="R sub t equals one over N sub t times the sum over the shorted stocks of open minus close divided by open, minus two c">
+        <div class="fx-row"><span class="fx-l"><var>R</var><sub><var>t</var></sub> =</span>
+          <span class="frac"><span>1</span><span><var>N</var><sub><var>t</var></sub></span></span>
+          <span class="sum">∑<small><var>i</var>&nbsp;∈&nbsp;<var>S</var><sub><var>t</var></sub></small></span>
+          <span class="frac"><span><var>O</var><sub><var>i</var>,<var>t</var></sub> − <var>C</var><sub><var>i</var>,<var>t</var></sub></span><span><var>O</var><sub><var>i</var>,<var>t</var></sub></span></span>
+          <span>− 2<var>c</var></span></div>
+        <div class="fx-row fx-small"><var>R</var><sub><var>t</var></sub> = 0 on days with no signal, and the money grows as <var>W</var><sub><var>t</var></sub> = <var>W</var><sub><var>t</var>−1</sub> × (1 + <var>R</var><sub><var>t</var></sub>).</div>
+      </div>
+      <dl class="fx-def">
+        <div><dt><var>S</var><sub><var>t</var></sub></dt><dd>the stocks that rose at least the threshold the day before: <var>C</var><sub><var>i</var>,<var>t</var>−1</sub> / <var>C</var><sub><var>i</var>,<var>t</var>−2</sub> − 1 ≥ 5%, using closes adjusted for dividends and splits</dd></div>
+        <div><dt><var>N</var><sub><var>t</var></sub></dt><dd>how many stocks are in <var>S</var><sub><var>t</var></sub>; the money is split equally between them</dd></div>
+        <div><dt><var>O</var><sub><var>i</var>,<var>t</var></sub>, <var>C</var><sub><var>i</var>,<var>t</var></sub></dt><dd>the stock’s opening and closing price on the trading day. A short earns when the price falls, so the gain is (open − close) / open</dd></div>
+        <div><dt><var>c</var></dt><dd>the cost per transaction as a share of the amount traded, here 0.10%. Every krone is traded twice, short and buy-back, so the cost is 2<var>c</var></dd></div>
+      </dl>
+      <div class="fx-ex">
+        <p><strong>Example: 9 December 2025.</strong> On 8 December, Hexagon Composites rose 10.5% and Wallenius Wilhelmsen 5.2%, so both are shorted at the open on the 9th, with half the money each.</p>
+        <div class="table-wrap"><table class="data-table">
+          <thead><tr><th scope="col" class="l">Stock</th><th scope="col">Open</th><th scope="col">Close</th><th scope="col">Gain on the short</th></tr></thead>
+          <tbody>
+            <tr><td class="l">Hexagon Composites</td><td>8.03</td><td>7.50</td><td>+6.60%</td></tr>
+            <tr><td class="l">Wallenius Wilhelmsen</td><td>101.80</td><td>104.90</td><td>−3.05%</td></tr>
+          </tbody>
+        </table></div>
+        <p><var>R</var> = ½ × (6.60% − 3.05%) − 2 × 0.10% = 1.78% − 0.20% = <strong>+1.58%</strong>. Hexagon fell back after its jump while Wallenius kept rising, and the day still made money because the gain on Hexagon was larger.</p>
+      </div>
       <p class="note" id="universe-note">Only liquid stocks are used: a median daily turnover of at least NOK 5 million over the previous three months and a share price of at least NOK 1. Prices are adjusted for dividends and splits.</p>
     </section>
 

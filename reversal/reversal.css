@@ -17,3 +17,21 @@
 #stats th, #stats td { padding-left: 0.5rem; padding-right: 0.5rem; }
 #freq td:first-child, #years td:first-child { white-space: nowrap; }
 #last td:nth-child(2) { white-space: normal; min-width: 12rem; }
+/* formula */
+.fx { margin: 0.75rem 0 1rem; padding: 1rem 1.1rem; border: 1px solid var(--rule); border-radius: 8px; overflow-x: auto; }
+.fx var { font-family: var(--serif); font-style: italic; font-size: 1.08em; }
+.fx sub var, .fx-def sub var { font-size: 1em; }
+.fx-row { display: flex; align-items: center; gap: 0.45rem; flex-wrap: nowrap; font-size: 1.15rem; white-space: nowrap; }
+.fx-small { margin-top: 0.75rem; font-size: 0.9rem; color: var(--muted); white-space: normal; display: block; }
+.frac { display: inline-flex; flex-direction: column; align-items: center; text-align: center; line-height: 1.25; }
+.frac > span:first-child { border-bottom: 1.5px solid currentColor; padding: 0 0.25rem 0.1rem; }
+.frac > span:last-child { padding: 0.1rem 0.25rem 0; }
+.sum { display: inline-flex; flex-direction: column; align-items: center; font-size: 1.6rem; line-height: 1; }
+.sum small { font-size: 0.72rem; margin-top: 0.15rem; }
+.fx-def { margin: 0 0 1rem; display: grid; gap: 0.45rem; }
+.fx-def div { display: grid; grid-template-columns: 4.6rem minmax(0, 1fr); gap: 0.75rem; font-size: 0.9rem; }
+.fx-def dt var { font-family: var(--serif); font-style: italic; font-size: 1.05em; }
+.fx-def dd { margin: 0; color: var(--muted); }
+.fx-ex { border-left: 3px solid var(--navy); padding: 0.1rem 0 0.1rem 1rem; }
+.fx-ex p { margin: 0.4rem 0; }
+.fx-ex var { font-family: var(--serif); font-style: italic; }
