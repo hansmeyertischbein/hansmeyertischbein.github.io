@@ -6,11 +6,11 @@
 <meta name="theme-color" media="(prefers-color-scheme: light)" content="#FBFCFD">
 <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0F1626">
 <meta name="color-scheme" content="light dark">
-<title>Buy yesterday’s loser, short yesterday’s winner – Hans Meyer Tischbein</title>
-<meta name="description" content="A daily reversal strategy on Oslo Børs, 2021–2025: buy the OSEBX stock that fell most yesterday, short the one that rose most, and compare three ways of closing the trade.">
+<title>Short yesterday’s big winners – Hans Meyer Tischbein</title>
+<meta name="description" content="A daily strategy on Oslo Børs, 2021–2025: short OSEBX stocks that rose at least 5% at the next open, buy them back at the close, and see what trading costs do to the result.">
 <meta property="og:type" content="website">
-<meta property="og:title" content="Buy yesterday’s loser, short yesterday’s winner">
-<meta property="og:description" content="A daily reversal strategy on Oslo Børs, 2021–2025: buy the OSEBX stock that fell most yesterday, short the one that rose most, and compare three ways of closing the trade.">
+<meta property="og:title" content="Short yesterday’s big winners">
+<meta property="og:description" content="A daily strategy on Oslo Børs, 2021–2025: short OSEBX stocks that rose at least 5% at the next open, buy them back at the close, and see what trading costs do to the result.">
 <meta property="og:url" content="https://hansmeyertischbein.github.io/reversal/">
 <meta property="og:image" content="https://hansmeyertischbein.github.io/og.png">
 <meta property="og:image:width" content="1200">
@@ -24,7 +24,7 @@
 <link rel="stylesheet" href="/site.css?v=3">
 <link rel="stylesheet" href="/assets/tools.css?v=1">
 <link rel="stylesheet" href="/assets/charts.css?v=1">
-<link rel="stylesheet" href="reversal.css?v=2">
+<link rel="stylesheet" href="reversal.css?v=3">
 </head>
 <body>
 
@@ -41,12 +41,12 @@
 <main>
   <div class="wrap">
     <header class="page-head">
-      <h1>Buy yesterday’s loser, short yesterday’s winner</h1>
-      <p class="lede">A simple daily strategy on Oslo Børs: every morning, buy the OSEBX stock that fell most yesterday and short the one that rose most. Does betting on a bounce back pay, and does it matter when you close the trade?</p>
+      <h1>Short yesterday’s big winners</h1>
+      <p class="lede">A simple daily strategy on Oslo Børs: when an OSEBX stock rises at least 5% in a day, short it at the next morning’s open and buy it back at that day’s close. Do big jumps fade the day after, and does anything survive trading costs?</p>
       <p class="page-meta"><span id="meta">2021–2025, five full years</span><span>Yahoo Finance data</span><span>Not investment advice</span></p>
       <ul class="page-links">
         <li><a href="#results">Results</a></li>
-        <li><a href="#why">Where the money comes from</a></li>
+        <li><a href="#costs">Trading costs</a></li>
         <li><a href="/risk/">Forecasting risk on Oslo Børs</a></li>
         <li><a href="https://github.com/hansmeyertischbein/hansmeyertischbein.github.io/tree/main/reversal">Code on GitHub</a></li>
       </ul>
@@ -55,15 +55,10 @@
     <section class="block" aria-labelledby="how-h">
       <h2 id="how-h">The rules</h2>
       <ol class="rev-steps">
-        <li><strong>Day 0, after the close.</strong> Rank the OSEBX stocks by their return that day. The biggest loser and the biggest winner are picked.</li>
-        <li><strong>Day 1, at the open.</strong> Put half the money into the loser and short the winner with the other half.</li>
-        <li><strong>Close the trade</strong> in one of three ways, compared side by side:
-          <ul>
-            <li><span class="rk r1">1</span> at the close the same day (held during the day only),</li>
-            <li><span class="rk r2">2</span> at the open the next day (held overnight),</li>
-            <li><span class="rk r3">3</span> at the close five trading days later (held for a week).</li>
-          </ul>
-        </li>
+        <li><strong>Day 0, after the close.</strong> Find every OSEBX stock that rose at least <span class="th-val">5%</span> that day.</li>
+        <li><strong>Day 1, at the open.</strong> Short all of them, splitting the money equally.</li>
+        <li><strong>Day 1, at the close.</strong> Buy them back. The position is never held overnight.</li>
+        <li><strong>No signal, no trade.</strong> On days when no stock rose that much, the money stays in cash.</li>
       </ol>
       <p class="note" id="universe-note">Only liquid stocks are used: a median daily turnover of at least NOK 5 million over the previous three months and a share price of at least NOK 1. Prices are adjusted for dividends and splits.</p>
     </section>
@@ -71,6 +66,9 @@
     <section class="block" aria-labelledby="res-h" id="results">
       <h2 id="res-h">Results</h2>
       <div class="controls rev-controls">
+        <label class="control">Rise on day 0, at least
+          <span class="range-row"><input type="range" id="th" min="3" max="15" step="1" value="5"><output for="th" id="th-out">5%</output></span>
+        </label>
         <div class="control">
           <span id="cost-l">Trading costs</span>
           <div class="seg" role="group" aria-labelledby="cost-l">
@@ -78,40 +76,52 @@
             <button type="button" data-cost="1" aria-pressed="true">With costs</button>
           </div>
         </div>
-        <label class="control">Cost per transaction, %<input class="field" id="cost" type="text" inputmode="decimal" enterkeyhint="done" value="0,10"><span class="hint">Each trade has four transactions: buy and sell the long, short and buy back the winner.</span></label>
+        <label class="control">Cost per transaction, %<input class="field" id="cost" type="text" inputmode="decimal" enterkeyhint="done" value="0,10"><span class="hint">Two transactions per stock and day: the short and the buy-back.</span></label>
       </div>
       <p class="verdict" id="verdict"></p>
+      <dl class="kpis" id="kpis"></dl>
       <div id="chart"></div>
-      <div class="table-wrap"><table class="data-table" id="stats"></table></div>
-      <p class="note">Return a year is compounded. Volatility and Sharpe ratio are annualised from daily changes, with a zero risk-free rate. Hit rate is the share of trades that made money after costs. OSEBX is buy and hold, without costs.</p>
       <h3>Year by year</h3>
       <div class="table-wrap"><table class="data-table" id="years"></table></div>
+      <h3>Does the threshold matter?</h3>
+      <div class="table-wrap"><table class="data-table" id="ths"></table></div>
+      <p class="note">Hit rate and average are over trading days only; days in cash count as zero. OSEBX is buy and hold, without costs.</p>
+    </section>
+
+    <section class="block" aria-labelledby="cost-h" id="costs">
+      <h2 id="cost-h">Trading costs decide it</h2>
+      <p id="breakeven"></p>
+      <ul>
+        <li><strong>Commission</strong> is small for a professional, often well under 0.05% per trade.</li>
+        <li><strong>The spread</strong> between bid and ask is the real cost. For the large stocks it is a few hundredths of a per cent, but the stocks that jump 5% are often small and volatile, where it can be 0.2–0.5%.</li>
+        <li><strong>Borrowing the shares</strong> to short them costs a fee, and the most volatile stocks are often hard or impossible to borrow on the day you want them.</li>
+        <li><strong>The opening price</strong> is set in an auction. Shorting a large amount there moves the price against you.</li>
+      </ul>
     </section>
 
     <section class="block" aria-labelledby="why-h" id="why">
-      <h2 id="why-h">Where the money comes from</h2>
-      <p>Average return per trade on each leg, before costs. The long leg is the loser you buy; the short leg is what you earn from shorting the winner (a positive number means the winner fell back).</p>
-      <div class="table-wrap"><table class="data-table" id="legs"></table></div>
-      <p id="legs-text"></p>
-      <h3>How fragile is it?</h3>
+      <h2 id="why-h">Is it real?</h2>
+      <p id="drift"></p>
+      <h3>How concentrated is it?</h3>
       <p id="fragile"></p>
       <div class="table-wrap"><table class="data-table" id="freq"></table></div>
+      <p class="note" id="check-note">Yahoo’s opening prices were compared with Euronext’s own for nine OSEBX stocks over two years, including Hexagon Composites, one of the most frequent picks here; they matched on almost every day.</p>
     </section>
 
     <section class="block" aria-labelledby="last-h">
-      <h2 id="last-h">The last ten trades</h2>
+      <h2 id="last-h">The last ten trading days</h2>
       <div class="table-wrap"><table class="data-table" id="last"></table></div>
     </section>
 
     <section class="block" aria-labelledby="cav-h">
       <h2 id="cav-h">What the backtest leaves out</h2>
       <ul>
-        <li><strong>Shorting is not free.</strong> Borrowing shares costs a fee, and the most volatile Oslo stocks are often hard to borrow. No borrowing fee is included.</li>
-        <li><strong>Opening prices.</strong> The test assumes you get the official opening price. In practice the opening auction and the spread in small stocks cost extra.</li>
-        <li><strong>One stock per side.</strong> Results depend on a handful of very large moves, so a few trades decide the outcome.</li>
+        <li><strong>Borrowing.</strong> No borrowing fee is included, and the test assumes every stock could be borrowed and shorted at the open.</li>
+        <li><strong>Size.</strong> Results are per krone invested. Large positions in small stocks would move prices.</li>
         <li><strong>Survivorship.</strong> Only companies still listed today have data, the same limitation as in the <a href="/risk/">risk project</a>.</li>
+        <li><strong>Hindsight.</strong> The 5% threshold and the five years were chosen before seeing the results, but trying many thresholds and keeping the best would overstate what could be earned.</li>
       </ul>
-      <p class="disclaimer">This is a backtest for learning, not investment advice. Past results say little about future results, and short selling can lose more than the money put in.</p>
+      <p class="disclaimer">This is a backtest for learning, not investment advice. Short selling can lose more than the money put in, and past results say little about future results.</p>
     </section>
   </div>
 </main>
@@ -121,6 +131,6 @@
 </footer>
 
 <script src="/assets/charts.js?v=2"></script>
-<script src="reversal.js?v=2"></script>
+<script src="reversal.js?v=4"></script>
 </body>
 </html>

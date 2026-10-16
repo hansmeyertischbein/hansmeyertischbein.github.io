@@ -1,13 +1,13 @@
-"""Daily reversal on Oslo Børs: buy yesterday's biggest loser, short yesterday's biggest winner.
+"""Short yesterday's big winners on Oslo Børs.
 
   python reversal/reversal.py DATA_DIR      (DATA_DIR = the risk-data branch: prices.csv.gz, macro.csv)
 
-Signal on day t: close-to-close return (adjusted for dividends and splits) of each eligible stock.
-Entry at the open on day t+1, half the money long the loser and half short the winner.
-Three exits: (1) close on day t+1, (2) open on day t+2, (3) close five trading days after the entry day.
-Eligible: in the OSEBX list used by the risk project, traded on day t and t+1, share price of at least
-NOK 1, and median daily turnover of at least NOK 5 million over the previous 63 trading days.
-Writes reversal/trades.json; the page applies trading costs and compounds the returns.
+Day 0: a stock rises at least the threshold (5% on the page; every candidate from 3% up is stored so the
+page can change it). Day 1: short it at the open and buy it back at the close. The money is split equally
+between the day's shorts; on days without a signal there is no trade.
+Eligible stocks: in the OSEBX list used by the risk project, traded on day 0 and day 1, share price of at
+least NOK 1, and median daily turnover of at least NOK 5 million over the previous 63 trading days.
+Returns use prices adjusted for dividends and splits. Writes reversal/trades.json.
 """
 import json
 import os
@@ -19,11 +19,11 @@ import pandas as pd
 DATA = sys.argv[1]
 HERE = os.path.dirname(os.path.abspath(__file__))
 START, END = '2021-01-01', '2025-12-31'
-HOLD = 5
+MIN_STORE = 0.03
 
 p = pd.read_csv(os.path.join(DATA, 'prices.csv.gz'), parse_dates=['date'])
 p = p[(p['date'] >= '2020-01-01') & (p['volume'] > 0)].sort_values(['ticker', 'date'])
-f = p['adj_close'] / p['close']                    # dividend and split adjustment, applied to the open as well
+f = p['adj_close'] / p['close']
 p['ao'], p['ac'] = p['open'] * f, p['adj_close']
 p['turn'] = p['close'] * p['volume']
 p['med_turn'] = p.groupby('ticker')['turn'].transform(lambda s: s.shift(1).rolling(63, min_periods=40).median())
@@ -39,32 +39,27 @@ for _, r in u.iterrows():
     for c in r['candidates'].split('|'):
         names[c] = r['name']
 
-trades = []
-for i, t in enumerate(dates[:-HOLD - 2]):
+days = []
+for i, t in enumerate(dates[:-1]):
     if not (START <= str(t.date()) <= END):
         continue
-    d1, d2, d6 = dates[i + 1], dates[i + 2], dates[i + 1 + HOLD]
+    d1 = dates[i + 1]
     elig = ok.loc[t] & R.loc[t].notna() & O.loc[d1].notna() & C.loc[d1].notna()
     r = R.loc[t][elig]
     if len(r) < 10:
         continue
-    lo, hi = r.idxmin(), r.idxmax()
-
-    def leg(tk):
-        e = O.at[d1, tk]
-        x2 = O.at[d2, tk] if pd.notna(O.at[d2, tk]) else C.at[d1, tk]       # not traded at the next open: use the entry day's close
-        x3 = C.loc[d1:d6, tk].dropna()
-        return C.at[d1, tk] / e - 1, x2 / e - 1, x3.iloc[-1] / e - 1
-    L, S = leg(lo), leg(hi)
-    trades.append({'d': str(t.date()), 'n': int(len(r)), 'L': lo, 'Lr': round(float(r[lo]), 4), 'S': hi, 'Sr': round(float(r[hi]), 4),
-                   'l': [round(float(x), 5) for x in L], 's': [round(float(x), 5) for x in S]})
+    intraday = (C.loc[d1, r.index] / O.loc[d1, r.index] - 1)
+    cand = r[r >= MIN_STORE].sort_values(ascending=False)
+    days.append({'d': str(t.date()), 'e': str(d1.date()), 'n': int(len(r)), 'm': round(float(intraday.mean()), 5),
+                 'c': [[tk, round(float(r[tk]), 4), round(float(intraday[tk]), 5)] for tk in cand.index]})
 
 m = pd.read_csv(os.path.join(DATA, 'macro.csv'), parse_dates=['date'], index_col='date')['osebx'].dropna()
 ob = m[(m.index >= pd.Timestamp(START) - pd.Timedelta(days=7)) & (m.index <= END)]
 base = ob[ob.index < START].iloc[-1]
 ob = ob[ob.index >= START]
-osebx = [{'d': str(d.date()), 'v': round(float(v / base), 5)} for d, v in ob.items()]
-out = {'start': START, 'end': END, 'hold_days': HOLD, 'n_trades': len(trades), 'stocks': sorted(set(t['L'] for t in trades) | set(t['S'] for t in trades)),
-       'names': names, 'trades': trades, 'osebx': osebx, 'avg_eligible': round(float(np.mean([t['n'] for t in trades])), 1)}
+out = {'start': START, 'end': END, 'min_stored': MIN_STORE, 'n_days': len(days), 'names': names, 'days': days,
+       'osebx': [{'d': str(d.date()), 'v': round(float(v / base), 5)} for d, v in ob.items()],
+       'avg_eligible': round(float(np.mean([x['n'] for x in days])), 1)}
 json.dump(out, open(os.path.join(HERE, 'trades.json'), 'w'), separators=(',', ':'), ensure_ascii=False)
-print(len(trades), 'trades; eligible per day', out['avg_eligible'])
+n5 = [x for x in days if any(c[1] >= 0.05 for c in x['c'])]
+print(len(days), 'days;', len(n5), 'with a 5% signal')
