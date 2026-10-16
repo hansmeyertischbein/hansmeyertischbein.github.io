@@ -1,33 +1,40 @@
-# Fetches daily prices for the Oslo Børs risk project and stores them on the
-# separate branch "risk-data" (force-pushed, one commit), so main stays small.
+# Oslo Børs risk project: fetch prices, then make and score the monthly forecasts.
+# Raw data goes to the separate branch "risk-data" (force-pushed, one commit) so main stays small.
+# Forecasts, scores and the live portfolio go to risk/live/ on main.
 name: risk-data
 on:
   push:
     branches: [main]
-    paths: ['risk/pipeline/fetch.py', 'risk/pipeline/universe.csv', '.github/workflows/risk-data.yml']
+    paths: ['risk/pipeline/**', '.github/workflows/risk-data.yml']
   schedule:
-    - cron: '23 4 1 * *'   # 1st of each month, 04:23 UTC
+    - cron: '23 4 1 * *'   # 1st of each month, 04:23 UTC, after the last trading day of the month
   workflow_dispatch:
 permissions:
   contents: write
 concurrency: risk-data
 jobs:
-  fetch:
+  run:
     runs-on: ubuntu-latest
-    timeout-minutes: 40
+    timeout-minutes: 60
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
       - name: Install
-        run: pip install "yfinance>=0.2.58,<0.3" "pandas>=2.2,<3" "requests>=2.31"
+        run: pip install "yfinance>=0.2.58,<0.3" "pandas>=2.2,<3" "numpy>=1.26,<3" "requests>=2.31" "lightgbm>=4.5,<5" "scikit-learn>=1.5,<2" "scipy>=1.13,<2"
       - name: Fetch
         env:
           OUT: ${{ runner.temp }}/risk-data
         run: python risk/pipeline/fetch.py
         continue-on-error: true
-      - name: Publish to the risk-data branch
+      - name: Forecast and score
+        env:
+          DATA: ${{ runner.temp }}/risk-data
+          LIVE: risk/live
+        run: python risk/pipeline/live.py 2>&1 | tee "${{ runner.temp }}/risk-data/live_log.txt"
+        continue-on-error: true
+      - name: Publish data to the risk-data branch
         if: always()
         env:
           OUT: ${{ runner.temp }}/risk-data
@@ -41,3 +48,11 @@ jobs:
           git add -A
           git commit -qm "Data fetched $(date -u +%Y-%m-%dT%H:%MZ)"
           git push -f "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" risk-data
+      - name: Publish forecasts to main
+        run: |
+          git config user.name "risk-data bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add -A risk/live
+          if git diff --cached --quiet; then echo "no changes"; exit 0; fi
+          git commit -qm "Risk forecasts updated $(date -u +%Y-%m-%d)"
+          for i in 1 2 3; do git pull -q --rebase origin main && git push -q origin HEAD:main && break; sleep 5; done

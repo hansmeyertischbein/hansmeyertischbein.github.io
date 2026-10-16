@@ -5,7 +5,7 @@ from scipy import stats
 from sklearn.metrics import brier_score_loss, log_loss, roc_auc_score
 
 VOL_MODELS = ['EWMA', 'HAR', 'LightGBM', 'RandomForest', 'MLP', 'ML']
-FALL_MODELS = ['Logit', 'LightGBM', 'RandomForest', 'MLP', 'ML']
+FALL_MODELS = ['Logit', 'LightGBM', 'RandomForest', 'MLP', 'ML', 'ML_cal', 'VolLogit']
 CRISES = {'Covid crash (Feb–May 2020)': ('2020-02', '2020-05'), '2022 energy and rates shock': ('2022-01', '2022-12')}
 
 

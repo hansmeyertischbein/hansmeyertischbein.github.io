@@ -1,0 +1,65 @@
+ticker,sector
+EQNR,Energy
+AKRBP,Energy
+VAR,Energy
+SUBC,Energy
+TGS,Energy
+DNO,Energy
+AKSO,Energy
+DNB,Financials
+STB,Financials
+SB1NO,Financials
+GJF,Financials
+AKER,Financials
+PROT,Financials
+ABG,Financials
+B2I,Financials
+ENTRA,Financials
+KOG,Industrials
+KMAR,Industrials
+AFG,Industrials
+BONHR,Industrials
+HEX,Industrials
+KOA,Industrials
+MULTI,Industrials
+NAS,Industrials
+TOM,Industrials
+VEI,Industrials
+VOW,Industrials
+FRO,Shipping
+HAFNI,Shipping
+BWLPG,Shipping
+MPCC,Shipping
+SNI,Shipping
+WAWI,Shipping
+CADLR,Shipping
+HAUTO,Shipping
+CMBTO,Shipping
+MOWI,Seafood
+SALM,Seafood
+BAKKA,Seafood
+LSG,Seafood
+NHY,Materials
+YAR,Materials
+BRG,Materials
+ELK,Materials
+TEL,Technology and media
+VEND,Technology and media
+NOD,Technology and media
+ATEA,Technology and media
+BOUV,Technology and media
+KIT,Technology and media
+AUTO,Technology and media
+PEXIP,Technology and media
+ORK,Consumer
+EPR,Consumer
+KID,Consumer
+SATS,Consumer
+ELMRA,Consumer
+NEL,Renewables
+HPUR,Renewables
+SCATC,Renewables
+CLOUD,Renewables
+AZT,Health
+PHO,Health
+NYKD,Health
