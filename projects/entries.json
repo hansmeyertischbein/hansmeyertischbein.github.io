@@ -382,6 +382,24 @@
           "url": "https://github.com/hansmeyertischbein/hansmeyertischbein.github.io/tree/main/risk"
         }
       ]
+    },
+    {
+      "date": "2026-10-16",
+      "topic": "Finance",
+      "title": "Buy yesterday’s loser, short yesterday’s winner",
+      "url": "/reversal/",
+      "text": "A daily reversal strategy on OSEBX stocks, 2021–2025, with three ways of closing the trade. Before costs, closing at the same day’s close turned NOK 1 into 3.2; with 0.1% per transaction every version loses money. The profit came only from shorting the winner — the losers kept falling.",
+      "tools": "Backtesting, Python, JavaScript, Yahoo Finance data",
+      "links": [
+        {
+          "text": "See the backtest",
+          "url": "/reversal/"
+        },
+        {
+          "text": "Code on GitHub",
+          "url": "https://github.com/hansmeyertischbein/hansmeyertischbein.github.io/tree/main/reversal"
+        }
+      ]
     }
   ]
 }
