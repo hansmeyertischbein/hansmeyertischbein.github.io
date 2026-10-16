@@ -1,0 +1,43 @@
+# Fetches daily prices for the Oslo Børs risk project and stores them on the
+# separate branch "risk-data" (force-pushed, one commit), so main stays small.
+name: risk-data
+on:
+  push:
+    branches: [main]
+    paths: ['risk/pipeline/fetch.py', 'risk/pipeline/universe.csv', '.github/workflows/risk-data.yml']
+  schedule:
+    - cron: '23 4 1 * *'   # 1st of each month, 04:23 UTC
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency: risk-data
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install
+        run: pip install "yfinance>=0.2.58,<0.3" "pandas>=2.2,<3" "requests>=2.31"
+      - name: Fetch
+        env:
+          OUT: ${{ runner.temp }}/risk-data
+        run: python risk/pipeline/fetch.py
+        continue-on-error: true
+      - name: Publish to the risk-data branch
+        if: always()
+        env:
+          OUT: ${{ runner.temp }}/risk-data
+        run: |
+          mkdir -p "$OUT"
+          echo "${{ github.sha }}" > "$OUT/source_commit.txt"
+          cd "$OUT"
+          git init -q -b risk-data
+          git config user.name "risk-data bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add -A
+          git commit -qm "Data fetched $(date -u +%Y-%m-%dT%H:%MZ)"
+          git push -f "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" risk-data
