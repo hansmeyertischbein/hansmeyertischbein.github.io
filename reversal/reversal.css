@@ -15,3 +15,5 @@
 #stats td:first-child, #legs td:first-child { white-space: nowrap; }
 #stats { font-size: 0.84rem; }
 #stats th, #stats td { padding-left: 0.5rem; padding-right: 0.5rem; }
+#freq td:first-child, #years td:first-child { white-space: nowrap; }
+#last td:nth-child(2) { white-space: normal; min-width: 12rem; }
