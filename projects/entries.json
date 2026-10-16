@@ -360,6 +360,28 @@
           "url": "https://open.spotify.com/episode/03xhkk3XCO6ie9R2v3AbaB"
         }
       ]
+    },
+    {
+      "date": "2026-10-16",
+      "topic": "Finance",
+      "title": "Forecasting risk on Oslo Børs with machine learning",
+      "url": "/risk/",
+      "text": "Can machine learning forecast next month’s volatility and large falls for Norwegian stocks better than the simple models the industry uses? A walk-forward test from 2015 to 2026: 13% lower volatility error than HAR, no gain from machine learning trained directly on falls, and a two-step model that does help. Includes what did not work and how it was handled, and live forecasts that are scored every month.",
+      "tools": "Python, LightGBM, random forest, neural networks, HAR, Diebold–Mariano, SHAP, GitHub Actions",
+      "links": [
+        {
+          "text": "See the results and forecasts",
+          "url": "/risk/"
+        },
+        {
+          "text": "Read the paper (PDF)",
+          "url": "/risk/Forecasting_risk_Oslo_Bors.pdf"
+        },
+        {
+          "text": "Code on GitHub",
+          "url": "https://github.com/hansmeyertischbein/hansmeyertischbein.github.io/tree/main/risk"
+        }
+      ]
     }
   ]
 }

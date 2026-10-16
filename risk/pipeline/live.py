@@ -39,6 +39,27 @@ def names():
     return out
 
 
+def crosscheck():
+    """Compare Yahoo closes with Euronext's own closes for the stocks fetched from both."""
+    import io
+    prices = pd.read_csv(os.path.join(DATA, 'prices.csv.gz'), parse_dates=['date'])
+    out = {}
+    for f in sorted(glob.glob(os.path.join(DATA, 'euronext_*.csv'))):
+        mn = os.path.basename(f)[9:-4]
+        try:
+            lines = open(f, encoding='utf-8-sig').read().splitlines()
+            i = next(k for k, ln in enumerate(lines) if ln.startswith('Date;'))
+            e = pd.read_csv(io.StringIO('\n'.join(lines[i:])), sep=';')
+            e = e.set_index(pd.to_datetime(e['Date'], format='%d/%m/%Y'))['Close'].astype(float)
+            y = prices[prices['ticker'] == mn].set_index('date')['close']
+            j = pd.concat([y.rename('y'), e.rename('e')], axis=1, join='inner').dropna()
+            rel = (j['y'] / j['e'] - 1).abs()
+            out[mn] = {'days': int(len(j)), 'days_diff_over_1pct': int((rel > 0.01).sum()), 'max_abs_diff_pct': r4(rel.max() * 100)}
+        except Exception as ex:  # noqa: BLE001
+            out[mn] = {'error': str(ex)[:120]}
+    return out
+
+
 def r4(x):
     return None if x is None or (isinstance(x, float) and not np.isfinite(x)) else round(float(x), 4)
 
@@ -123,7 +144,7 @@ def main():
     latest = {k: fc[k] for k in fc if k != 'stocks'}
     latest.update({'stocks': rows, 'scored_months': len(score), 'portfolio_months': len(port),
                    'track': [{k: s[k] for k in s if k != 'stocks'} for s in score], 'portfolio_track': port,
-                   'data_notes': notes})
+                   'data_notes': notes, 'crosscheck_euronext': crosscheck()})
     json.dump(latest, open(os.path.join(LIVE, 'latest.json'), 'w'), indent=1)
     print(json.dumps({'as_of': fc['as_of'], 'official': official, 'stocks': len(rows), 'scored': len(score), 'portfolio_months': len(port)}))
 
