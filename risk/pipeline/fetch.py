@@ -130,20 +130,27 @@ def euronext():
     end = dt.date.today()
     start = end - dt.timedelta(days=730)
     for mn, isin in ISIN.items():
-        try:
-            r = requests.post(f'https://live.euronext.com/en/ajax/AwlHistoricalPrice/getFullDownloadAjax/{isin}-XOSL',
-                              data={'format': 'csv', 'decimal_separator': '.', 'date_form': 'Y-m-d', 'op': '', 'adjusted': 'N',
-                                    'base100': '', 'startdate': str(start), 'enddate': str(end)},
-                              headers={'User-Agent': 'Mozilla/5.0', 'X-Requested-With': 'XMLHttpRequest'}, timeout=60)
-            txt = r.text
-            if r.status_code != 200 or len(txt) < 200:
-                log['second_source']['euronext_' + mn] = {'ok': False, 'status': r.status_code, 'head': txt[:160]}
-                continue
-            with open(os.path.join(OUT, f'euronext_{mn}.csv'), 'w', encoding='utf-8') as f:
-                f.write(txt)
-            log['second_source']['euronext_' + mn] = {'ok': True, 'bytes': len(txt), 'head': txt[:160]}
-        except Exception as e:  # noqa: BLE001
-            log['second_source']['euronext_' + mn] = {'ok': False, 'error': str(e)[:200]}
+        q = {'format': 'csv', 'decimal_separator': '.', 'date_form': 'Y-m-d', 'op': '', 'adjusted': 'N', 'base100': '',
+             'startdate': str(start), 'enddate': str(end)}
+        url = f'https://live.euronext.com/en/ajax/AwlHistoricalPrice/getFullDownloadAjax/{isin}-XOSL'
+        hdr = {'User-Agent': 'Mozilla/5.0', 'X-Requested-With': 'XMLHttpRequest', 'Referer': f'https://live.euronext.com/en/product/equities/{isin}-XOSL'}
+        tries = [('get', lambda: requests.get(url, params=q, headers=hdr, timeout=60)),
+                 ('post_qs', lambda: requests.post(url, params=q, data=q, headers=hdr, timeout=60)),
+                 ('post_json', lambda: requests.post(url, json=q, headers=hdr, timeout=60))]
+        info = {}
+        for how, call in tries:
+            try:
+                r = call()
+                txt = r.text
+                info[how] = {'status': r.status_code, 'head': txt[:160]}
+                if r.status_code == 200 and len(txt) > 200 and ',' in txt[:400] or ';' in txt[:400] and r.status_code == 200:
+                    with open(os.path.join(OUT, f'euronext_{mn}.csv'), 'w', encoding='utf-8') as f:
+                        f.write(txt)
+                    info['ok'] = how
+                    break
+            except Exception as e:  # noqa: BLE001
+                info[how] = {'error': str(e)[:200]}
+        log['second_source']['euronext_' + mn] = info
         time.sleep(1)
 
 
