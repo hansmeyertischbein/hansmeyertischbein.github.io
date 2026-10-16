@@ -1,0 +1,722 @@
+{
+ "run_utc": "2026-10-16T13:47:04Z",
+ "python": "3.12.15",
+ "yfinance": "0.2.66",
+ "stocks": {
+  "Equinor": {
+   "ok": true,
+   "ticker": "EQNR",
+   "rows": 6793,
+   "first": "2000-01-03",
+   "last": "2026-10-16",
+   "zero_volume_days": 112
+  },
+  "DNB Bank": {
+   "ok": true,
+   "ticker": "DNB",
+   "rows": 6793,
+   "first": "2000-01-03",
+   "last": "2026-10-16",
+   "zero_volume_days": 116
+  },
+  "Kongsberg Gruppen": {
+   "ok": true,
+   "ticker": "KOG",
+   "rows": 6793,
+   "first": "2000-01-03",
+   "last": "2026-10-16",
+   "zero_volume_days": 211
+  },
+  "Aker BP": {
+   "ok": true,
+   "ticker": "AKRBP",
+   "rows": 4463,
+   "first": "2009-01-09",
+   "last": "2026-10-16",
+   "zero_volume_days": 3
+  },
+  "Norsk Hydro": {
+   "ok": true,
+   "ticker": "NHY",
+   "rows": 6793,
+   "first": "2000-01-03",
+   "last": "2026-10-16",
+   "zero_volume_days": 113
+  },
+  "Mowi": {
+   "ok": true,
+   "ticker": "MOWI",
+   "rows": 6793,
+   "first": "2000-01-03",
+   "last": "2026-10-16",
+   "zero_volume_days": 118
+  },
+  "Storebrand": {
+   "ok": true,
+   "ticker": "STB",
+   "rows": 6793,
+   "first": "2000-01-03",
+   "last": "2026-10-16",
+   "zero_volume_days": 112
+  },
+  "Telenor": {
+   "ok": true,
+   "ticker": "TEL",
+   "rows": 6552,
+   "first": "2000-12-05",
+   "last": "2026-10-16",
+   "zero_volume_days": 98
+  },
+  "Subsea 7": {
+   "ok": true,
+   "ticker": "SUBC",
+   "rows": 6793,
+   "first": "2000-01-03",
+   "last": "2026-10-16",
+   "zero_volume_days": 152
+  },
+  "Yara International": {
+   "ok": true,
+   "ticker": "YAR",
+   "rows": 5691,
+   "first": "2004-03-24",
+   "last": "2026-10-16",
+   "zero_volume_days": 25
+  },
+  "Orkla": {
+   "ok": true,
+   "ticker": "ORK",
+   "rows": 6793,
+   "first": "2000-01-03",
+   "last": "2026-10-16",
+   "zero_volume_days": 115
+  },
+  "SpareBank 1 Sør-Norge": {
+   "ok": true,
+   "ticker": "SB1NO",
+   "rows": 6793,
+   "first": "2000-01-03",
+   "last": "2026-10-16",
+   "zero_volume_days": 150
+  },
+  "Gjensidige Forsikring": {
+   "ok": true,
+   "ticker": "GJF",
+   "rows": 3979,
+   "first": "2010-12-10",
+   "last": "2026-10-16",
+   "zero_volume_days": 2
+  },
+  "Vår Energi": {
+   "ok": true,
+   "ticker": "VAR",
+   "rows": 1172,
+   "first": "2022-02-16",
+   "last": "2026-10-16",
+   "zero_volume_days": 0
+  },
+  "Frontline": {
+   "ok": true,
+   "ticker": "FRO",
+   "rows": 6793,
+   "first": "2000-01-03",
+   "last": "2026-10-16",
+   "zero_volume_days": 119
+  },
+  "SalMar": {
+   "ok": true,
+   "ticker": "SALM",
+   "rows": 4884,
+   "first": "2007-05-08",
+   "last": "2026-10-16",
+   "zero_volume_days": 91
+  },
+  "Vend Marketplaces": {
+   "ok": true,
+   "ticker": "VEND",
+   "rows": 2859,
+   "first": "2015-05-29",
+   "last": "2026-10-16",
+   "zero_volume_days": 9
+  },
+  "Nordic Semiconductor": {
+   "ok": true,
+   "ticker": "NOD",
+   "rows": 6793,
+   "first": "2000-01-03",
+   "last": "2026-10-16",
+   "zero_volume_days": 669
+  },
+  "Aker": {
+   "ok": true,
+   "ticker": "AKER",
+   "rows": 6793,
+   "first": "2000-01-03",
+   "last": "2026-10-16",
+   "zero_volume_days": 115
+  },
+  "Kongsberg Maritime": {
+   "ok": true,
+   "ticker": "KMAR",
+   "rows": 124,
+   "first": "2026-04-23",
+   "last": "2026-10-16",
+   "zero_volume_days": 0
+  },
+  "TGS": {
+   "ok": true,
+   "ticker": "TGS",
+   "rows": 6793,
+   "first": "2000-01-03",
+   "last": "2026-10-16",
+   "zero_volume_days": 114
+  },
+  "Hafnia": {
+   "ok": true,
+   "ticker": "HAFNI",
+   "rows": 1742,
+   "first": "2019-11-08",
+   "last": "2026-10-16",
+   "zero_volume_days": 8
+  },
+  "BW LPG": {
+   "ok": true,
+   "ticker": "BWLPG",
+   "rows": 3237,
+   "first": "2013-11-21",
+   "last": "2026-10-16",
+   "zero_volume_days": 2
+  },
+  "Protector Forsikring": {
+   "ok": true,
+   "ticker": "PROT",
+   "rows": 4872,
+   "first": "2007-05-25",
+   "last": "2026-10-16",
+   "zero_volume_days": 470
+  },
+  "ABG Sundal Collier": {
+   "ok": true,
+   "ticker": "ABG",
+   "rows": 6793,
+   "first": "2000-01-03",
+   "last": "2026-10-16",
+   "zero_volume_days": 432
+  },
+  "AF Gruppen": {
+   "ok": true,
+   "ticker": "AFG",
+   "rows": 6793,
+   "first": "2000-01-03",
+   "last": "2026-10-16",
+   "zero_volume_days": 1126
+  },
+  "Aker Solutions": {
+   "ok": true,
+   "ticker": "AKSO",
+   "rows": 5684,
+   "first": "2004-04-02",
+   "last": "2026-10-16",
+   "zero_volume_days": 31
+  },
+  "ArcticZymes Technologies": {
+   "ok": true,
+   "ticker": "AZT",
+   "rows": 5269,
+   "first": "2005-11-04",
+   "last": "2026-10-16",
+   "zero_volume_days": 157
+  },
+  "Atea": {
+   "ok": true,
+   "ticker": "ATEA",
+   "rows": 6793,
+   "first": "2000-01-03",
+   "last": "2026-10-16",
+   "zero_volume_days": 116
+  },
+  "B2 Impact": {
+   "ok": true,
+   "ticker": "B2I",
+   "rows": 2605,
+   "first": "2016-06-08",
+   "last": "2026-10-16",
+   "zero_volume_days": 3
+  },
+  "Bakkafrost": {
+   "ok": true,
+   "ticker": "BAKKA",
+   "rows": 4158,
+   "first": "2010-03-26",
+   "last": "2026-10-16",
+   "zero_volume_days": 4
+  },
+  "Bonheur": {
+   "ok": true,
+   "ticker": "BONHR",
+   "rows": 6793,
+   "first": "2000-01-03",
+   "last": "2026-10-16",
+   "zero_volume_days": 3295
+  },
+  "Borregaard": {
+   "ok": true,
+   "ticker": "BRG",
+   "rows": 3510,
+   "first": "2012-10-18",
+   "last": "2026-10-16",
+   "zero_volume_days": 2
+  },
+  "Bouvet": {
+   "ok": true,
+   "ticker": "BOUV",
+   "rows": 4879,
+   "first": "2007-05-15",
+   "last": "2026-10-16",
+   "zero_volume_days": 962
+  },
+  "DNO": {
+   "ok": true,
+   "ticker": "DNO",
+   "rows": 6793,
+   "first": "2000-01-03",
+   "last": "2026-10-16",
+   "zero_volume_days": 117
+  },
+  "Elkem": {
+   "ok": true,
+   "ticker": "ELK",
+   "rows": 2149,
+   "first": "2018-03-22",
+   "last": "2026-10-16",
+   "zero_volume_days": 1
+  },
+  "Elmera Group": {
+   "ok": true,
+   "ticker": "ELMRA",
+   "rows": 2150,
+   "first": "2018-03-21",
+   "last": "2026-10-16",
+   "zero_volume_days": 4
+  },
+  "Entra": {
+   "ok": true,
+   "ticker": "ENTRA",
+   "rows": 3012,
+   "first": "2014-10-17",
+   "last": "2026-10-16",
+   "zero_volume_days": 2
+  },
+  "Europris": {
+   "ok": true,
+   "ticker": "EPR",
+   "rows": 2848,
+   "first": "2015-06-19",
+   "last": "2026-10-16",
+   "zero_volume_days": 2
+  },
+  "Flex LNG": {
+   "ok": false,
+   "tried": "FLNG"
+  },
+  "Hexagon Composites": {
+   "ok": true,
+   "ticker": "HEX",
+   "rows": 6793,
+   "first": "2000-01-03",
+   "last": "2026-10-16",
+   "zero_volume_days": 395
+  },
+  "Hexagon Purus": {
+   "ok": true,
+   "ticker": "HPUR",
+   "rows": 1467,
+   "first": "2020-12-14",
+   "last": "2026-10-16",
+   "zero_volume_days": 0
+  },
+  "Kid": {
+   "ok": true,
+   "ticker": "KID",
+   "rows": 2752,
+   "first": "2015-11-02",
+   "last": "2026-10-16",
+   "zero_volume_days": 25
+  },
+  "Kitron": {
+   "ok": true,
+   "ticker": "KIT",
+   "rows": 6793,
+   "first": "2000-01-03",
+   "last": "2026-10-16",
+   "zero_volume_days": 679
+  },
+  "Kongsberg Automotive": {
+   "ok": true,
+   "ticker": "KOA",
+   "rows": 5364,
+   "first": "2005-06-24",
+   "last": "2026-10-16",
+   "zero_volume_days": 64
+  },
+  "Lerøy Seafood": {
+   "ok": true,
+   "ticker": "LSG",
+   "rows": 6078,
+   "first": "2002-09-30",
+   "last": "2026-10-16",
+   "zero_volume_days": 249
+  },
+  "MPC Container Ships": {
+   "ok": true,
+   "ticker": "MPCC",
+   "rows": 2356,
+   "first": "2017-05-31",
+   "last": "2026-10-16",
+   "zero_volume_days": 74
+  },
+  "Multiconsult": {
+   "ok": true,
+   "ticker": "MULTI",
+   "rows": 2867,
+   "first": "2015-05-22",
+   "last": "2026-10-16",
+   "zero_volume_days": 58
+  },
+  "Nel": {
+   "ok": true,
+   "ticker": "NEL",
+   "rows": 5548,
+   "first": "2004-10-11",
+   "last": "2026-10-16",
+   "zero_volume_days": 68
+  },
+  "Norwegian Air Shuttle": {
+   "ok": true,
+   "ticker": "NAS",
+   "rows": 5760,
+   "first": "2003-12-18",
+   "last": "2026-10-16",
+   "zero_volume_days": 41
+  },
+  "Photocure": {
+   "ok": true,
+   "ticker": "PHO",
+   "rows": 6687,
+   "first": "2000-05-30",
+   "last": "2026-10-16",
+   "zero_volume_days": 305
+  },
+  "Scatec": {
+   "ok": true,
+   "ticker": "SCATC",
+   "rows": 3023,
+   "first": "2014-10-02",
+   "last": "2026-10-16",
+   "zero_volume_days": 2
+  },
+  "Stolt-Nielsen": {
+   "ok": true,
+   "ticker": "SNI",
+   "rows": 6485,
+   "first": "2001-03-08",
+   "last": "2026-10-16",
+   "zero_volume_days": 103
+  },
+  "Tomra Systems": {
+   "ok": true,
+   "ticker": "TOM",
+   "rows": 6793,
+   "first": "2000-01-03",
+   "last": "2026-10-16",
+   "zero_volume_days": 114
+  },
+  "Veidekke": {
+   "ok": true,
+   "ticker": "VEI",
+   "rows": 6793,
+   "first": "2000-01-03",
+   "last": "2026-10-16",
+   "zero_volume_days": 206
+  },
+  "Wallenius Wilhelmsen": {
+   "ok": true,
+   "ticker": "WAWI",
+   "rows": 4100,
+   "first": "2010-06-24",
+   "last": "2026-10-16",
+   "zero_volume_days": 2
+  },
+  "Cloudberry Clean Energy": {
+   "ok": true,
+   "ticker": "CLOUD",
+   "rows": 1643,
+   "first": "2020-04-02",
+   "last": "2026-10-16",
+   "zero_volume_days": 0
+  },
+  "Cadeler": {
+   "ok": true,
+   "ticker": "CADLR",
+   "rows": 1478,
+   "first": "2020-11-27",
+   "last": "2026-10-16",
+   "zero_volume_days": 0
+  },
+  "AutoStore": {
+   "ok": true,
+   "ticker": "AUTO",
+   "rows": 1254,
+   "first": "2021-10-21",
+   "last": "2026-10-16",
+   "zero_volume_days": 0
+  },
+  "Høegh Autoliners": {
+   "ok": true,
+   "ticker": "HAUTO",
+   "rows": 1227,
+   "first": "2021-11-29",
+   "last": "2026-10-16",
+   "zero_volume_days": 0
+  },
+  "CMB Tech": {
+   "ok": true,
+   "ticker": "CMBTO",
+   "rows": 292,
+   "first": "2025-08-20",
+   "last": "2026-10-16",
+   "zero_volume_days": 0
+  },
+  "Nykode Therapeutics": {
+   "ok": true,
+   "ticker": "NYKD",
+   "rows": 1515,
+   "first": "2020-10-07",
+   "last": "2026-10-16",
+   "zero_volume_days": 1
+  },
+  "Schibsted B": {
+   "ok": false,
+   "tried": "SCHB"
+  },
+  "SATS": {
+   "ok": true,
+   "ticker": "SATS",
+   "rows": 1717,
+   "first": "2019-12-13",
+   "last": "2026-10-16",
+   "zero_volume_days": 0
+  },
+  "Pexip": {
+   "ok": true,
+   "ticker": "PEXIP",
+   "rows": 1617,
+   "first": "2020-05-14",
+   "last": "2026-10-16",
+   "zero_volume_days": 0
+  },
+  "REC Silicon": {
+   "ok": false,
+   "tried": "RECSI"
+  },
+  "Vow": {
+   "ok": true,
+   "ticker": "VOW",
+   "rows": 3141,
+   "first": "2014-04-11",
+   "last": "2026-10-16",
+   "zero_volume_days": 268
+  },
+  "Golden Ocean Group": {
+   "ok": false,
+   "tried": "GOGL"
+  },
+  "Crayon Group": {
+   "ok": false,
+   "tried": "CRAYN"
+  },
+  "Adevinta": {
+   "ok": false,
+   "tried": "ADE"
+  },
+  "XXL": {
+   "ok": false,
+   "tried": "XXL"
+  },
+  "Aker Horizons": {
+   "ok": false,
+   "tried": "AKH"
+  },
+  "Avance Gas": {
+   "ok": false,
+   "tried": "AGAS"
+  },
+  "Kahoot!": {
+   "ok": false,
+   "tried": "KAHOT"
+  },
+  "Carasent": {
+   "ok": false,
+   "tried": "CARA"
+  },
+  "Gaming Innovation Group": {
+   "ok": false,
+   "tried": "GIG"
+  }
+ },
+ "macro": {
+  "osebx": {
+   "ok": true,
+   "symbol": "OSEBX.OL",
+   "rows": 3396,
+   "first": "2013-03-05",
+   "last": "2026-10-16"
+  },
+  "obx": {
+   "ok": false,
+   "tried": [
+    "OBX.OL",
+    "^OBX"
+   ]
+  },
+  "oseax": {
+   "ok": false,
+   "tried": [
+    "^OSEAX",
+    "OSEAX.OL"
+   ]
+  },
+  "vix": {
+   "ok": true,
+   "symbol": "^VIX",
+   "rows": 6740,
+   "first": "2000-01-03",
+   "last": "2026-10-16"
+  },
+  "brent": {
+   "ok": true,
+   "symbol": "BZ=F",
+   "rows": 4784,
+   "first": "2007-07-30",
+   "last": "2026-10-16"
+  },
+  "usdnok": {
+   "ok": true,
+   "symbol": "NOK=X",
+   "rows": 6395,
+   "first": "2001-07-16",
+   "last": "2026-10-16"
+  },
+  "eurnok": {
+   "ok": true,
+   "symbol": "EURNOK=X",
+   "rows": 6902,
+   "first": "2000-03-15",
+   "last": "2026-10-16"
+  },
+  "policy_rate": {
+   "ok": true,
+   "source": "Norges Bank",
+   "rows": 6737,
+   "first": "2000-01-03",
+   "last": "2026-10-15"
+  },
+  "nok_3m_bill": {
+   "ok": true,
+   "source": "Norges Bank",
+   "rows": 1954,
+   "first": "2019-01-02",
+   "last": "2026-10-15"
+  },
+  "nok_10y_bond": {
+   "ok": true,
+   "source": "Norges Bank",
+   "rows": 1954,
+   "first": "2019-01-02",
+   "last": "2026-10-15"
+  }
+ },
+ "second_source": {
+  "euronext_EQNR": {
+   "get": {
+    "status": 200,
+    "head": "﻿\"Historical Data\"\n\"From 2024-10-16 to 2026-10-16\"\nNO0010096985\nDate;Open;High;Low;Last;Close;\"Number of Shares\";\"Number of Trades\";Turnover;vwap\n15/10/2026;429"
+   },
+   "ok": "get"
+  },
+  "euronext_DNB": {
+   "get": {
+    "status": 200,
+    "head": "﻿\"Historical Data\"\n\"From 2024-10-16 to 2026-10-16\"\nNO0010161896\nDate;Open;High;Low;Last;Close;\"Number of Shares\";\"Number of Trades\";Turnover;vwap\n15/10/2026;306"
+   },
+   "ok": "get"
+  },
+  "euronext_NHY": {
+   "get": {
+    "status": 200,
+    "head": "﻿\"Historical Data\"\n\"From 2024-10-16 to 2026-10-16\"\nNO0005052605\nDate;Open;High;Low;Last;Close;\"Number of Shares\";\"Number of Trades\";Turnover;vwap\n15/10/2026;75."
+   },
+   "ok": "get"
+  },
+  "euronext_MOWI": {
+   "get": {
+    "status": 200,
+    "head": "﻿\"Historical Data\"\n\"From 2024-10-16 to 2026-10-16\"\nNO0003054108\nDate;Open;High;Low;Last;Close;\"Number of Shares\";\"Number of Trades\";Turnover;vwap\n15/10/2026;208"
+   },
+   "ok": "get"
+  },
+  "euronext_TEL": {
+   "get": {
+    "status": 200,
+    "head": "﻿\"Historical Data\"\n\"From 2024-10-16 to 2026-10-16\"\nNO0010063308\nDate;Open;High;Low;Last;Close;\"Number of Shares\";\"Number of Trades\";Turnover;vwap\n15/10/2026;121"
+   },
+   "ok": "get"
+  },
+  "euronext_ORK": {
+   "get": {
+    "status": 200,
+    "head": "﻿\"Historical Data\"\n\"From 2024-10-16 to 2026-10-16\"\nNO0003733800\nDate;Open;High;Low;Last;Close;\"Number of Shares\";\"Number of Trades\";Turnover;vwap\n15/10/2026;94."
+   },
+   "ok": "get"
+  },
+  "euronext_YAR": {
+   "get": {
+    "status": 200,
+    "head": "﻿\"Historical Data\"\n\"From 2024-10-16 to 2026-10-16\"\nNO0010208051\nDate;Open;High;Low;Last;Close;\"Number of Shares\";\"Number of Trades\";Turnover;vwap\n15/10/2026;406"
+   },
+   "ok": "get"
+  },
+  "euronext_NOD": {
+   "get": {
+    "status": 200,
+    "head": "﻿\"Historical Data\"\n\"From 2024-10-16 to 2026-10-16\"\nNO0003055501\nDate;Open;High;Low;Last;Close;\"Number of Shares\";\"Number of Trades\";Turnover;vwap\n15/10/2026;166"
+   },
+   "ok": "get"
+  },
+  "euronext_HEX": {
+   "get": {
+    "status": 200,
+    "head": "﻿\"Historical Data\"\n\"From 2024-10-16 to 2026-10-16\"\nNO0003067902\nDate;Open;High;Low;Last;Close;\"Number of Shares\";\"Number of Trades\";Turnover;vwap\n15/10/2026;12."
+   },
+   "ok": "get"
+  }
+ },
+ "errors": [
+  "FLNG.OL: $FLNG.OL: possibly delisted; no timezone found",
+  "TOMRA.OL: $TOMRA.OL: possibly delisted; no timezone found",
+  "SCHB.OL: $SCHB.OL: possibly delisted; no timezone found",
+  "RECSI.OL: $RECSI.OL: possibly delisted; no timezone found",
+  "GOGL.OL: $GOGL.OL: possibly delisted; no timezone found",
+  "CRAYN.OL: $CRAYN.OL: possibly delisted; no timezone found",
+  "ADE.OL: $ADE.OL: possibly delisted; no timezone found",
+  "XXL.OL: $XXL.OL: possibly delisted; no timezone found",
+  "AKH.OL: $AKH.OL: possibly delisted; no timezone found",
+  "AGAS.OL: $AGAS.OL: possibly delisted; no timezone found",
+  "KAHOT.OL: $KAHOT.OL: possibly delisted; no timezone found",
+  "CARA.OL: $CARA.OL: possibly delisted; no timezone found",
+  "GIG.OL: $GIG.OL: possibly delisted; no timezone found",
+  "^OBX: $^OBX: possibly delisted; no timezone found",
+  "^OSEAX: $^OSEAX: possibly delisted; no timezone found"
+ ],
+ "prices_rows": 291656
+}
