@@ -121,6 +121,32 @@ def macro():
         m.to_csv(os.path.join(OUT, 'macro.csv'), float_format='%.6g')
 
 
+ISIN = {'EQNR': 'NO0010096985', 'DNB': 'NO0010161896', 'NHY': 'NO0005052605', 'MOWI': 'NO0003054108',
+        'TEL': 'NO0010063308', 'ORK': 'NO0003733800', 'YAR': 'NO0010208051', 'NOD': 'NO0003067902'}
+
+
+def euronext():
+    """Second source: daily closes from Euronext (the exchange) for eight large stocks, last two years."""
+    end = dt.date.today()
+    start = end - dt.timedelta(days=730)
+    for mn, isin in ISIN.items():
+        try:
+            r = requests.post(f'https://live.euronext.com/en/ajax/AwlHistoricalPrice/getFullDownloadAjax/{isin}-XOSL',
+                              data={'format': 'csv', 'decimal_separator': '.', 'date_form': 'Y-m-d', 'op': '', 'adjusted': 'N',
+                                    'base100': '', 'startdate': str(start), 'enddate': str(end)},
+                              headers={'User-Agent': 'Mozilla/5.0', 'X-Requested-With': 'XMLHttpRequest'}, timeout=60)
+            txt = r.text
+            if r.status_code != 200 or len(txt) < 200:
+                log['second_source']['euronext_' + mn] = {'ok': False, 'status': r.status_code, 'head': txt[:160]}
+                continue
+            with open(os.path.join(OUT, f'euronext_{mn}.csv'), 'w', encoding='utf-8') as f:
+                f.write(txt)
+            log['second_source']['euronext_' + mn] = {'ok': True, 'bytes': len(txt), 'head': txt[:160]}
+        except Exception as e:  # noqa: BLE001
+            log['second_source']['euronext_' + mn] = {'ok': False, 'error': str(e)[:200]}
+        time.sleep(1)
+
+
 def second_source():
     """Cross-check a few stocks against Stooq (a second, independent price source)."""
     for mn in ['EQNR', 'DNB', 'NHY', 'MOWI', 'TEL', 'ORK', 'YAR', 'NOD']:
@@ -137,7 +163,7 @@ def second_source():
             log['second_source'][mn] = {'ok': False, 'error': str(e)[:200]}
 
 
-for step in (stocks, macro, second_source):
+for step in (stocks, macro, euronext):
     try:
         step()
     except Exception:  # noqa: BLE001

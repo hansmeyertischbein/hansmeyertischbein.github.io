@@ -82,7 +82,9 @@ def build(prices, macro):
         f['rv_next'] = np.sqrt(fwd_sq / H) * ann
         lp = np.log(g['adj_close'])
         fwd_min = lp[::-1].rolling(H, min_periods=H).min()[::-1].shift(-1)
-        f['fall_next'] = ((np.exp(fwd_min - lp) - 1) <= FALL).astype(float).where(fwd_min.notna())
+        for th in (10, 15, 20):
+            f[f'fall{th}'] = ((np.exp(fwd_min - lp) - 1) <= -th / 100).astype(float).where(fwd_min.notna())
+        f['fall_next'] = f['fall15']
         f['ret_next'] = (lp.shift(-H) - lp)
         f['ticker'] = t
         # keep the last trading day of each calendar month
