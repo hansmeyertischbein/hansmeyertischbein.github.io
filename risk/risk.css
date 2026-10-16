@@ -39,3 +39,26 @@
   .now-table td:first-child { min-width: 0; }
   .lessons td { min-width: 12rem; }
 }
+
+/* Glossary */
+.glossary-block { padding-top: 1.5rem; padding-bottom: 1.5rem; }
+.glossary { border: 1px solid var(--rule); border-radius: 8px; }
+.glossary > summary { display: grid; gap: 0.15rem; padding: 0.9rem 2.6rem 0.9rem 1rem; cursor: pointer; list-style: none; position: relative; }
+.glossary > summary::-webkit-details-marker { display: none; }
+.glossary > summary::after { content: ""; position: absolute; right: 1.1rem; top: 50%; width: 0.55rem; height: 0.55rem; border-right: 2px solid var(--ink); border-bottom: 2px solid var(--ink); transform: translateY(-70%) rotate(45deg); transition: transform 200ms var(--ease-out); }
+.glossary[open] > summary::after { transform: translateY(-30%) rotate(225deg); }
+.glossary > summary:active { background: color-mix(in srgb, var(--navy) 6%, transparent); }
+.g-title { font: 400 1.35rem/1.25 var(--serif); color: var(--ink); }
+.g-sub { font-size: 0.875rem; color: var(--muted); }
+.g-body { padding: 0 1rem 1rem; border-top: 1px solid var(--rule); }
+.g-find { margin: 1rem 0 0.5rem; max-width: 22rem; }
+.g-find .field { font-size: 16px; }
+.g-body h3 { margin: 1.5rem 0 0.5rem; }
+.g-body dl { margin: 0; display: grid; gap: 0; }
+.g-body dl > div { padding: 0.55rem 0; border-bottom: 1px solid var(--rule); scroll-margin-top: 4.5rem; }
+.g-body dl > div:last-child { border-bottom: 0; }
+.g-body dt { font-weight: 600; font-size: 0.95rem; }
+.g-body dd { margin: 0.15rem 0 0; color: var(--muted); font-size: 0.9rem; max-width: 40rem; }
+.g-body dl > div:target { background: color-mix(in srgb, var(--navy) 8%, transparent); }
+@media (hover: hover) and (pointer: fine) { .glossary > summary:hover .g-title { text-decoration: underline; text-underline-offset: 3px; } }
+@media (prefers-reduced-motion: reduce) { .glossary > summary::after { transition: none; } }

@@ -222,6 +222,39 @@
     }
   }
 
+  /* ---------- glossary: closed by default, opened by a tap or by a link to a term ---------- */
+  (function glossary() {
+    var box = $('glossary-box'), find = $('gl-find');
+    if (!box) return;
+    function openFor(hash) {
+      if (!hash) return;
+      var id = hash.slice(1), t = id === 'glossary' ? box : document.getElementById(id);
+      if (!t || !box.contains(t) && t !== box) return;
+      box.open = true;
+      requestAnimationFrame(function () { t.scrollIntoView({ block: 'start' }); });
+    }
+    document.addEventListener('click', function (e) {
+      var a = e.target.closest('a[href^="#"]');
+      if (!a) return;
+      var h = a.getAttribute('href');
+      if (h === '#glossary' || /^#g-/.test(h)) { box.open = true; }
+    });
+    window.addEventListener('hashchange', function () { openFor(location.hash); });
+    openFor(location.hash);
+    var sub = box.querySelector('.g-sub');
+    box.addEventListener('toggle', function () { sub.textContent = 'Every term on this page explained in plain words. Tap to ' + (box.open ? 'close.' : 'open.'); });
+    var items = Array.prototype.slice.call(box.querySelectorAll('dl > div'));
+    find.addEventListener('input', function () {
+      var q = find.value.trim().toLowerCase(), shown = 0;
+      items.forEach(function (d) { var hit = !q || d.textContent.toLowerCase().indexOf(q) >= 0; d.hidden = !hit; if (hit) shown++; });
+      box.querySelectorAll('.g-body h3').forEach(function (h) {
+        var dl = h.nextElementSibling, any = Array.prototype.some.call(dl.children, function (c) { return !c.hidden; });
+        h.hidden = dl.hidden = !any;
+      });
+      $('gl-none').hidden = shown > 0;
+    });
+  })();
+
   get('results/backtest.json').then(results).catch(function (e) { $('verdict').textContent = 'The results could not be loaded.'; console.error(e); });
   get('live/latest.json').then(live).catch(function (e) { $('now-status').textContent = 'The forecasts could not be loaded.'; console.error(e); });
 })();
