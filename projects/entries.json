@@ -10,6 +10,20 @@
   ],
   "entries": [
     {
+      "date": "2026-10-18",
+      "topic": "Strategy and decisions",
+      "title": "Market analysis: Norwegian mobile services",
+      "url": "/markets/norwegian-mobile-services/",
+      "text": "Norway’s mobile market is going from three radio networks to two, as Telia and Ice put theirs into a joint company and leave Telenor as the only operator carrying a national network alone. The conditions Nkom attaches will decide whether this brings sharper competition or a more comfortable market.",
+      "tools": "Market analysis, competitor analysis, PESTEL, SWOT",
+      "links": [
+        {
+          "text": "Read the analysis",
+          "url": "/markets/norwegian-mobile-services/"
+        }
+      ]
+    },
+    {
       "date": "2026-10-11",
       "topic": "Games",
       "title": "Games: Sudoku, Snake, 2048, Minesweeper and Spin the wheel",
