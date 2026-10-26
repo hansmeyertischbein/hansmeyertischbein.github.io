@@ -46,3 +46,12 @@
   .swot { grid-template-columns: minmax(0, 1fr); }
 }
 .article .outputs { margin: 1.5rem 0; }
+
+/* Exhibit: the title states the takeaway */
+.exhibit { margin: 2rem 0 1.5rem; }
+.exhibit-title { font: 500 1.2rem/1.35 var(--serif); color: var(--ink); margin: 0 0 1rem; max-width: 34rem; text-wrap: balance; }
+.exhibit svg { max-width: 34rem; }
+
+/* Investor view and revision note */
+.sens-table td:first-child { font-weight: 600; }
+.disclaimer-line { font-size: 0.875rem; color: var(--muted); }
