@@ -3,8 +3,10 @@
 Instructions for the agent that writes one market and competitor analysis a week for
 hansmeyertischbein.github.io. Follow them exactly. The site is in English.
 
-Version 2, in use from week 44 of 2026. Earlier analyses followed version 1, which is in
+Version 2.1, in use from week 44 of 2026. Earlier analyses followed version 1, which is in
 this file's history: it had no investor view, risks or exhibit, and no independent review.
+Version 2.1 adds two rules learned from revising the salmon farming analysis: date and
+align forecasts (section 2), and convert each mechanism into earnings (section 3).
 
 The standard is a note that a senior analyst at a top-tier investment bank or strategy
 firm would send to clients without edits: a clear view, backed by numbers, that tells an
@@ -40,6 +42,10 @@ involved.
   about NOK X a year". Mark each one "own calculation" and name its inputs. A forecast or
   scenario is allowed only when it is labelled as a scenario and its assumptions are
   stated.
+- When several sources give a forecast (prices, supply, guidance), give each one its date
+  and put them in the same currency and unit before using any of them. Say which one
+  you use and why, normally the most recent. A forecast made before a large surprise in
+  the data is out of date even if it is recent in calendar terms.
 - Typical searches: market size and growth, market shares, the three to six largest
   companies and their latest results and guidance, recent entries, exits and
   acquisitions, regulation and political proposals, prices, technology shifts, analyst
@@ -53,6 +59,13 @@ involved.
   could disagree with it.
 - Identify the two or three drivers that decide the outcome (for example price against
   volume, the cost of capacity, a regulatory decision) and quantify them.
+- Convert every mechanism the thesis rests on into earnings for each named company, and
+  show it next to the price sensitivity (the effect of a small change in the market
+  price). A mechanism that moves earnings less than a small price change cannot carry
+  the thesis on its own.
+- Before ranking companies, run your own base case through the sensitivities. If the
+  base case favours the company you rank lower, say what outweighs it or change the
+  ranking.
 - Where a source shows what the market expects (company guidance, analyst commentary,
   pricing), say where this analysis agrees and where it differs. Never invent a
   consensus.
