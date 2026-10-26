@@ -51,6 +51,8 @@
 .exhibit { margin: 2rem 0 1.5rem; }
 .exhibit-title { font: 500 1.2rem/1.35 var(--serif); color: var(--ink); margin: 0 0 1rem; max-width: 34rem; text-wrap: balance; }
 .exhibit svg { max-width: 34rem; }
+.exhibit .val { paint-order: stroke; stroke: var(--paper); stroke-width: 4px; stroke-linejoin: round; }
+.exhibit + .exhibit { margin-top: 2.5rem; }
 
 /* Investor view and revision note */
 .sens-table td:first-child { font-weight: 600; }
