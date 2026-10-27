@@ -1,6 +1,7 @@
 """Short yesterday's big winners on Oslo Børs.
 
-  python reversal/reversal.py DATA_DIR      (DATA_DIR = the risk-data branch: prices.csv.gz, macro.csv)
+  python reversal/reversal.py DATA_DIR [START END OUTFILE]   (DATA_DIR = the risk-data branch)
+  python reversal/reversal.py DATA_DIR 2016-01-01 2025-12-31 trades10.json
 
 Day 0: a stock rises at least the threshold (5% on the page; every candidate from 3% up is stored so the
 page can change it). Day 1: short it at the open and buy it back at the close. The money is split equally
@@ -18,11 +19,13 @@ import pandas as pd
 
 DATA = sys.argv[1]
 HERE = os.path.dirname(os.path.abspath(__file__))
-START, END = '2021-01-01', '2025-12-31'
+START = sys.argv[2] if len(sys.argv) > 2 else '2021-01-01'
+END = sys.argv[3] if len(sys.argv) > 3 else '2025-12-31'
+OUTFILE = sys.argv[4] if len(sys.argv) > 4 else 'trades.json'
 MIN_STORE = 0.03
 
 p = pd.read_csv(os.path.join(DATA, 'prices.csv.gz'), parse_dates=['date'])
-p = p[(p['date'] >= '2020-01-01') & (p['volume'] > 0)].sort_values(['ticker', 'date'])
+p = p[(p['date'] >= str(int(START[:4]) - 1) + '-01-01') & (p['volume'] > 0)].sort_values(['ticker', 'date'])
 f = p['adj_close'] / p['close']
 p['ao'], p['ac'] = p['open'] * f, p['adj_close']
 p['turn'] = p['close'] * p['volume']
@@ -60,6 +63,6 @@ ob = ob[ob.index >= START]
 out = {'start': START, 'end': END, 'min_stored': MIN_STORE, 'n_days': len(days), 'names': names, 'days': days,
        'osebx': [{'d': str(d.date()), 'v': round(float(v / base), 5)} for d, v in ob.items()],
        'avg_eligible': round(float(np.mean([x['n'] for x in days])), 1)}
-json.dump(out, open(os.path.join(HERE, 'trades.json'), 'w'), separators=(',', ':'), ensure_ascii=False)
+json.dump(out, open(os.path.join(HERE, OUTFILE), 'w'), separators=(',', ':'), ensure_ascii=False)
 n5 = [x for x in days if any(c[1] >= 0.05 for c in x['c'])]
 print(len(days), 'days;', len(n5), 'with a 5% signal')

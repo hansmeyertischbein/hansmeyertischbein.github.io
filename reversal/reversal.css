@@ -35,3 +35,6 @@
 .fx-ex { border-left: 3px solid var(--navy); padding: 0.1rem 0 0.1rem 1rem; }
 .fx-ex p { margin: 0.4rem 0; }
 .fx-ex var { font-family: var(--serif); font-style: italic; }
+.callout.why { max-width: 38rem; margin: 0 0 1.5rem; border-left: 4px solid var(--c2); background: color-mix(in srgb, var(--c2) 7%, transparent); padding: 0.85rem 1rem; border-radius: 0 6px 6px 0; }
+.callout.why:empty { display: none; }
+.data-table tr.lag td { background: color-mix(in srgb, var(--c2) 8%, transparent); }
