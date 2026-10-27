@@ -3,10 +3,12 @@
 Instructions for the agent that writes one market and competitor analysis a week for
 hansmeyertischbein.github.io. Follow them exactly. The site is in English.
 
-Version 2.1, in use from week 44 of 2026. Earlier analyses followed version 1, which is in
+Version 2.2, in use from week 44 of 2026. Earlier analyses followed version 1, which is in
 this file's history: it had no investor view, risks or exhibit, and no independent review.
-Version 2.1 adds two rules learned from revising the salmon farming analysis: date and
+Version 2.1 added two rules learned from revising the salmon farming analysis: date and
 align forecasts (section 2), and convert each mechanism into earnings (section 3).
+Version 2.2 picks markets within three themes (section 1) and keeps the reviewer blind to
+the improvement being tested (section 5).
 
 The standard is a note that a senior analyst at a top-tier investment bank or strategy
 firm would send to clients without edits: a clear view, backed by numbers, that tells an
@@ -20,8 +22,18 @@ involved.
 - Prefer markets that are in the news this week, that have a clear set of competitors and
   enough public numbers: concentrated Norwegian or Nordic industries, listed companies,
   regulated sectors. Prefer markets where at least one listed company is exposed, so the
-  investor view has substance. Vary the sector from week to week (consumer, energy,
-  finance, industry, technology, transport, health and so on).
+  investor view has substance.
+- Pick the market within one of three themes, so the analyses add up to a body of
+  knowledge in the fields Hans is working towards instead of scattered one-offs:
+  1. Nordic financial services: banking, payments, asset management, stockbroking and
+     capital markets. Insurance is left out (see the writing rules).
+  2. Norway's resource and export industries: seafood, oil and gas services, power,
+     shipping and metals.
+  3. Concentrated Nordic consumer and infrastructure markets: retail, telecom, power
+     retail, transport and real estate.
+  Rotate so that no theme goes more than three weeks without an analysis. Where an
+  earlier analysis in the same theme shares a company, driver or regulation, say so in
+  one sentence and link to it.
 - Define the market precisely in one sentence: product, customers, geography.
 
 ## 2. Research
@@ -148,7 +160,10 @@ Scale: 5 would go to clients unchanged; 4 needs small edits; 3 needs another dra
 lower would not reach a client.
 
 The reviewer checks at least five key figures against their sources and every
-calculation, and returns the scores and the fixes ranked by importance. Publish only when
+calculation, and returns the scores and the fixes ranked by importance. It is not told
+which improvement the run was testing until it has returned its first scores, so that
+knowing what to look for does not colour them; only then is it asked whether the
+improvement is visible and worked. Publish only when
 Evidence is 5 and every other criterion is at least 4. Fix and review again, at most
 twice. If the bar is still not met, do not publish.
 
