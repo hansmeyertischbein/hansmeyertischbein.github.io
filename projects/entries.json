@@ -38,7 +38,7 @@
       ]
     },
     {
-      "date": "2026-10-11",
+      "date": "2026-09-23",
       "topic": "Games",
       "title": "Games: Sudoku, Snake, 2048, Minesweeper and Spin the wheel",
       "url": "/games/",
@@ -56,7 +56,7 @@
       ]
     },
     {
-      "date": "2026-10-10",
+      "date": "2026-09-27",
       "topic": "Finance",
       "title": "Taylor rule for Norges Bank",
       "url": "/taylor-rule/",
@@ -74,7 +74,7 @@
       ]
     },
     {
-      "date": "2026-10-09",
+      "date": "2026-10-12",
       "topic": "Finance",
       "title": "Bonds and the yield curve",
       "url": "/bonds/",
@@ -92,7 +92,7 @@
       ]
     },
     {
-      "date": "2026-10-04",
+      "date": "2026-04-19",
       "topic": "Finance",
       "title": "Option pricing",
       "url": "/options/",
@@ -110,7 +110,7 @@
       ]
     },
     {
-      "date": "2026-09-27",
+      "date": "2026-06-21",
       "topic": "Finance",
       "title": "LBO calculator",
       "url": "/lbo/",
@@ -128,7 +128,7 @@
       ]
     },
     {
-      "date": "2026-09-23",
+      "date": "2026-09-13",
       "topic": "Strategy and decisions",
       "title": "Case interview trainer",
       "url": "/case-trainer/",
@@ -146,7 +146,7 @@
       ]
     },
     {
-      "date": "2026-10-11",
+      "date": "2026-10-14",
       "topic": "AI",
       "title": "How I work with AI agents",
       "url": "/ai-agents/",
@@ -192,7 +192,7 @@
       ]
     },
     {
-      "date": "2026-09-06",
+      "date": "2026-07-26",
       "topic": "Finance",
       "title": "What does Gjensidige’s share price assume?",
       "url": "/valuation/",
@@ -224,7 +224,7 @@
       ]
     },
     {
-      "date": "2026-08-30",
+      "date": "2026-07-12",
       "topic": "Insurance",
       "title": "Simulating a year of claims",
       "url": "/claims-simulation/",
@@ -246,7 +246,7 @@
       ]
     },
     {
-      "date": "2026-08-19",
+      "date": "2026-02-15",
       "topic": "Finance",
       "title": "Portfolio and CAPM calculator",
       "url": "/portfolio/",
@@ -264,7 +264,7 @@
       ]
     },
     {
-      "date": "2026-08-09",
+      "date": "2026-03-29",
       "topic": "Strategy and decisions",
       "title": "Case: student contents insurance",
       "url": "/student-insurance-case/",
@@ -292,7 +292,7 @@
       ]
     },
     {
-      "date": "2026-09-13",
+      "date": "2026-05-10",
       "topic": "Strategy and decisions",
       "title": "What does it cost to wait?",
       "url": "/priority/",
@@ -314,7 +314,7 @@
       ]
     },
     {
-      "date": "2026-08-16",
+      "date": "2026-03-08",
       "topic": "Finance",
       "title": "Market concentration calculator",
       "url": "/hhi/",
@@ -368,7 +368,7 @@
       ]
     },
     {
-      "date": "2026-10-13",
+      "date": "2026-10-20",
       "topic": "AI",
       "title": "Learning to use AI proficiently",
       "url": "/ai/learning-to-use-ai/",
@@ -412,7 +412,7 @@
       ]
     },
     {
-      "date": "2026-10-16",
+      "date": "2026-10-22",
       "topic": "Finance",
       "title": "Short yesterday’s big winners",
       "url": "/reversal/",
