@@ -428,6 +428,24 @@
           "url": "https://github.com/hansmeyertischbein/hansmeyertischbein.github.io/tree/main/reversal"
         }
       ]
+    },
+    {
+      "date": "2026-10-29",
+      "topic": "Finance",
+      "title": "Fund operations: from trade to reconciled holdings and NAV",
+      "url": "/fund-operations/",
+      "text": "A simulation of a day in fund operations, with three fictional funds holding real Oslo Børs shares and Norwegian government bonds. Each trade is validated, enriched, checked against the mandate (issuer, sector and ESG limits), matched with the broker, settled on T+2 and reconciled with the custodian before it ends up in the fund&#8217;s NAV. Rule-based fixes happen automatically, the rest goes to an exception queue with manager approval. Move the clock through the day to see trades settle and NAV be released. In Norwegian.",
+      "tools": "Trade lifecycle, reconciliation, NAV calculation, JavaScript, Python, Yahoo Finance and Norges Bank data",
+      "links": [
+        {
+          "text": "Open the simulation",
+          "url": "/fund-operations/"
+        },
+        {
+          "text": "Code on GitHub",
+          "url": "https://github.com/hansmeyertischbein/hansmeyertischbein.github.io/tree/main/fund-operations"
+        }
+      ]
     }
   ]
 }

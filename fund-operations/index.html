@@ -1,0 +1,1267 @@
+<!doctype html>
+<html lang="nb">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Handelsflyt og avstemming</title>
+<style>
+:root {
+  --bg: #f6f6f3; --flate: #ffffff; --flate2: #f0f1ed; --tekst: #16191d; --dempet: #5d646d; --linje: #dfe1dc;
+  --aksent: #1f5fae; --aksent-svak: rgb(31 95 174 / 0.10);
+  --ok: #1d7a46; --ok-svak: rgb(29 122 70 / 0.12);
+  --rettet: #1f5fae; --rettet-svak: rgb(31 95 174 / 0.12);
+  --venter: #a8670d; --venter-svak: rgb(168 103 13 / 0.14);
+  --stopp: #c2352b; --stopp-svak: rgb(194 53 43 / 0.11);
+  --folg: #7a4fb0; --folg-svak: rgb(122 79 176 / 0.12);
+  --leder: #0b7a83; --leder-svak: rgb(11 122 131 / 0.13);
+  --vent: #c9cdd2; --av: #9aa1a9;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #111418; --flate: #191d22; --flate2: #20252b; --tekst: #e8eaed; --dempet: #9aa1aa; --linje: #2c3239;
+    --aksent: #6aa5ee; --aksent-svak: rgb(106 165 238 / 0.13);
+    --ok: #4fcf88; --ok-svak: rgb(79 207 136 / 0.13);
+    --rettet: #6aa5ee; --rettet-svak: rgb(106 165 238 / 0.15);
+    --venter: #f0b257; --venter-svak: rgb(240 178 87 / 0.14);
+    --stopp: #ff7a6e; --stopp-svak: rgb(255 122 110 / 0.13);
+    --folg: #b892ea; --folg-svak: rgb(184 146 234 / 0.14);
+    --leder: #4fd1db; --leder-svak: rgb(79 209 219 / 0.13);
+    --vent: #3b424a; --av: #5d656e;
+  }
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--tekst); font: 14.5px/1.5 system-ui, -apple-system, "Segoe UI", sans-serif; }
+main { max-width: 1320px; margin: 0 auto; padding: 22px 18px 64px; }
+h1 { font-size: clamp(1.4rem, 2.6vw, 1.9rem); line-height: 1.15; margin: 0 0 4px; letter-spacing: -0.02em; }
+h2 { font-size: 1.08rem; margin: 0 0 4px; letter-spacing: -0.01em; }
+h3 { font-size: 0.95rem; margin: 0 0 6px; }
+p { margin: 0 0 8px; }
+.dempet { color: var(--dempet); }
+.liten { font-size: 0.82rem; }
+.tall { font-variant-numeric: tabular-nums; }
+.kort { background: var(--flate); border: 1px solid var(--linje); border-radius: 14px; padding: 16px 18px; }
+button { font: inherit; font-weight: 600; border: 0; border-radius: 999px; padding: 8px 15px; background: var(--aksent); color: #fff; cursor: pointer; white-space: nowrap; }
+button.stille { background: transparent; color: var(--aksent); border: 1px solid var(--linje); }
+button.lite { padding: 4px 11px; font-size: 0.8rem; }
+button.fare { background: var(--stopp); }
+button:disabled { opacity: 0.45; cursor: not-allowed; }
+button:focus-visible, select:focus-visible, input:focus-visible, textarea:focus-visible, tr:focus-visible, [role=tab]:focus-visible { outline: 2px solid var(--aksent); outline-offset: 2px; }
+select, input, textarea { font: inherit; color: var(--tekst); background: var(--bg); border: 1px solid var(--linje); border-radius: 8px; padding: 6px 9px; min-width: 0; }
+textarea { width: 100%; min-height: 70px; resize: vertical; }
+label { font-size: 0.8rem; color: var(--dempet); display: grid; gap: 3px; }
+.rad { display: flex; flex-wrap: wrap; gap: 10px 14px; align-items: center; }
+.rad.bunn { align-items: end; }
+.mellom { justify-content: space-between; }
+
+/* Topp med klokke */
+.topp { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 14px 24px; align-items: end; }
+@media (max-width: 860px) { .topp { grid-template-columns: 1fr; } }
+.klokke { background: var(--flate); border: 1px solid var(--linje); border-radius: 14px; padding: 12px 14px; display: grid; gap: 8px; min-width: min(100%, 520px); }
+.klokke .naa { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; }
+.klokke .naa b { font-size: 1.5rem; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
+.faser { display: grid; grid-template-columns: 34px repeat(4, 1fr) 34px; gap: 4px; }
+.faser button { font-size: 0.74rem; font-weight: 500; padding: 5px 6px; border-radius: 8px; background: var(--flate2); color: var(--dempet); text-align: center; line-height: 1.25; white-space: normal; }
+.faser button:hover:not(:disabled) { outline: 1px solid var(--aksent); }
+.faser button.ferdig { background: var(--ok-svak); color: var(--ok); }
+.faser button.naa { background: var(--aksent); color: #fff; font-weight: 600; }
+.faser button.dag { font-size: 0.9rem; padding: 0; }
+.rolle { display: inline-flex; border: 1px solid var(--linje); border-radius: 999px; padding: 2px; }
+.rolle button { background: transparent; color: var(--dempet); padding: 5px 12px; font-size: 0.82rem; }
+.rolle button.valgt { background: var(--aksent); color: #fff; }
+
+/* Faner */
+.faner { display: flex; gap: 4px; margin-top: 18px; border-bottom: 1px solid var(--linje); overflow-x: auto; }
+.faner [role=tab] { background: transparent; color: var(--dempet); border-radius: 10px 10px 0 0; padding: 9px 14px; border: 1px solid transparent; border-bottom: 0; margin-bottom: -1px; display: flex; gap: 8px; align-items: center; }
+.faner [role=tab][aria-selected=true] { background: var(--flate); color: var(--tekst); border-color: var(--linje); }
+.varsel { display: inline-flex; align-items: center; gap: 3px; background: var(--stopp); color: #fff; border-radius: 999px; font-size: 0.72rem; padding: 1px 7px; font-weight: 700; }
+.varsel.leder { background: var(--leder); }
+.fondsflate { background: var(--flate); border: 1px solid var(--linje); border-top: 0; border-radius: 0 0 14px 14px; padding: 16px 18px; }
+.fondsinfo { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 8px 18px; font-size: 0.84rem; }
+.fondsinfo div span { display: block; color: var(--dempet); font-size: 0.74rem; }
+.fondsinfo div b { font-variant-numeric: tabular-nums; }
+.mandatrad { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr); gap: 10px 28px; margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--linje); }
+@media (max-width: 760px) { .mandatrad { grid-template-columns: minmax(0, 1fr); } }
+.etikett { display: block; color: var(--dempet); font-size: 0.74rem; margin-bottom: 4px; }
+ul.mandat { margin: 0; padding-left: 18px; font-size: 0.86rem; columns: 2 200px; column-gap: 24px; }
+ul.mandat li { margin-bottom: 2px; break-inside: avoid; }
+.sektorer { display: grid; gap: 4px; font-size: 0.8rem; }
+.sektor { display: grid; grid-template-columns: 110px minmax(0, 1fr) 52px; gap: 8px; align-items: center; }
+.sektor .tall { text-align: right; }
+.stolpe { position: relative; height: 8px; background: var(--flate2); border-radius: 4px; }
+.stolpe i { position: absolute; inset: 0 auto 0 0; background: var(--aksent); border-radius: 4px; }
+.stolpe i.naer { background: var(--venter); } .stolpe i.over { background: var(--stopp); }
+.stolpe b { position: absolute; top: -3px; bottom: -3px; width: 2px; background: var(--tekst); opacity: 0.6; }
+.underfaner { display: flex; gap: 6px; margin: 16px 0 12px; flex-wrap: wrap; }
+.underfaner button { background: var(--flate2); color: var(--tekst); font-weight: 500; }
+.underfaner button[aria-selected=true] { background: var(--tekst); color: var(--bg); }
+
+.nokkel { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 8px; margin-bottom: 12px; }
+.nokkel div { background: var(--flate2); border-radius: 10px; padding: 9px 12px; }
+.nokkel b { display: block; font-size: 1.25rem; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
+
+/* Transaksjoner */
+.arbeid { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(320px, 1fr); gap: 16px; align-items: start; }
+@media (max-width: 980px) { .arbeid { grid-template-columns: minmax(0, 1fr); } .panel.laast { position: static; max-height: none; } }
+.verktoy { display: flex; flex-wrap: wrap; gap: 10px 14px; align-items: end; padding: 12px; background: var(--flate2); border-radius: 12px; margin-bottom: 10px; }
+.filter { display: flex; flex-wrap: wrap; gap: 8px 14px; align-items: center; margin: 4px 0 8px; font-size: 0.84rem; }
+.filter label.bryter { display: flex; align-items: center; gap: 6px; font-size: 0.84rem; color: var(--tekst); }
+.rull { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; font-size: 0.84rem; }
+th { text-align: left; font-weight: 600; color: var(--dempet); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.04em; padding: 6px 7px; border-bottom: 1px solid var(--linje); white-space: nowrap; }
+td { padding: 7px; border-bottom: 1px solid var(--linje); vertical-align: middle; }
+.hoyre { text-align: right; }
+#handelstabell tbody tr { cursor: pointer; }
+#handelstabell tbody tr:hover { background: var(--aksent-svak); }
+#handelstabell tbody tr.valgt { background: var(--aksent-svak); box-shadow: inset 3px 0 0 var(--aksent); }
+.prikker { display: flex; gap: 3px; }
+.prikk { width: 12px; height: 12px; border-radius: 50%; background: transparent; border: 1.5px solid var(--vent); flex: none; }
+.s-ok { background: var(--ok); border-color: var(--ok); } .s-rettet { background: var(--rettet); border-color: var(--rettet); }
+.s-venter { background: var(--venter); border-color: var(--venter); } .s-stoppet { background: var(--stopp); border-color: var(--stopp); }
+.s-folges { background: var(--folg); border-color: var(--folg); } .s-leder { background: var(--leder); border-color: var(--leder); }
+.s-vent { background: transparent; border-color: var(--av); border-style: dashed; } .s-av { background: var(--av); border-color: var(--av); }
+.merke { display: inline-block; font-size: 0.72rem; font-weight: 600; padding: 2px 8px; border-radius: 999px; white-space: nowrap; }
+.m-ok { background: var(--ok-svak); color: var(--ok); } .m-rettet { background: var(--rettet-svak); color: var(--rettet); }
+.m-venter { background: var(--venter-svak); color: var(--venter); } .m-stoppet { background: var(--stopp-svak); color: var(--stopp); }
+.m-folges { background: var(--folg-svak); color: var(--folg); } .m-leder { background: var(--leder-svak); color: var(--leder); }
+.m-vent, .m-av { background: var(--flate2); color: var(--dempet); }
+.forklaring { display: flex; flex-wrap: wrap; gap: 4px 12px; font-size: 0.75rem; color: var(--dempet); margin-bottom: 6px; }
+.forklaring .prikk { display: inline-block; width: 9px; height: 9px; margin-right: 4px; vertical-align: -1px; }
+
+.panel { background: var(--flate); border: 1px solid var(--linje); border-radius: 14px; padding: 14px 16px; }
+.panel.laast { position: sticky; top: 12px; max-height: calc(100vh - 24px); overflow: auto; }
+.panel dl { display: grid; grid-template-columns: auto 1fr; gap: 2px 12px; margin: 8px 0 12px; font-size: 0.83rem; font-variant-numeric: tabular-nums; }
+.panel dt { color: var(--dempet); }
+.panel dd { margin: 0; text-align: right; overflow-wrap: anywhere; }
+.panel dd.skille, .panel dt.skille { border-top: 1px solid var(--linje); padding-top: 4px; margin-top: 4px; }
+ol.steg { list-style: none; margin: 0; padding: 0; display: grid; gap: 7px; }
+ol.steg li { display: grid; grid-template-columns: 12px 1fr; gap: 9px; font-size: 0.83rem; }
+ol.steg li .prikk { margin-top: 4px; }
+ol.steg b { display: block; }
+.sak { border: 1px solid var(--linje); border-left: 4px solid var(--venter); border-radius: 10px; padding: 12px 14px; background: var(--flate); margin-top: 12px; }
+.sak.hos_leder { border-left-color: var(--leder); }
+.sak.lost { border-left-color: var(--ok); }
+.sak fieldset { border: 0; padding: 0; margin: 10px 0 0; }
+.sak legend { font-size: 0.78rem; font-weight: 600; color: var(--dempet); padding: 0; margin-bottom: 4px; }
+.sak .valg { display: flex; gap: 8px; align-items: flex-start; font-size: 0.84rem; color: var(--tekst); padding: 3px 0; }
+.sak .valg input { margin-top: 3px; }
+.krever { font-size: 0.7rem; font-weight: 600; color: var(--leder); background: var(--leder-svak); border-radius: 999px; padding: 1px 7px; margin-left: 4px; white-space: nowrap; }
+.retur { background: var(--venter-svak); border-radius: 8px; padding: 8px 10px; font-size: 0.84rem; }
+.oppsummering { background: var(--flate2); border-radius: 8px; padding: 8px 10px; font-size: 0.84rem; margin-top: 8px; }
+.oppsummering ul { margin: 4px 0 0; padding-left: 18px; }
+.melding { color: var(--stopp); font-size: 0.8rem; margin-top: 6px; }
+details { margin-top: 10px; }
+summary { cursor: pointer; font-weight: 600; font-size: 0.84rem; }
+.tom { color: var(--dempet); font-size: 0.86rem; padding: 12px 0; }
+.brudd { color: var(--stopp); font-weight: 600; }
+.forklarboks { background: var(--aksent-svak); border-radius: 12px; padding: 12px 14px; font-size: 0.86rem; margin-bottom: 14px; }
+.forklarboks ol, .forklarboks ul { margin: 6px 0 0; padding-left: 20px; }
+.navtabell td:first-child { color: var(--dempet); }
+.navtabell tr.sum td { font-weight: 700; border-top: 2px solid var(--tekst); color: var(--tekst); }
+ul.tett { margin: 6px 0 0; padding-left: 20px; font-size: 0.86rem; }
+ul.tett li { margin-bottom: 4px; }
+.to-kol { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 16px; }
+@media (max-width: 900px) { .to-kol { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<main>
+  <div class="topp">
+    <div>
+      <h1>Fra handel til avstemt beholdning og NAV</h1>
+      <p class="dempet" style="max-width:70ch;margin:0">Hver handel går gjennom seks steg. Det som har én riktig løsning etter en fast regel, rettes automatisk. Resten går til en person, og noe må godkjennes av leder. Flytt klokken for å se hvordan handlene gjøres opp, avstemmes og ender i fondets NAV.</p>
+    </div>
+    <div class="klokke" id="klokke"></div>
+  </div>
+  <div id="app"></div>
+  <details class="kort" style="margin-top:16px">
+    <summary>Regler, kilder og forbehold</summary>
+    <ul class="tett" id="forbehold"></ul>
+  </details>
+</main>
+
+<script>
+const DATA = {"laget": "2026-10-29", "aksjer": [{"ticker": "EQNR", "navn": "Equinor", "isin": "NO0010096985", "sektor": "Energi", "kurser": {"2026-09-28": 405.7, "2026-09-29": 398.4, "2026-09-30": 399.5, "2026-10-01": 401.8, "2026-10-02": 402.8, "2026-10-05": 404.0, "2026-10-06": 410.0, "2026-10-07": 403.5, "2026-10-08": 410.7, "2026-10-09": 417.9, "2026-10-12": 419.4, "2026-10-13": 426.2, "2026-10-14": 432.0, "2026-10-15": 429.3, "2026-10-16": 432.6, "2026-10-19": 435.0, "2026-10-20": 427.3, "2026-10-21": 434.3, "2026-10-22": 431.8, "2026-10-23": 453.8, "2026-10-26": 450.9, "2026-10-27": 440.5, "2026-10-28": 444.1}}, {"ticker": "DNB", "navn": "DNB Bank", "isin": "NO0010161896", "sektor": "Finans", "kurser": {"2026-09-28": 323.2, "2026-09-29": 319.9, "2026-09-30": 315.8, "2026-10-01": 309.2, "2026-10-02": 309.0, "2026-10-05": 308.7, "2026-10-06": 310.9, "2026-10-07": 307.5, "2026-10-08": 304.3, "2026-10-09": 302.4, "2026-10-12": 304.0, "2026-10-13": 307.3, "2026-10-14": 308.4, "2026-10-15": 305.0, "2026-10-16": 306.9, "2026-10-19": 306.5, "2026-10-20": 305.3, "2026-10-21": 314.7, "2026-10-22": 313.7, "2026-10-23": 313.3, "2026-10-26": 318.7, "2026-10-27": 324.9, "2026-10-28": 323.7}}, {"ticker": "KOG", "navn": "Kongsberg Gruppen", "isin": "NO0013536151", "sektor": "Industri", "kurser": {"2026-09-28": 311.5, "2026-09-29": 305.3, "2026-09-30": 319.9, "2026-10-01": 311.5, "2026-10-02": 308.0, "2026-10-05": 309.1, "2026-10-06": 299.0, "2026-10-07": 295.6, "2026-10-08": 291.5, "2026-10-09": 295.4, "2026-10-12": 300.0, "2026-10-13": 295.9, "2026-10-14": 301.2, "2026-10-15": 302.3, "2026-10-16": 315.3, "2026-10-19": 313.3, "2026-10-20": 306.6, "2026-10-21": 308.8, "2026-10-22": 301.5, "2026-10-23": 301.0, "2026-10-26": 310.5, "2026-10-27": 311.3, "2026-10-28": 312.1}}, {"ticker": "AKRBP", "navn": "Aker BP", "isin": "NO0010345853", "sektor": "Energi", "kurser": {"2026-09-28": 350.0, "2026-09-29": 345.1, "2026-09-30": 340.3, "2026-10-01": 341.2, "2026-10-02": 338.4, "2026-10-05": 342.0, "2026-10-06": 339.2, "2026-10-07": 339.4, "2026-10-08": 346.1, "2026-10-09": 353.7, "2026-10-12": 353.2, "2026-10-13": 360.0, "2026-10-14": 371.0, "2026-10-15": 366.5, "2026-10-16": 372.1, "2026-10-19": 375.7, "2026-10-20": 377.2, "2026-10-21": 383.2, "2026-10-22": 380.9, "2026-10-23": 393.1, "2026-10-26": 391.3, "2026-10-27": 386.0, "2026-10-28": 383.9}}, {"ticker": "NHY", "navn": "Norsk Hydro", "isin": "NO0005052605", "sektor": "Materialer", "kurser": {"2026-09-28": 82.82, "2026-09-29": 82.4, "2026-09-30": 82.64, "2026-10-01": 79.44, "2026-10-02": 80.1, "2026-10-05": 81.1, "2026-10-06": 79.46, "2026-10-07": 77.86, "2026-10-08": 78.34, "2026-10-09": 78.9, "2026-10-12": 78.0, "2026-10-13": 77.7, "2026-10-14": 76.5, "2026-10-15": 76.0, "2026-10-16": 76.86, "2026-10-19": 75.44, "2026-10-20": 74.2, "2026-10-21": 73.82, "2026-10-22": 71.76, "2026-10-23": 67.4, "2026-10-26": 68.06, "2026-10-27": 68.7, "2026-10-28": 68.04}}, {"ticker": "MOWI", "navn": "Mowi", "isin": "NO0003054108", "sektor": "Konsumvarer", "kurser": {"2026-09-28": 207.2, "2026-09-29": 203.4, "2026-09-30": 203.4, "2026-10-01": 201.4, "2026-10-02": 201.4, "2026-10-05": 201.4, "2026-10-06": 203.0, "2026-10-07": 200.6, "2026-10-08": 201.4, "2026-10-09": 203.8, "2026-10-12": 202.6, "2026-10-13": 206.6, "2026-10-14": 207.4, "2026-10-15": 206.0, "2026-10-16": 206.0, "2026-10-19": 213.2, "2026-10-20": 213.8, "2026-10-21": 216.8, "2026-10-22": 215.8, "2026-10-23": 216.0, "2026-10-26": 216.6, "2026-10-27": 217.2, "2026-10-28": 217.2}}, {"ticker": "TEL", "navn": "Telenor", "isin": "NO0010063308", "sektor": "Kommunikasjon", "kurser": {"2026-09-28": 130.3, "2026-09-29": 129.0, "2026-09-30": 128.2, "2026-10-01": 126.9, "2026-10-02": 127.8, "2026-10-05": 127.9, "2026-10-06": 125.1, "2026-10-07": 127.3, "2026-10-08": 126.1, "2026-10-09": 124.5, "2026-10-12": 124.2, "2026-10-13": 124.5, "2026-10-14": 125.3, "2026-10-15": 125.4, "2026-10-16": 126.1, "2026-10-19": 125.6, "2026-10-20": 126.0, "2026-10-21": 124.9, "2026-10-22": 127.5, "2026-10-23": 127.3, "2026-10-26": 126.4, "2026-10-27": 127.7, "2026-10-28": 130.0}}, {"ticker": "YAR", "navn": "Yara International", "isin": "NO0010208051", "sektor": "Materialer", "kurser": {"2026-09-28": 435.6, "2026-09-29": 425.0, "2026-09-30": 422.0, "2026-10-01": 414.3, "2026-10-02": 415.3, "2026-10-05": 413.7, "2026-10-06": 411.3, "2026-10-07": 412.2, "2026-10-08": 416.3, "2026-10-09": 413.6, "2026-10-12": 400.4, "2026-10-13": 402.0, "2026-10-14": 404.0, "2026-10-15": 412.8, "2026-10-16": 412.1, "2026-10-19": 408.0, "2026-10-20": 402.0, "2026-10-21": 402.0, "2026-10-22": 399.4, "2026-10-23": 402.9, "2026-10-26": 406.0, "2026-10-27": 398.0, "2026-10-28": 394.5}}, {"ticker": "ORK", "navn": "Orkla", "isin": "NO0003733800", "sektor": "Konsumvarer", "kurser": {"2026-09-28": 92.85, "2026-09-29": 92.1, "2026-09-30": 92.8, "2026-10-01": 90.85, "2026-10-02": 91.7, "2026-10-05": 91.0, "2026-10-06": 91.1, "2026-10-07": 91.75, "2026-10-08": 92.9, "2026-10-09": 93.05, "2026-10-12": 92.9, "2026-10-13": 93.2, "2026-10-14": 93.8, "2026-10-15": 95.6, "2026-10-16": 94.4, "2026-10-19": 95.15, "2026-10-20": 96.15, "2026-10-21": 96.0, "2026-10-22": 96.9, "2026-10-23": 96.8, "2026-10-26": 97.8, "2026-10-27": 97.6, "2026-10-28": 97.15}}, {"ticker": "HAUTO", "navn": "Höegh Autoliners", "isin": "NO0011082075", "sektor": "Shipping", "kurser": {"2026-09-28": 185.7, "2026-09-29": 186.7, "2026-09-30": 189.8, "2026-10-01": 189.6, "2026-10-02": 191.5, "2026-10-05": 190.4, "2026-10-06": 182.3, "2026-10-07": 177.2, "2026-10-08": 183.1, "2026-10-09": 184.6, "2026-10-12": 184.0, "2026-10-13": 188.9, "2026-10-14": 186.7, "2026-10-15": 187.7, "2026-10-16": 186.7, "2026-10-19": 185.9, "2026-10-20": 183.8, "2026-10-21": 184.2, "2026-10-22": 181.3, "2026-10-23": 175.9, "2026-10-26": 184.0, "2026-10-27": 183.1, "2026-10-28": 181.0}}, {"ticker": "GJF", "navn": "Gjensidige Forsikring", "isin": "NO0010582521", "sektor": "Finans", "kurser": {"2026-09-28": 262.2, "2026-09-29": 260.0, "2026-09-30": 258.8, "2026-10-01": 253.4, "2026-10-02": 256.6, "2026-10-05": 253.8, "2026-10-06": 249.8, "2026-10-07": 247.8, "2026-10-08": 247.6, "2026-10-09": 254.2, "2026-10-12": 253.8, "2026-10-13": 256.2, "2026-10-14": 255.8, "2026-10-15": 259.6, "2026-10-16": 263.6, "2026-10-19": 265.4, "2026-10-20": 264.2, "2026-10-21": 271.2, "2026-10-22": 270.4, "2026-10-23": 260.0, "2026-10-26": 262.4, "2026-10-27": 263.4, "2026-10-28": 260.4}}, {"ticker": "SALM", "navn": "SalMar", "isin": "NO0010310956", "sektor": "Konsumvarer", "kurser": {"2026-09-28": 589.0, "2026-09-29": 582.0, "2026-09-30": 572.0, "2026-10-01": 564.0, "2026-10-02": 577.5, "2026-10-05": 567.0, "2026-10-06": 575.5, "2026-10-07": 554.5, "2026-10-08": 550.5, "2026-10-09": 551.0, "2026-10-12": 544.5, "2026-10-13": 554.0, "2026-10-14": 552.0, "2026-10-15": 551.0, "2026-10-16": 547.0, "2026-10-19": 559.5, "2026-10-20": 574.0, "2026-10-21": 584.5, "2026-10-22": 578.0, "2026-10-23": 584.0, "2026-10-26": 588.0, "2026-10-27": 588.5, "2026-10-28": 579.5}}, {"ticker": "SUBC", "navn": "Subsea 7", "isin": "LU0075646355", "sektor": "Energi", "kurser": {"2026-09-28": 330.6, "2026-09-29": 327.0, "2026-09-30": 325.0, "2026-10-01": 322.4, "2026-10-02": 319.2, "2026-10-05": 329.0, "2026-10-06": 321.0, "2026-10-07": 323.0, "2026-10-08": 323.6, "2026-10-09": 338.6, "2026-10-12": 341.0, "2026-10-13": 344.4, "2026-10-14": 341.6, "2026-10-15": 327.4, "2026-10-16": 336.0, "2026-10-19": 336.0, "2026-10-20": 330.0, "2026-10-21": 318.0, "2026-10-22": 310.4, "2026-10-23": 317.8, "2026-10-26": 319.6, "2026-10-27": 328.8, "2026-10-28": 328.0}}, {"ticker": "TOM", "navn": "Tomra Systems", "isin": "NO0012470089", "sektor": "Industri", "kurser": {"2026-09-28": 91.55, "2026-09-29": 92.95, "2026-09-30": 91.6, "2026-10-01": 90.4, "2026-10-02": 91.1, "2026-10-05": 91.8, "2026-10-06": 94.8, "2026-10-07": 92.95, "2026-10-08": 88.85, "2026-10-09": 90.3, "2026-10-12": 90.1, "2026-10-13": 90.75, "2026-10-14": 91.7, "2026-10-15": 89.2, "2026-10-16": 91.35, "2026-10-19": 92.3, "2026-10-20": 92.6, "2026-10-21": 92.3, "2026-10-22": 93.1, "2026-10-23": 94.5, "2026-10-26": 96.85, "2026-10-27": 97.35, "2026-10-28": 96.5}}], "obligasjoner": [{"ticker": "NST487", "navn": "Statsobligasjon 3,625 % 2034", "kortnavn": "NGB 04/2034", "isin": "NO0013148338", "kupong": 3.625, "forfall": "2034-04-13", "kupongdag": "04-13", "palydende": 1000}, {"ticker": "NST490", "navn": "Statsobligasjon 4,125 % 2036", "kortnavn": "NGB 06/2036", "isin": "NO0013713123", "kupong": 4.125, "forfall": "2036-06-03", "kupongdag": "06-03", "palydende": 1000}, {"ticker": "NST488", "navn": "Statsobligasjon 3,625 % 2039", "kortnavn": "NGB 05/2039", "isin": "NO0013238246", "kupong": 3.625, "forfall": "2039-05-31", "kupongdag": "05-31", "palydende": 1000}], "renter": {"3Y": {"2026-09-30": 4.808, "2026-10-01": 4.85, "2026-10-02": 4.791, "2026-10-05": 4.856, "2026-10-06": 4.897, "2026-10-07": 4.849, "2026-10-08": 4.84, "2026-10-09": 4.793, "2026-10-12": 4.792, "2026-10-13": 4.815, "2026-10-14": 4.821, "2026-10-15": 4.754, "2026-10-16": 4.782, "2026-10-19": 4.799, "2026-10-20": 4.784, "2026-10-21": 4.779, "2026-10-22": 4.767, "2026-10-23": 4.746, "2026-10-26": 4.765, "2026-10-27": 4.768}, "10Y": {"2026-09-30": 4.596, "2026-10-01": 4.636, "2026-10-02": 4.588, "2026-10-05": 4.651, "2026-10-06": 4.68, "2026-10-07": 4.682, "2026-10-08": 4.641, "2026-10-09": 4.582, "2026-10-12": 4.586, "2026-10-13": 4.592, "2026-10-14": 4.585, "2026-10-15": 4.494, "2026-10-16": 4.542, "2026-10-19": 4.568, "2026-10-20": 4.539, "2026-10-21": 4.528, "2026-10-22": 4.485, "2026-10-23": 4.472, "2026-10-26": 4.468, "2026-10-27": 4.453}, "5Y": {"2026-09-30": 4.683, "2026-10-01": 4.71, "2026-10-02": 4.651, "2026-10-05": 4.714, "2026-10-06": 4.762, "2026-10-07": 4.734, "2026-10-08": 4.721, "2026-10-09": 4.666, "2026-10-12": 4.664, "2026-10-13": 4.681, "2026-10-14": 4.692, "2026-10-15": 4.609, "2026-10-16": 4.648, "2026-10-19": 4.67, "2026-10-20": 4.635, "2026-10-21": 4.63, "2026-10-22": 4.615, "2026-10-23": 4.586, "2026-10-26": 4.596, "2026-10-27": 4.596}}, "startgrunnlag": "2026-10-23", "historikk": ["2026-10-26", "2026-10-27", "2026-10-28"]};
+
+// ================= Format =================
+const nb = (x, d = 0) => Number(x).toLocaleString("nb-NO", { minimumFractionDigits: d, maximumFractionDigits: d });
+const kr = (x, d = 2) => nb(x, d) + " kr";
+const mill = (x, d = 1) => nb(x / 1e6, d) + " mill. kr";
+const pst = (x, d = 2) => (x >= 0 ? "+" : "") + nb(x * 100, d) + " %";
+const datoTekst = (d) => d.split("-").reverse().join(".");
+const kortDato = (d) => datoTekst(d).slice(0, 5);
+const esc = (s) => String(s ?? "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+const pad = (n, l = 4) => String(n).padStart(l, "0");
+
+// ================= Kalender: norske bankdager =================
+const tilDato = (s) => new Date(s + "T00:00:00Z");
+const tilTekst = (d) => d.toISOString().slice(0, 10);
+const plussDager = (s, n) => { const d = tilDato(s); d.setUTCDate(d.getUTCDate() + n); return tilTekst(d); };
+const dagerMellom = (a, b) => Math.round((tilDato(b) - tilDato(a)) / 864e5);
+const UKEDAG = ["søndag", "mandag", "tirsdag", "onsdag", "torsdag", "fredag", "lørdag"];
+const ukedag = (d) => UKEDAG[tilDato(d).getUTCDay()];
+function paaskedag(aar) { // gregoriansk påskedag
+  const a = aar % 19, b = Math.floor(aar / 100), c = aar % 100, d = Math.floor(b / 4), e = b % 4;
+  const f = Math.floor((b + 8) / 25), g = Math.floor((b - f + 1) / 3), h = (19 * a + b - d - g + 15) % 30;
+  const i = Math.floor(c / 4), k = c % 4, l = (32 + 2 * e + 2 * i - h - k) % 7, m = Math.floor((a + 11 * h + 22 * l) / 451);
+  const mnd = Math.floor((h + l - 7 * m + 114) / 31), dag = ((h + l - 7 * m + 114) % 31) + 1;
+  return `${aar}-${pad(mnd, 2)}-${pad(dag, 2)}`;
+}
+const fridagCache = {};
+function fridager(aar) {
+  if (fridagCache[aar]) return fridagCache[aar];
+  const p = paaskedag(aar);
+  return (fridagCache[aar] = {
+    [`${aar}-01-01`]: "1. nyttårsdag", [plussDager(p, -3)]: "skjærtorsdag", [plussDager(p, -2)]: "langfredag",
+    [plussDager(p, 1)]: "2. påskedag", [`${aar}-05-01`]: "1. mai", [`${aar}-05-17`]: "17. mai",
+    [plussDager(p, 39)]: "Kristi himmelfartsdag", [plussDager(p, 50)]: "2. pinsedag",
+    [`${aar}-12-24`]: "julaften", [`${aar}-12-25`]: "1. juledag", [`${aar}-12-26`]: "2. juledag", [`${aar}-12-31`]: "nyttårsaften",
+  });
+}
+const erBankdag = (s) => { const u = tilDato(s).getUTCDay(); return u !== 0 && u !== 6 && !fridager(Number(s.slice(0, 4)))[s]; };
+function bankdagerFram(s, n) {
+  const hoppet = [];
+  let d = s;
+  while (n > 0) {
+    d = plussDager(d, 1);
+    if (erBankdag(d)) n--;
+    else if (fridager(Number(d.slice(0, 4)))[d]) hoppet.push(`${datoTekst(d)} (${fridager(Number(d.slice(0, 4)))[d]})`);
+  }
+  return { dato: d, hoppet };
+}
+const nesteBankdag = (s) => bankdagerFram(s, 1).dato;
+
+// ================= Tilfeldighet =================
+// Kursene etter siste ekte sluttkurs er simulert med et frø per papir og dato, så de blir like hver gang.
+function hash(s) { let h = 2166136261; for (const c of s) { h ^= c.charCodeAt(0); h = Math.imul(h, 16777619); } return h >>> 0; }
+function blandet(t) { t = Math.imul(t ^ (t >>> 15), t | 1); t ^= t + Math.imul(t ^ (t >>> 7), t | 61); return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }
+function rngFra(frø) { let a = frø >>> 0; return () => { a = (a + 0x6D2B79F5) >>> 0; return blandet(a); }; }
+const normal = (r) => Math.sqrt(-2 * Math.log(Math.max(1e-12, r()))) * Math.cos(2 * Math.PI * r());
+// Simuleringens egen tilfeldighet ligger i tilstanden, så en spoling tilbake gir samme forløp.
+function rnd() { S.fro = (S.fro + 0x6D2B79F5) >>> 0; return blandet(S.fro); }
+const velgTilf = (liste) => liste[Math.floor(rnd() * liste.length)];
+const heltall = (a, b) => a + Math.floor(rnd() * (b - a + 1));
+const rundAv = (x, d) => Math.round(x * 10 ** d) / 10 ** d;
+
+// ================= Stamdata og kurser =================
+const PAPIR = {};
+for (const a of DATA.aksjer) PAPIR[a.ticker] = { ...a, type: "aksje", marked: "XOSL" };
+for (const o of DATA.obligasjoner) PAPIR[o.ticker] = { ...o, type: "obligasjon", marked: "XOSL" };
+const PAPIR_ISIN = Object.fromEntries(Object.values(PAPIR).map((p) => [p.isin, p]));
+const erAksje = (t) => PAPIR[t].type === "aksje";
+
+const kursCache = {};
+function aksjekurs(t, d) {
+  const a = PAPIR[t];
+  if (a.kurser[d] != null) return a.kurser[d];
+  if (kursCache[t + d] != null) return kursCache[t + d];
+  const datoer = Object.keys(a.kurser).sort();
+  const siste = datoer.at(-1);
+  let k;
+  if (d < siste) k = a.kurser[datoer.filter((x) => x <= d).at(-1) ?? datoer[0]];
+  else {
+    let dato = siste; k = a.kurser[siste];
+    while (dato < d) { dato = nesteBankdag(dato); k *= Math.exp(0.013 * normal(rngFra(hash(t + dato)))); }
+    k = rundAv(k, 2);
+  }
+  return (kursCache[t + d] = k);
+}
+function tenorRente(tenor, d) {
+  const serie = DATA.renter[tenor];
+  if (serie[d] != null) return serie[d];
+  const datoer = Object.keys(serie).sort(), siste = datoer.at(-1);
+  if (d < siste) return serie[datoer.filter((x) => x <= d).at(-1) ?? datoer[0]];
+  let dato = siste, y = serie[siste];
+  while (dato < d) { dato = nesteBankdag(dato); y += 0.03 * normal(rngFra(hash("rente" + dato))); } // parallellskift, 3 bp i snitt
+  return y;
+}
+const kursErEkte = (t, d) => (erAksje(t) ? PAPIR[t].kurser[d] != null : DATA.renter["10Y"][d] != null);
+function obligasjonsrente(o, d) { // lineær mellom 3, 5 og 10 år, flat utenfor
+  const t = dagerMellom(d, o.forfall) / 365.25;
+  const p = [[3, tenorRente("3Y", d)], [5, tenorRente("5Y", d)], [10, tenorRente("10Y", d)]];
+  if (t <= 3) return p[0][1];
+  if (t >= 10) return p[2][1];
+  const [a, b] = t < 5 ? [p[0], p[1]] : [p[1], p[2]];
+  return a[1] + ((b[1] - a[1]) * (t - a[0])) / (b[0] - a[0]);
+}
+function kupongdatoer(o, d) {
+  let aar = Number(d.slice(0, 4));
+  if (`${aar}-${o.kupongdag}` > d) aar--;
+  return { forrige: `${aar}-${o.kupongdag}`, neste: `${aar + 1}-${o.kupongdag}` };
+}
+function palopt(o, palydende, d) {
+  const { forrige, neste } = kupongdatoer(o, d);
+  const dager = dagerMellom(forrige, d);
+  return { belop: (palydende * (o.kupong / 100) * dager) / dagerMellom(forrige, neste), dager, forrige };
+}
+function renKurs(o, d, rente) { // årlig kupong, ACT/ACT
+  const { forrige, neste } = kupongdatoer(o, d);
+  const w = dagerMellom(d, neste) / dagerMellom(forrige, neste);
+  const n = Number(o.forfall.slice(0, 4)) - Number(neste.slice(0, 4)) + 1;
+  const y = rente / 100, c = o.kupong;
+  let pv = 0;
+  for (let i = 0; i < n; i++) pv += c / Math.pow(1 + y, i + w);
+  pv += 100 / Math.pow(1 + y, n - 1 + w);
+  return pv - c * (1 - w);
+}
+const obligasjonskurs = (t, d, oppgjor = d) => rundAv(renKurs(PAPIR[t], oppgjor, obligasjonsrente(PAPIR[t], d)), 3);
+const markedskurs = (t, d, oppgjor) => (erAksje(t) ? aksjekurs(t, d) : obligasjonskurs(t, d, oppgjor ?? bankdagerFram(d, 2).dato));
+const kursTekst = (t, k) => (erAksje(t) ? nb(k, 2) + " kr" : nb(k, 3) + " %");
+const mengdeTekst = (t, m) => (erAksje(t) ? `${nb(m)} aksjer` : `${nb(m / 1e6, m % 1e6 ? 1 : 0)} mill. pålydende`);
+
+// ================= Fond (simulerte) =================
+const FOND_OPPSETT = [
+  { kode: "AN01", navn: "Aksjefond Norge", type: "Aksjefond", beskrivelse: "Norske aksjer notert på Oslo Børs", startverdi: 4e9, startNav: 250, honorar: 0.0020,
+    depot: "0000.10.11111", mandat: { typer: ["aksje"], utsteder: 0.10, sektor: 0.25, esg: 60 }, handlerPerDag: [5, 8],
+    vekter: { EQNR: 9.6, DNB: 9.4, KOG: 8.5, AKRBP: 7.5, NHY: 7.5, MOWI: 7.5, TEL: 7, YAR: 7, ORK: 7, GJF: 7, SALM: 6.5, SUBC: 6, TOM: 6.5 } },
+  { kode: "RS01", navn: "Rentefond Stat", type: "Rentefond", beskrivelse: "Norske statsobligasjoner", startverdi: 2e9, startNav: 105, honorar: 0.0010,
+    depot: "0000.20.22222", mandat: { typer: ["obligasjon"] }, handlerPerDag: [2, 4],
+    vekter: { NST487: 32, NST490: 35, NST488: 30 } },
+  { kode: "KB01", navn: "Kombinasjonsfond 50/50", type: "Kombinasjonsfond", beskrivelse: "Halvt aksjer, halvt statsobligasjoner", startverdi: 3e9, startNav: 150, honorar: 0.0025,
+    depot: "0000.30.33333", mandat: { typer: ["aksje", "obligasjon"], utsteder: 0.10, aksjeandel: [0.40, 0.60], sektor: 0.25, esg: 60 }, handlerPerDag: [4, 6],
+    vekter: { EQNR: 4.8, DNB: 4.7, KOG: 4.2, AKRBP: 3.8, NHY: 3.8, MOWI: 3.7, TEL: 3.5, YAR: 3.5, ORK: 3.5, GJF: 3.5, SALM: 3.2, SUBC: 3, TOM: 3.3, NST487: 15, NST490: 17, NST488: 15 } },
+];
+const OPPSETT = Object.fromEntries(FOND_OPPSETT.map((f) => [f.kode, f]));
+// Simulerte ESG-scorer (0–100, høyere er bedre). Ekte scorer kommer fra leverandører med ulike skalaer.
+const ESG = { EQNR: 72, DNB: 78, KOG: 66, AKRBP: 63, NHY: 74, MOWI: 69, TEL: 81, YAR: 70, ORK: 77, GJF: 80, SALM: 65, SUBC: 64, TOM: 85, HAUTO: 55 };
+function sektorvekter(kode, d, tillegg) { // hver sektors andel av aksjedelen, eventuelt med en handel lagt til
+  const b = handelsdagsbeholdning(kode);
+  if (tillegg) b[tillegg.ticker] = (b[tillegg.ticker] || 0) + tillegg.mengde;
+  const per = {};
+  let sum = 0;
+  for (const [t, m] of Object.entries(b)) if (erAksje(t) && m) { const v = m * aksjekurs(t, d); per[PAPIR[t].sektor] = (per[PAPIR[t].sektor] || 0) + v; sum += v; }
+  for (const k of Object.keys(per)) per[k] /= sum;
+  return per;
+}
+function mandatpunkter(o) {
+  const m = o.mandat, punkter = [];
+  if (m.typer.includes("aksje") && m.typer.includes("obligasjon")) punkter.push("Aksjer på Oslo Børs og norske statsobligasjoner");
+  else punkter.push(m.typer.includes("aksje") ? "Aksjer notert på Oslo Børs" : "Norske statsobligasjoner");
+  if (m.aksjeandel) punkter.push(`Aksjeandel ${m.aksjeandel.map((x) => nb(x * 100)).join("–")} %`);
+  if (m.utsteder) punkter.push(`Maks ${nb(m.utsteder * 100)} % i én aksjeutsteder`);
+  if (m.sektor) punkter.push(`Maks ${nb(m.sektor * 100)} % av aksjedelen i én sektor`);
+  if (m.esg) punkter.push(`ESG-score over ${m.esg}`);
+  punkter.push("Ingen short-salg");
+  return punkter;
+}
+const MEGLERE = ["Megler A", "Megler B", "Megler C"];
+const SSI = { "Megler A": "VPS 0000.71.71717", "Megler B": "VPS 0000.72.72727", "Megler C": "VPS 0000.73.73737" };
+const FEILRATE = 0.07;        // sannsynlighet for at en tilfeldig handel får et problem
+const TOLERANSE_KR = 50;      // godtatt beløpsdifferanse mot megler
+const PRISGRENSE = 0.05;      // kurs mer enn 5 % fra markedet stoppes
+const KURTASJE = 0.0002;      // 2 bp, simulert
+
+const FASER = [
+  { tid: "08:00", navn: "Avstemming", tekst: "Depotbankens rapport for i går er mottatt og avstemmes mot vår beholdning." },
+  { tid: "10:00", navn: "Handler", tekst: "Forvalterne handler. Handlene registreres, berikes, kontrolleres mot mandatet og matches mot megler." },
+  { tid: "14:00", navn: "Oppgjør", tekst: "Manglende bekreftelser purres. Handler med oppgjørsdato i dag gjøres opp i Euronext Securities Oslo." },
+  { tid: "18:00", navn: "NAV", tekst: "Sluttkurser hentes. NAV beregnes og frigis hvis ingen saker er åpne i fondet." },
+];
+const STEG = ["Mottak og validering", "Berikelse", "Mandatkontroll", "Matching mot megler", "Oppgjør", "Avstemming"];
+
+// ================= Ekte dato og klokke =================
+// Simuleringen starter på dagens dato og i det steget som passer med klokkeslettet. De tre forrige bankdagene er historikk.
+const naaOslo = () => { const d = new Date(); return { dato: d.toLocaleDateString("sv-SE", { timeZone: "Europe/Oslo" }), tid: d.toLocaleTimeString("nb-NO", { timeZone: "Europe/Oslo", hour: "2-digit", minute: "2-digit" }) }; };
+function bankdagFoer(s) { let d = plussDager(s, -1); while (!erBankdag(d)) d = plussDager(d, -1); return d; }
+const LIVE = (() => {
+  const { dato, tid } = naaOslo();
+  if (!erBankdag(dato)) return { dato: bankdagFoer(dato), fase: 3 };
+  return { dato, fase: tid < "10:00" ? 0 : tid < "14:00" ? 1 : tid < "18:00" ? 2 : 3 };
+})();
+const HIST = [bankdagFoer(bankdagFoer(bankdagFoer(LIVE.dato))), bankdagFoer(bankdagFoer(LIVE.dato)), bankdagFoer(LIVE.dato)];
+const STARTGRUNNLAG = bankdagFoer(HIST[0]);
+const SISTE_EKTE_KURS = Object.keys(PAPIR.EQNR.kurser).sort().at(-1);
+const erLive = () => S.dato === LIVE.dato && S.fase === LIVE.fase;
+// Handler registrert nå får ekte klokkeslett. Ellers et tilfeldig tidspunkt i steget.
+function handelstid() {
+  if (erLive() && (S.fase === 1 || S.fase === 2)) return naaOslo().tid;
+  return S.fase === 2 ? `${pad(heltall(14, 17), 2)}:${pad(heltall(0, 59), 2)}` : `${pad(heltall(10, 13), 2)}:${pad(heltall(0, 59), 2)}`;
+}
+
+// ================= Tilstand =================
+let S;                 // hele simuleringen, ren data, så den kan lagres og spoles tilbake
+let tidslinje = [];    // øyeblikksbilder etter hvert steg på klokken
+const ui = { m: { side: "Kjøp", papir: "EQNR", mengde: "10000", kurs: "" }, manuellApen: false, fond: "AN01", fane: "transaksjoner", valgt: null, rolle: "analytiker", bareOppmerksomhet: false, sok: "", status: "alle", dato: "alle", laast: true, utkast: {}, navDato: null, melding: {} };
+
+function nyttFond(o) {
+  const d = STARTGRUNNLAG;
+  const start = {};
+  let investert = 0;
+  for (const [t, v] of Object.entries(o.vekter)) {
+    const maal = (o.startverdi * v) / 100;
+    if (erAksje(t)) { start[t] = Math.round(maal / aksjekurs(t, d) / 10) * 10; investert += start[t] * aksjekurs(t, d); }
+    else { start[t] = Math.round(maal / (obligasjonskurs(t, d) / 100) / 1e5) * 1e5; investert += (start[t] * obligasjonskurs(t, d)) / 100 + palopt(PAPIR[t], start[t], d).belop; }
+  }
+  return { kode: o.kode, start, startKontant: o.startverdi - investert, kontant: o.startverdi - investert, andeler: o.startverdi / o.startNav,
+    honorarPalopt: 0, nav: [], avstemming: null, depotAvvik: {}, godkjentAvvik: {}, kontantlogg: [] };
+}
+
+const finnHandel = (id) => S.handler.find((h) => h.id === id);
+const finnSak = (id) => S.saker.find((s) => s.id === id);
+const tidsstempel = (tid) => `${kortDato(S.dato)} ${tid ?? FASER[S.fase].tid}`;
+
+// ================= Beholdninger =================
+const bokforte = (kode) => S.handler.filter((h) => h.fond === kode && h.bokfort && !h.avvist);
+const fortegn = (h) => (h.side === "Kjøp" ? 1 : -1);
+function handelsdagsbeholdning(kode, unntatt) {
+  const b = { ...S.fond[kode].start };
+  for (const h of bokforte(kode)) if (h !== unntatt) b[h.ticker] = (b[h.ticker] || 0) + fortegn(h) * h.mengde;
+  return b;
+}
+function oppgjortBeholdning(kode) {
+  const b = { ...S.fond[kode].start };
+  for (const h of bokforte(kode)) if (h.levert) b[h.ticker] = (b[h.ticker] || 0) + fortegn(h) * h.levert;
+  return b;
+}
+function sisteNav(kode) { const n = S.fond[kode].nav.at(-1); return n ? n.netto : OPPSETT[kode].startverdi; }
+
+// ================= Saker (unntak) =================
+const SAKTYPER = {
+  isin: { tittel: "Feil ISIN", sjekk: ["Ticker i ordren er kontrollert mot det forvalteren ville handle", "Riktig ISIN er kontrollert mot Euronext", "Megleren bruker samme ISIN i bekreftelsen"],
+    handlinger: [{ kode: "rett_isin", tekst: "Rett ISIN til verdien i stamdata", leder: true }, { kode: "avvis", tekst: "Avvis handelen og send den tilbake til front office", fare: true }] },
+  pris: { tittel: "Kurs utenfor grensen", sjekk: ["Kursen er sammenlignet med børsens kurs på handelstidspunktet", "Front office er kontaktet", "Megleren bekrefter samme kurs"],
+    handlinger: [{ kode: "rett_kurs", tekst: "Front office bekrefter tastefeil. Rett kursen" }, { kode: "godta_kurs", tekst: "Kursen er riktig. Godkjenn avviket", leder: true }, { kode: "avvis", tekst: "Avvis handelen", fare: true }] },
+  short: { tittel: "Short-salg", sjekk: ["Beholdningen er kontrollert, også uoppgjorte handler", "Front office er kontaktet"],
+    handlinger: [{ kode: "reduser_short", tekst: "Reduser salget til fondets beholdning", leder: true }, { kode: "avvis", tekst: "Avvis handelen", fare: true }] },
+  grense: { tittel: "Brudd på utstedergrensen", sjekk: ["Andelen er regnet ut fra siste NAV", "Compliance er informert", "Forvalteren er informert"],
+    handlinger: [{ kode: "reduser", tekst: "Reduser ordren til største tillatte mengde", leder: true }, { kode: "avvis", tekst: "Avvis handelen", fare: true }] },
+  andel: { tittel: "Aksjeandel utenfor mandatet", sjekk: ["Aksjeandelen er regnet ut fra siste NAV", "Compliance er informert"],
+    handlinger: [{ kode: "avvis", tekst: "Avvis handelen", fare: true }] },
+  esg: { tittel: "ESG-score under mandatets krav", sjekk: ["ESG-scoren er kontrollert mot siste data", "Forvalteren er informert"],
+    handlinger: [{ kode: "avvis", tekst: "Avvis handelen", fare: true }] },
+  sektor: { tittel: "Brudd på sektorgrensen", sjekk: ["Sektorvektene er regnet ut fra siste kurser", "Compliance er informert", "Forvalteren er informert"],
+    handlinger: [{ kode: "reduser", tekst: "Reduser ordren til største tillatte mengde", leder: true }, { kode: "avvis", tekst: "Avvis handelen", fare: true }] },
+  instrument: { tittel: "Instrumentet er ikke tillatt i fondet", sjekk: ["Mandatet er kontrollert", "Front office er kontaktet"],
+    handlinger: [{ kode: "avvis", tekst: "Avvis handelen", fare: true }] },
+  matching: { tittel: "Bekreftelsen matcher ikke", sjekk: ["Ordren er kontrollert mot det forvalteren la inn", "Megleren er kontaktet", "Avviket er dokumentert"],
+    handlinger: [{ kode: "megler_retter", tekst: "Megleren sender rettet bekreftelse med våre verdier" }, { kode: "kanseller", tekst: "Kanseller handelen med megleren", leder: true, fare: true }] },
+  oppgjor: { tittel: "Oppgjøret har feilet i tre dager", sjekk: ["Megleren er kontaktet", "Boten etter CSDR er beregnet", "Forvalteren vet at papirene mangler"],
+    handlinger: [{ kode: "lover_levering", tekst: "Megleren lover levering neste bankdag" }, { kode: "kanseller", tekst: "Kanseller handelen", leder: true, fare: true }] },
+  avstemming: { tittel: "Uforklart avvik mot depotbanken", sjekk: ["Alle handler og oppgjør for papiret er gjennomgått", "Depotbanken er kontaktet", "Selskapshendelser er sjekket"],
+    handlinger: [{ kode: "depot_feil", tekst: "Depotbanken bekrefter feil i sin rapport og sender ny" }, { kode: "godta_avvik", tekst: "Godkjenn differansen som forklart", leder: true }] },
+  nav: { tittel: "NAV er ikke frigitt", sjekk: ["Alle åpne saker i fondet er gjennomgått", "Effekten på NAV er vurdert som uvesentlig", "Vurderingen er dokumentert"],
+    handlinger: [{ kode: "ny_kontroll", tekst: "Kjør NAV-kontrollen på nytt etter at sakene er løst" }, { kode: "frigi", tekst: "Frigi NAV likevel", leder: true }] },
+};
+
+function opprettSak(fond, kilde, ref, type, tekst, data = {}) {
+  const sak = { id: `S-${pad(++S.teller.s, 3)}`, fond, kilde, ref, type, tittel: SAKTYPER[type].tittel, tekst, data, status: "apen",
+    opprettet: tidsstempel(), sjekk: [], forslag: null, kommentar: "", lederKommentar: "", logg: [`${tidsstempel()} Opprettet automatisk`] };
+  S.saker.push(sak);
+  return sak;
+}
+const aapneSaker = (kode) => S.saker.filter((s) => (!kode || s.fond === kode) && (s.status === "apen" || s.status === "hos_leder"));
+
+const UTFOR = {
+  rett_isin(sak, h) { h.isin = PAPIR[h.ticker].isin; return fortsett(h, 0); },
+  rett_kurs(sak, h) { h.kurs = markedskurs(h.ticker, h.handelsdato); return fortsett(h, 1); },
+  godta_kurs(sak, h) { h.kursGodkjent = true; return fortsett(h, 1); },
+  reduser_short(sak, h) { h.mengde = sak.data.maks; return fortsett(h, 1); },
+  reduser(sak, h) { h.mengde = sak.data.maks; return fortsett(h, 1); },
+  megler_retter(sak, h) { h.meglerRettet = true; return fortsett(h, 3); },
+  avvis(sak, h) { avvisHandel(h, "Avvist og sendt tilbake til front office"); },
+  kanseller(sak, h) { avvisHandel(h, "Kansellert med megleren"); h.utfall = "kansellert"; },
+  lover_levering(sak, h) { h.leverNeste = true; sett(h, 4, "folges", `Megleren har lovet levering ${datoTekst(nesteBankdag(S.dato))}.`); },
+  depot_feil(sak) {
+    const f = S.fond[sak.fond];
+    delete f.depotAvvik[sak.data.ticker];
+    const h = sak.data.handel && finnHandel(sak.data.handel);
+    if (h) sett(h, 5, "rettet", "Depotbanken bekreftet feil i sin rapport og sendte ny. Ny rapport stemmer.");
+    avstemFond(sak.fond, f.avstemming?.dato ?? S.dato, false);
+  },
+  godta_avvik(sak) {
+    const f = S.fond[sak.fond];
+    f.godkjentAvvik[sak.data.ticker] = true;
+    const h = sak.data.handel && finnHandel(sak.data.handel);
+    if (h) sett(h, 5, "rettet", "Differansen mot depotbanken er godkjent av leder som forklart.");
+    avstemFond(sak.fond, f.avstemming?.dato ?? S.dato, false);
+  },
+  ny_kontroll(sak) {
+    const andre = aapneSaker(sak.fond).filter((s) => s.type !== "nav");
+    const rad = S.fond[sak.fond].nav.find((n) => n.dato === sak.data.dato);
+    Object.assign(rad, navKomponenter(sak.fond, rad.dato, rad));
+    if (andre.length) { sak.tekst = `NAV ${datoTekst(rad.dato)} er fortsatt blokkert. Åpne saker: ${andre.map((s) => s.id).join(", ")}.`; return false; }
+    rad.status = "frigitt"; rad.merknad = "Frigitt etter ny kontroll";
+  },
+  frigi(sak) {
+    const rad = S.fond[sak.fond].nav.find((n) => n.dato === sak.data.dato);
+    rad.status = "frigitt_leder"; rad.merknad = `Frigitt av leder. ${sak.kommentar}`;
+  },
+};
+
+function utfor(sak, kode, hvem) {
+  const handling = SAKTYPER[sak.type].handlinger.find((x) => x.kode === kode);
+  const h = sak.kilde === "handel" ? finnHandel(sak.ref) : sak.data.handel ? finnHandel(sak.data.handel) : null;
+  sak.status = "lost";
+  sak.logg.push(`${tidsstempel()} ${hvem}: ${handling.tekst}${sak.kommentar && hvem === "Analytiker" ? `. «${sak.kommentar}»` : ""}`);
+  if (h) { if (h.sak === sak.id) h.sak = null; h.manuell = true; loggH(h, `${hvem} løste ${sak.id}: ${handling.tekst}.`); }
+  if (UTFOR[kode](sak, h) === false) { sak.status = "apen"; sak.logg.push(`${tidsstempel()} Saken er fortsatt åpen`); }
+  // Steget som en person løste, vises som rettet, også etter ny behandling.
+  const i = sak.data.steg;
+  if (h && i != null && h.steg[i]?.status === "ok") h.steg[i] = { status: "rettet", tekst: `Løst av ${hvem.toLowerCase()} (${sak.id}): ${handling.tekst}. ${h.steg[i].tekst}` };
+}
+function sendTilLeder(sak, u) {
+  Object.assign(sak, { sjekk: u.sjekk.slice(), forslag: u.forslag, kommentar: u.kommentar.trim(), status: "hos_leder", lederKommentar: "" });
+  const h = SAKTYPER[sak.type].handlinger.find((x) => x.kode === u.forslag);
+  sak.logg.push(`${tidsstempel()} Analytiker sendte til leder: ${h.tekst}. «${sak.kommentar}»`);
+}
+function lederSvar(sak, godkjent, kommentar) {
+  sak.lederKommentar = kommentar.trim();
+  if (godkjent) { sak.logg.push(`${tidsstempel()} Leder godkjente${sak.lederKommentar ? `: «${sak.lederKommentar}»` : ""}`); utfor(sak, sak.forslag, "Leder"); }
+  else { sak.status = "apen"; sak.logg.push(`${tidsstempel()} Leder sendte tilbake: «${sak.lederKommentar}»`); }
+}
+
+// ================= Handler =================
+const loggH = (h, tekst) => h.logg.push(`${tidsstempel(h.loggTid)} ${tekst}`);
+function sett(h, i, status, tekst) { h.steg[i] = { status, tekst }; loggH(h, `${STEG[i]}: ${tekst}`); }
+function avvisHandel(h, grunn) {
+  h.avvist = true; h.bokfort = false; h.matchet = false; h.utfall = "avvist";
+  const i = h.steg.findLastIndex((s) => s && s.status !== "vent");
+  if (i >= 0) h.steg[i] = { ...h.steg[i], status: "stoppet" };
+  for (let j = i + 1; j < 6; j++) h.steg[j] = null;
+  loggH(h, `Handelen er avvist: ${grunn}.`);
+}
+function knyttSak(h, i, status, type, tekst, data) {
+  sett(h, i, status, tekst);
+  if (i < 3) h.steg[4] = h.steg[5] = null; // ikke bokført, så den skal ikke gjøres opp
+  const sak = opprettSak(h.fond, "handel", h.id, type, tekst, { ...data, steg: i });
+  h.sak = sak.id;
+  return false;
+}
+
+const STEGFUNKSJONER = [
+  function mottak(h) {
+    if (h.duplikatAv) { sett(h, 0, "rettet", `Samme ordre (${h.ordre}) og innhold som ${h.duplikatAv}. Duplikatet er fjernet automatisk og logget.`); h.utfall = "duplikat"; return false; }
+    if (!isinGyldig(h.isin)) return knyttSak(h, 0, "venter", "isin", `ISIN ${h.isin} har feil kontrollsiffer. Ordren har ticker ${h.ticker}, som i stamdata har ISIN ${PAPIR[h.ticker].isin}.`);
+    if (!PAPIR_ISIN[h.isin]) return knyttSak(h, 0, "venter", "isin", `ISIN ${h.isin} finnes ikke i stamdata.`);
+    if (!h.ssi) { h.ssi = SSI[h.megler]; sett(h, 0, "rettet", `Oppgjørsinstruks manglet. Standard instruks for ${h.megler} i Euronext Securities Oslo er hentet fra stamdata: ${h.ssi}.`); return true; }
+    sett(h, 0, "ok", `Mottatt fra ordresystemet (${h.ordre}). ISIN, motpart og oppgjørsinstruks er gyldige.`);
+    return true;
+  },
+  function berikelse(h) {
+    const { dato, hoppet } = bankdagerFram(h.handelsdato, 2);
+    h.oppgjor = dato;
+    const marked = markedskurs(h.ticker, h.handelsdato, dato);
+    const avvik = h.kurs / marked - 1;
+    if (Math.abs(avvik) > PRISGRENSE && !h.kursGodkjent)
+      return knyttSak(h, 1, "venter", "pris", `Kursen ${kursTekst(h.ticker, h.kurs)} avviker ${pst(avvik, 1)} fra markedskursen ${kursTekst(h.ticker, marked)}. Mulig tastefeil.`);
+    if (erAksje(h.ticker)) { h.brutto = rundAv(h.mengde * h.kurs, 2); h.kurtasje = rundAv(h.brutto * KURTASJE, 2); h.palopt = 0; }
+    else { h.brutto = rundAv((h.mengde * h.kurs) / 100, 2); h.kurtasje = 0; const r = palopt(PAPIR[h.ticker], h.mengde, dato); h.palopt = rundAv(r.belop, 2); h.paloptDager = r.dager; h.paloptFra = r.forrige; }
+    h.netto = rundAv(h.side === "Kjøp" ? h.brutto + h.kurtasje + h.palopt : h.brutto - h.kurtasje + h.palopt, 2);
+    const deler = [`Oppgjørsdato ${datoTekst(dato)}, to bankdager etter handel${hoppet.length ? `. Hoppet over ${hoppet.join(", ")}` : ""}.`];
+    if (!erAksje(h.ticker)) deler.push(`Påløpt rente ${kr(h.palopt)} for ${h.paloptDager} dager siden kupongen ${datoTekst(h.paloptFra)}.`);
+    deler.push(`Oppgjørsbeløp ${kr(h.netto)}.`);
+    sett(h, 1, h.kursGodkjent ? "rettet" : "ok", (h.kursGodkjent ? "Kursavviket er godkjent. " : "") + deler.join(" "));
+    h.steg[4] = { status: "vent", tekst: `Venter på oppgjørsdato ${datoTekst(dato)}.` };
+    h.steg[5] = { status: "vent", tekst: "Avstemmes morgenen etter oppgjør." };
+    return true;
+  },
+  function mandat(h) {
+    const o = OPPSETT[h.fond], p = PAPIR[h.ticker];
+    const b = handelsdagsbeholdning(h.fond, h);
+    const har = b[h.ticker] || 0;
+    const etter = har + fortegn(h) * h.mengde;
+    const nav = sisteNav(h.fond);
+    if (!o.mandat.typer.includes(p.type))
+      return knyttSak(h, 2, "stoppet", "instrument", `${o.navn} kan bare eie ${o.mandat.typer.map((t) => (t === "aksje" ? "aksjer" : "statsobligasjoner")).join(" og ")}. ${p.navn} er ${p.type === "aksje" ? "en aksje" : "en obligasjon"}.`);
+    if (etter < 0)
+      return knyttSak(h, 2, "stoppet", "short", `Salg av ${mengdeTekst(h.ticker, h.mengde)}, men fondet eier ${mengdeTekst(h.ticker, har)}, medregnet uoppgjorte handler. Short-salg er ikke tillatt.`, { maks: har });
+    if (erAksje(h.ticker) && h.side === "Kjøp" && o.mandat.esg && ESG[h.ticker] <= o.mandat.esg)
+      return knyttSak(h, 2, "stoppet", "esg", `${p.navn} har ESG-score ${ESG[h.ticker]}. Mandatet krever over ${o.mandat.esg}.`);
+    if (erAksje(h.ticker) && h.side === "Kjøp" && o.mandat.sektor) {
+      const etterVekt = sektorvekter(h.fond, h.handelsdato, { ticker: h.ticker, mengde: h.mengde })[p.sektor];
+      if (etterVekt > o.mandat.sektor) {
+        let aksjeverdi = 0;
+        for (const [t, m] of Object.entries(b)) if (erAksje(t)) aksjeverdi += m * aksjekurs(t, h.handelsdato);
+        const L = o.mandat.sektor, Sv = (sektorvekter(h.fond, h.handelsdato)[p.sektor] || 0) * aksjeverdi;
+        const maks = Math.max(0, Math.floor((L * aksjeverdi - Sv) / ((1 - L) * aksjekurs(h.ticker, h.handelsdato)) / 10) * 10);
+        return knyttSak(h, 2, "stoppet", "sektor", `${p.sektor} blir ${nb(etterVekt * 100, 1)} % av aksjedelen etter handelen. Grensen er ${nb(L * 100)} % per sektor. Største tillatte kjøp er ${nb(maks)} aksjer.`, { maks });
+      }
+    }
+    if (erAksje(h.ticker) && h.side === "Kjøp" && o.mandat.utsteder) {
+      const andel = (etter * aksjekurs(h.ticker, h.handelsdato)) / nav;
+      if (andel > o.mandat.utsteder) {
+        const maks = Math.max(0, Math.floor(((o.mandat.utsteder * nav) / aksjekurs(h.ticker, h.handelsdato) - har) / 10) * 10);
+        return knyttSak(h, 2, "stoppet", "grense", `${p.navn} blir ${nb(andel * 100, 2)} % av fondet etter handelen. Grensen er ${nb(o.mandat.utsteder * 100)} %. Største tillatte kjøp er ${nb(maks)} aksjer.`, { maks });
+      }
+    }
+    if (o.mandat.aksjeandel && erAksje(h.ticker)) {
+      let aksjer = 0;
+      for (const [t, m] of Object.entries(b)) if (erAksje(t)) aksjer += m * aksjekurs(t, h.handelsdato);
+      const ny = (aksjer + fortegn(h) * h.mengde * aksjekurs(h.ticker, h.handelsdato)) / nav;
+      const [lav, hoy] = o.mandat.aksjeandel;
+      if (ny < lav || ny > hoy) return knyttSak(h, 2, "stoppet", "andel", `Aksjeandelen blir ${nb(ny * 100, 1)} % etter handelen. Mandatet krever ${nb(lav * 100)} til ${nb(hoy * 100)} %.`);
+    }
+    h.bokfort = true;
+    const tekst = erAksje(h.ticker) ? `${p.navn} utgjør ${nb(((etter * aksjekurs(h.ticker, h.handelsdato)) / nav) * 100, 2)} % av fondet etter handelen.` : "Statsobligasjon. Utstedergrensen for aksjer gjelder ikke.";
+    sett(h, 2, "ok", `Innenfor mandatet. ${tekst} Handelen er bokført på handelsdagen og tas med i NAV fra i dag.`);
+    return true;
+  },
+  function matching(h) {
+    if (h.problem === "bekreftelse" && !h.purret) { sett(h, 3, "folges", `Ingen bekreftelse fra ${h.megler} ennå. Purres automatisk kl. 14:00.`); return false; }
+    const bekr = { mengde: h.mengde, oppgjor: h.oppgjor, netto: h.netto };
+    if (!h.meglerRettet) {
+      if (h.problem === "oppgjorsdato") bekr.oppgjor = bankdagerFram(h.handelsdato, 3).dato;
+      if (h.problem === "antall") bekr.mengde = h.mengde + (erAksje(h.ticker) ? 100 : 1e6);
+      if (h.problem === "avrunding") bekr.netto = rundAv(h.netto + (h.avrunding ??= rundAv((rnd() < 0.5 ? -1 : 1) * (1 + rnd() * 30), 2)), 2);
+    }
+    const ulike = [];
+    if (bekr.mengde !== h.mengde) ulike.push(`mengde: vi har ${mengdeTekst(h.ticker, h.mengde)}, megler har ${mengdeTekst(h.ticker, bekr.mengde)}`);
+    if (bekr.oppgjor !== h.oppgjor) ulike.push(`oppgjørsdato: vi har ${datoTekst(h.oppgjor)}, megler har ${datoTekst(bekr.oppgjor)}`);
+    if (ulike.length) return knyttSak(h, 3, "venter", "matching", `Bekreftelsen fra ${h.megler} (${h.meglerRef}) matcher ikke: ${ulike.join("; ")}. Uten matching kan handelen ikke gjøres opp.`);
+    h.matchet = true;
+    const diff = rundAv(bekr.netto - h.netto, 2);
+    if (diff) { h.netto = bekr.netto; sett(h, 3, "rettet", `Beløpet avviker ${kr(diff)} fra meglerens bekreftelse, innenfor toleransen på ${kr(TOLERANSE_KR, 0)}. Meglerens beløp brukes, og differansen er logget.`); return true; }
+    const forTekst = h.purret ? `Bekreftelsen manglet og ble purret automatisk kl. 14:00. ` : h.meglerRettet ? "Megleren sendte rettet bekreftelse. " : "";
+    sett(h, 3, h.purret || h.meglerRettet ? "rettet" : "ok", `${forTekst}Alle felt matcher ${h.meglerRef}: ISIN, side, mengde, kurs, handelsdato, oppgjørsdato og beløp.`);
+    return true;
+  },
+];
+
+function fortsett(h, fra) {
+  h.sak = null;
+  for (let i = fra; i <= 3; i++) if (!STEGFUNKSJONER[i](h)) return;
+}
+
+function isinGyldig(isin) {
+  if (!/^[A-Z]{2}[A-Z0-9]{9}[0-9]$/.test(isin)) return false;
+  const siffer = [...isin].map((c) => (/[0-9]/.test(c) ? c : String(c.charCodeAt(0) - 55))).join("");
+  let sum = 0;
+  for (let i = 0; i < siffer.length; i++) { let x = Number(siffer[siffer.length - 1 - i]); if (i % 2) { x *= 2; if (x > 9) x -= 9; } sum += x; }
+  return sum % 10 === 0;
+}
+
+// ================= Lage handler =================
+const FELLES_PROBLEMER = ["duplikat", "ssi", "isin", "pris", "avrunding", "oppgjorsdato", "antall", "bekreftelse", "feilet", "delvis", "depot"];
+const PROBLEMNAVN = {
+  ingen: "Ingen problem", duplikat: "Samme ordre mottatt to ganger", ssi: "Mangler oppgjørsinstruks", isin: "Feil kontrollsiffer i ISIN", pris: "Tastefeil i kurs",
+  short: "Salg av mer enn fondet eier", grense: "Kjøp over utstedergrensen", instrument: "Aksje i rentefondet", avrunding: "Avrundingsdifferanse hos megler",
+  oppgjorsdato: "Megler har annen oppgjørsdato", antall: "Megler har annen mengde", bekreftelse: "Bekreftelse fra megler kommer sent",
+  feilet: "Motparten leverer ikke", esg: "Kjøp av selskap med ESG-score under 60", sektor: "Kjøp over sektorgrensen", delvis: "Delvis oppgjør", depot: "Feil i depotbankens rapport",
+};
+function problemerFor(kode) {
+  const o = OPPSETT[kode];
+  return [...FELLES_PROBLEMER, "short", ...(o.mandat.utsteder ? ["grense"] : []), ...(o.mandat.esg ? ["esg"] : []), ...(o.mandat.sektor ? ["sektor"] : []), ...(o.mandat.typer.includes("aksje") ? [] : ["instrument"])];
+}
+
+function lagHandel(kode, { side, ticker, mengde, kurs, problem, tid }) {
+  const h = {
+    id: `H-${pad(++S.teller.h)}`, ordre: `FO-${heltall(100000, 999999)}`, meglerRef: `BC-${heltall(100000, 999999)}`,
+    fond: kode, ticker, isin: PAPIR[ticker].isin, side, mengde, kurs, handelsdato: S.dato, tid, loggTid: tid,
+    megler: velgTilf(MEGLERE), ssi: null, problem, steg: [null, null, null, null, null, null],
+    bokfort: false, matchet: false, levert: 0, forsok: 0, avvist: false, sak: null, logg: [],
+  };
+  h.ssi = problem === "ssi" ? null : SSI[h.megler];
+  if (problem === "isin") h.isin = h.isin.slice(0, 11) + String((Number(h.isin[11]) + 3) % 10);
+  if (problem === "pris") h.kurs = erAksje(ticker) ? rundAv(kurs * 10, 2) : rundAv(kurs + 10, 3);
+  if (problem === "feilet") h.feilDager = velgTilf([1, 2, 4]);
+  return h;
+}
+
+function registrer(h) {
+  S.handler.push(h);
+  loggH(h, `Ordre ${h.ordre} mottatt: ${h.side} ${mengdeTekst(h.ticker, h.mengde)} ${PAPIR[h.ticker].navn} til ${kursTekst(h.ticker, h.kurs)}.`);
+  fortsett(h, 0);
+  if (h.problem === "duplikat" && !h.duplikatAv) {
+    const kopi = { ...JSON.parse(JSON.stringify(h)), id: `H-${pad(++S.teller.h)}`, duplikatAv: h.id, steg: [null, null, null, null, null, null], logg: [], sak: null, bokfort: false, matchet: false };
+    S.handler.push(kopi);
+    loggH(kopi, `Ordre ${kopi.ordre} mottatt på nytt.`);
+    fortsett(kopi, 0);
+  }
+}
+
+function tilfeldigHandel(kode, tvunget, tid) {
+  const o = OPPSETT[kode];
+  let problem = tvunget && tvunget !== "tilfeldig" ? tvunget : S.utenFeil ? "ingen" : rnd() < FEILRATE ? velgTilf(problemerFor(kode)) : "ingen";
+  const b = handelsdagsbeholdning(kode);
+  const nav = sisteNav(kode);
+  const univers = Object.keys(o.vekter);
+  const aksjer = univers.filter(erAksje), obligasjoner = univers.filter((t) => !erAksje(t));
+  let ticker, side, mengde;
+  if (problem === "short") {
+    side = "Salg";
+    if (aksjer.length) { ticker = "HAUTO"; mengde = velgTilf([400, 1000, 2500]); }
+    else { ticker = velgTilf(obligasjoner); mengde = (b[ticker] || 0) + 10e6; }
+  } else if (problem === "grense") {
+    side = "Kjøp"; ticker = "EQNR";
+    const k = aksjekurs(ticker, S.dato);
+    mengde = Math.ceil(((o.mandat.utsteder + 0.004) * nav / k - (b[ticker] || 0)) / 100) * 100;
+  } else if (problem === "esg") {
+    side = "Kjøp"; ticker = "HAUTO"; mengde = velgTilf([1000, 2500, 5000]);
+  } else if (problem === "sektor") {
+    side = "Kjøp";
+    const v = sektorvekter(kode, S.dato);
+    const sektor = Object.keys(v).sort((x, y) => v[y] - v[x])[0];
+    // minste post i den største sektoren, så utstedergrensen ikke slår til først
+    ticker = aksjer.filter((t) => PAPIR[t].sektor === sektor).sort((x, y) => (b[x] || 0) * aksjekurs(x, S.dato) - (b[y] || 0) * aksjekurs(y, S.dato))[0];
+    let aksjeverdi = 0;
+    for (const [t, m] of Object.entries(b)) if (erAksje(t)) aksjeverdi += m * aksjekurs(t, S.dato);
+    const L = o.mandat.sektor + 0.01;
+    mengde = Math.ceil(((L - v[sektor]) * aksjeverdi) / ((1 - L) * aksjekurs(ticker, S.dato)) / 100) * 100;
+  } else if (problem === "instrument") {
+    side = "Kjøp"; ticker = velgTilf(["EQNR", "DNB", "HAUTO"]); mengde = velgTilf([500, 1000, 2000]);
+  } else {
+    ticker = aksjer.length && (!obligasjoner.length || rnd() < 0.6) ? velgTilf(aksjer) : velgTilf(obligasjoner);
+    side = rnd() < 0.5 ? "Kjøp" : "Salg";
+    if (erAksje(ticker)) mengde = Math.max(10, Math.round((nav * (0.0005 + rnd() * 0.004)) / aksjekurs(ticker, S.dato) / 10) * 10);
+    else mengde = velgTilf([5, 10, 20, 25, 50]) * 1e6;
+    if (side === "Salg") { const har = b[ticker] || 0; if (har < mengde) side = "Kjøp"; }
+    // Forvalteren kjøper ikke for mer enn fondet har tilgjengelig, medregnet uoppgjorte handler.
+    if (side === "Kjøp") {
+      let disponibelt = S.fond[kode].kontant;
+      for (const h of bokforte(kode)) { const rest = ((h.mengde - h.levert) / h.mengde) * h.netto; disponibelt += h.side === "Salg" ? rest : -rest; }
+      const belop = erAksje(ticker) ? mengde * aksjekurs(ticker, S.dato) : (mengde * markedskurs(ticker, S.dato)) / 100;
+      if (belop > disponibelt - 0.01 * nav && (b[ticker] || 0) >= mengde) side = "Salg";
+      // og holder seg godt under utstedergrensen
+      if (erAksje(ticker) && o.mandat.utsteder && ((b[ticker] || 0) + mengde) * aksjekurs(ticker, S.dato) > (o.mandat.utsteder - 0.005) * nav) side = "Salg";
+      if (erAksje(ticker) && o.mandat.sektor && sektorvekter(kode, S.dato, { ticker, mengde })[PAPIR[ticker].sektor] > o.mandat.sektor - 0.005) side = "Salg";
+    }
+  }
+  const marked = markedskurs(ticker, S.dato);
+  const kurs = erAksje(ticker) ? rundAv(marked * (1 + (rnd() - 0.5) * 0.008), 2) : rundAv(marked + (rnd() - 0.5) * 0.06, 3);
+  registrer(lagHandel(kode, { side, ticker, mengde, kurs, problem, tid: tid ?? `${pad(heltall(10, 13), 2)}:${pad(heltall(0, 59), 2)}` }));
+}
+
+// ================= Klokken: faser i dagen =================
+function avstemFond(kode, d, lagSaker = true) {
+  const f = S.fond[kode];
+  const hd = handelsdagsbeholdning(kode), opp = oppgjortBeholdning(kode);
+  const papirer = [...new Set([...Object.keys(hd), ...Object.keys(opp)])].filter((t) => hd[t] || opp[t] || f.depotAvvik[t]);
+  const rader = papirer.map((t) => {
+    const depot = (opp[t] || 0) + (f.depotAvvik[t] || 0);
+    const uoppgjorte = bokforte(kode).filter((h) => h.ticker === t && h.levert < h.mengde);
+    const diff = depot - (opp[t] || 0);
+    let forklaring = "", status = "ok";
+    if (diff && f.godkjentAvvik[t]) { forklaring = "Differansen er godkjent av leder"; status = "rettet"; }
+    else if (diff) {
+      status = "venter";
+      let sak = S.saker.find((s) => s.type === "avstemming" && s.fond === kode && s.data.ticker === t && (s.status === "apen" || s.status === "hos_leder"));
+      if (!sak && lagSaker) {
+        const h = bokforte(kode).filter((x) => x.ticker === t && x.problem === "depot" && x.levert).at(-1);
+        sak = opprettSak(kode, "avstemming", `${kode}:${t}`, "avstemming", `Depotbanken viser ${mengdeTekst(t, Math.abs(diff))} ${diff < 0 ? "mindre" : "mer"} ${PAPIR[t].navn} enn vår oppgjorte beholdning, og ingen handel forklarer det.`, { ticker: t, handel: h?.id });
+        if (h) { h.sak = sak.id; sett(h, 5, "venter", `Avvik i avstemmingen ${datoTekst(d)}. Se ${sak.id}.`); }
+      }
+      forklaring = sak ? `Uforklart. Ligger i ${sak.id}` : "Uforklart";
+    } else if (uoppgjorte.length) forklaring = `Stemmer. ${uoppgjorte.length} uoppgjort${uoppgjorte.length > 1 ? "e" : ""} handel${uoppgjorte.length > 1 ? "er" : ""} venter på oppgjør`;
+    return { ticker: t, handelsdag: hd[t] || 0, oppgjort: opp[t] || 0, depot, diff, uoppgjort: (hd[t] || 0) - (opp[t] || 0), forklaring, status, uoppgjorte: uoppgjorte.map((h) => h.id) };
+  });
+  let kjop = 0, salg = 0;
+  for (const h of bokforte(kode)) { const rest = ((h.mengde - h.levert) / h.mengde) * h.netto; if (rest > 0) h.side === "Kjøp" ? (kjop += rest) : (salg += rest); }
+  f.avstemming = { dato: d, rader, kontant: { oss: f.kontant, depot: f.kontant, kjop, salg } };
+  // Handler som ble gjort opp før denne morgenen, er nå avstemt.
+  for (const h of bokforte(kode)) {
+    if (h.levert >= h.mengde && h.steg[5]?.status === "vent" && h.oppgjortDato < d) {
+      if (!f.depotAvvik[h.ticker] || f.godkjentAvvik[h.ticker]) sett(h, 5, "ok", `Avstemt mot depotbankens rapport ${datoTekst(d)}.`);
+    }
+  }
+}
+
+function gjorOpp(d) {
+  for (const h of S.handler) {
+    if (!h.bokfort || h.avvist || !h.oppgjor || h.oppgjor > d || h.levert >= h.mengde) continue;
+    h.loggTid = "14:00";
+    h.forsok++;
+    if (!h.matchet) { sett(h, 4, "folges", `Ikke gjort opp ${datoTekst(d)}: handelen er ikke matchet mot megler. Forsøkes igjen ${datoTekst(nesteBankdag(d))}.`); continue; }
+    if (h.problem === "feilet" && !h.leverNeste && (h.forsok <= h.feilDager || h.sak)) {
+      const hvem = h.side === "Kjøp" ? "Motparten leverte ikke papirene" : "Motparten betalte ikke";
+      if (h.forsok >= 3 && !h.sak) {
+        knyttSak(h, 4, "venter", "oppgjor", `${hvem} for tredje bankdag på rad (første oppgjørsdato ${datoTekst(h.oppgjor)}). Etter CSDR betaler den som feiler, en daglig bot.`);
+      } else if (!h.sak) sett(h, 4, "folges", `Forsøk ${h.forsok}: ${hvem} ${datoTekst(d)}. Nytt forsøk ${datoTekst(nesteBankdag(d))}, og ${h.megler} er varslet. Etter CSDR betaler den som feiler, en daglig bot.`);
+      continue;
+    }
+    const enhet = erAksje(h.ticker) ? 1 : 1e5;
+    let del = h.mengde - h.levert;
+    if (h.problem === "delvis" && h.levert === 0) del = Math.max(enhet, Math.floor((h.mengde * 0.6) / enhet) * enhet);
+    lever(h, Math.min(del, h.mengde - h.levert), d);
+  }
+}
+function lever(h, del, d) {
+  const f = S.fond[h.fond];
+  h.levert += del;
+  f.kontant += ((h.netto * del) / h.mengde) * (h.side === "Kjøp" ? -1 : 1);
+  if (h.problem === "depot" && !h.depotFeil) { f.depotAvvik[h.ticker] = (f.depotAvvik[h.ticker] || 0) - (erAksje(h.ticker) ? 100 : 1e6); h.depotFeil = true; }
+  if (h.levert < h.mengde) { sett(h, 4, "folges", `Delvis oppgjort ${datoTekst(d)}: ${mengdeTekst(h.ticker, h.levert)} av ${mengdeTekst(h.ticker, h.mengde)} levert mot betaling. Resten forsøkes ${datoTekst(nesteBankdag(d))}.`); return; }
+  h.oppgjortDato = d;
+  const etter = h.forsok > 1 ? ` etter ${h.forsok} forsøk` : "";
+  sett(h, 4, h.forsok > 1 ? "rettet" : "ok", `Oppgjort ${datoTekst(d)}${etter} som levering mot betaling (DVP) i Euronext Securities Oslo. Papirer og penger byttet samtidig.`);
+  h.steg[5] = { status: "vent", tekst: `Avstemmes mot depotbankens rapport ${datoTekst(nesteBankdag(d))} kl. 08:00.` };
+}
+
+function navKomponenter(kode, d, tidligere = {}) {
+  const f = S.fond[kode];
+  const hd = handelsdagsbeholdning(kode);
+  let aksjer = 0, obligasjoner = 0, renter = 0, ekteKurser = true;
+  for (const [t, m] of Object.entries(hd)) {
+    if (!m) continue;
+    if (!kursErEkte(t, d)) ekteKurser = false;
+    if (erAksje(t)) aksjer += m * aksjekurs(t, d);
+    else { obligasjoner += (m * obligasjonskurs(t, d)) / 100; renter += palopt(PAPIR[t], m, d).belop; }
+  }
+  let fordringer = 0, gjeld = 0;
+  for (const h of bokforte(kode)) { const rest = ((h.mengde - h.levert) / h.mengde) * h.netto; if (rest > 0) h.side === "Salg" ? (fordringer += rest) : (gjeld += rest); }
+  const honorar = tidligere.honorar ?? f.honorarPalopt;
+  const netto = aksjer + obligasjoner + renter + f.kontant + fordringer - gjeld - honorar;
+  return { dato: d, aksjer, obligasjoner, renter, bank: f.kontant, fordringer, gjeld, honorar, netto, andeler: f.andeler, perAndel: netto / f.andeler, ekteKurser };
+}
+function beregnNav(kode, d) {
+  const f = S.fond[kode], o = OPPSETT[kode];
+  const forrige = f.nav.at(-1);
+  // Påløpt honorar for forrige måned betales første NAV-dag i ny måned.
+  if (forrige && forrige.dato.slice(0, 7) !== d.slice(0, 7) && f.honorarPalopt > 0) {
+    f.kontant -= f.honorarPalopt;
+    f.kontantlogg.push({ dato: d, tekst: `Forvaltningshonorar for ${forrige.dato.slice(0, 7)} betalt`, belop: -f.honorarPalopt });
+    f.honorarPalopt = 0;
+  }
+  const dager = forrige ? dagerMellom(forrige.dato, d) : 1;
+  const honorarDag = ((forrige ? forrige.netto : o.startverdi) * o.honorar * dager) / 365;
+  f.honorarPalopt += honorarDag;
+  const rad = { ...navKomponenter(kode, d), honorarDag, honorarDager: dager };
+  rad.endring = forrige ? rad.perAndel / forrige.perAndel - 1 : null;
+  // En NAV som fortsatt er blokkert når neste dags NAV beregnes, ble aldri frigitt. Den gamle saken lukkes.
+  for (const gammel of aapneSaker(kode).filter((s) => s.type === "nav")) {
+    gammel.status = "utlopt";
+    gammel.logg.push(`${tidsstempel()} Lukket: ny NAV beregnet. NAV ${datoTekst(gammel.data.dato)} ble aldri frigitt.`);
+    const r = f.nav.find((n) => n.dato === gammel.data.dato);
+    if (r) { r.status = "ikke_frigitt"; r.merknad = "Ble aldri frigitt. Fondet hadde ingen offisiell kurs denne dagen."; }
+  }
+  const aapne = aapneSaker(kode).filter((s) => s.type !== "nav");
+  if (!aapne.length) { rad.status = "frigitt"; rad.merknad = "Frigitt automatisk. Ingen åpne saker i fondet."; }
+  else {
+    rad.status = "blokkert"; rad.merknad = `Blokkert av ${aapne.length} åpne saker.`;
+    rad.sak = opprettSak(kode, "nav", `${kode}:${d}`, "nav", `NAV ${datoTekst(d)} er beregnet, men ikke frigitt. ${aapne.length} saker i fondet er åpne: ${aapne.map((s) => s.id).join(", ")}. NAV kan være feil til de er løst.`, { dato: d }).id;
+  }
+  f.nav.push(rad);
+}
+
+function kjorFase() {
+  const d = S.dato;
+  if (S.fase === 0) for (const k of Object.keys(S.fond)) avstemFond(k, d);
+  if (S.fase === 1) for (const o of FOND_OPPSETT) { const n = heltall(...o.handlerPerDag); for (let i = 0; i < n; i++) tilfeldigHandel(o.kode); }
+  if (S.fase === 2) {
+    for (const h of S.handler) if (h.problem === "bekreftelse" && !h.purret && !h.avvist && h.steg[3]?.status === "folges") { h.purret = true; h.loggTid = "14:00"; fortsett(h, 3); }
+    gjorOpp(d);
+  }
+  if (S.fase === 3) for (const k of Object.keys(S.fond)) beregnNav(k, d);
+}
+function nesteFase() {
+  if (S.fase < 3) S.fase++;
+  else { S.dato = nesteBankdag(S.dato); S.fase = 0; }
+  S.utenFeil = S.dato < LIVE.dato; // historikken er ren
+  kjorFase();
+  lagre();
+}
+function lagre() { tidslinje.push({ dato: S.dato, fase: S.fase, json: JSON.stringify(S) }); }
+function spolTil(i) { S = JSON.parse(tidslinje[i].json); tidslinje.length = i + 1; ui.valgt = null; ui.navDato = null; ui.utkast = {}; }
+
+function start() {
+  S = { dato: HIST[0], fase: 0, fro: hash(LIVE.dato), teller: { h: 0, s: 0 }, handler: [], saker: [], fond: {}, utenFeil: true };
+  for (const o of FOND_OPPSETT) S.fond[o.kode] = nyttFond(o);
+  tidslinje = [];
+  kjorFase();
+  lagre();
+  while (!(S.dato === LIVE.dato && S.fase === LIVE.fase)) nesteFase();
+}
+
+// ================= Status for visning =================
+function handelStatus(h) {
+  if (h.utfall === "duplikat") return ["av", "Duplikat fjernet"];
+  if (h.avvist) return ["stoppet", h.utfall === "kansellert" ? "Kansellert" : "Avvist"];
+  const sak = h.sak && finnSak(h.sak);
+  if (sak && sak.status === "hos_leder") return ["leder", "Hos leder"];
+  const st = h.steg.filter(Boolean).map((s) => s.status);
+  if (st.includes("stoppet")) return ["stoppet", "Stoppet"];
+  if (st.includes("venter")) return ["venter", "Trenger oppmerksomhet"];
+  if (st.includes("folges")) return ["folges", "Følges opp automatisk"];
+  if (h.steg[5]?.status === "vent") return ["vent", h.levert >= h.mengde ? "Venter på avstemming" : "Venter på oppgjør"];
+  if (st.includes("rettet") || h.manuell) return ["rettet", "Ferdig, rettet underveis"];
+  return ["ok", "Ferdig, helautomatisk"];
+}
+const trengerOppmerksomhet = (h) => ["venter", "stoppet", "leder"].includes(handelStatus(h)[0]) && !h.avvist;
+
+// ================= Visning =================
+const app = document.getElementById("app");
+
+function tegnKlokke() {
+  const live = erLive();
+  const forrige = tidslinje.some((t) => t.dato < S.dato);
+  document.getElementById("klokke").innerHTML = `
+    <div class="rad mellom">
+      <div class="naa"><span class="dempet">${ukedag(S.dato)[0].toUpperCase() + ukedag(S.dato).slice(1)} ${datoTekst(S.dato)}</span><b id="klokketid">${live ? naaOslo().tid : FASER[S.fase].tid}</b><span>${FASER[S.fase].navn}</span>${live ? '<span class="merke m-ok">Nå</span>' : S.dato > LIVE.dato || (S.dato === LIVE.dato && S.fase > LIVE.fase) ? '<span class="merke m-folges">Fram i tid</span>' : ""}</div>
+      <div class="rolle" role="group" aria-label="Rolle">
+        <button data-act="rolle" data-v="analytiker" class="${ui.rolle === "analytiker" ? "valgt" : ""}">Analytiker</button>
+        <button data-act="rolle" data-v="leder" class="${ui.rolle === "leder" ? "valgt" : ""}">Leder${S.saker.filter((s) => s.status === "hos_leder").length ? ` (${S.saker.filter((s) => s.status === "hos_leder").length})` : ""}</button>
+      </div>
+    </div>
+    <div class="faser" role="group" aria-label="Tidspunkt">
+      <button class="dag" data-act="forrigedag" ${forrige ? "" : "disabled"} title="Forrige bankdag" aria-label="Forrige bankdag">◀</button>
+      ${FASER.map((f, i) => `<button data-act="fase" data-v="${i}" class="${i < S.fase ? "ferdig" : i === S.fase ? "naa" : ""}" aria-pressed="${i === S.fase}">${f.tid}<br>${f.navn}</button>`).join("")}
+      <button class="dag" data-act="nestedag" title="Neste bankdag" aria-label="Neste bankdag">▶</button>
+    </div>
+    ${S.dato > SISTE_EKTE_KURS ? `<div class="liten dempet">Kurser etter ${datoTekst(SISTE_EKTE_KURS)} er simulert.</div>` : ""}`;
+}
+
+function tegn() {
+  tegnKlokke();
+  const hosLeder = S.saker.filter((s) => s.status === "hos_leder");
+  const faner = FOND_OPPSETT.map((o) => {
+    const n = aapneSaker(o.kode).length;
+    return `<button role="tab" aria-selected="${ui.fond === o.kode}" data-act="fond" data-v="${o.kode}">${o.navn} <span class="dempet liten">${o.kode}</span>${n ? `<span class="varsel" title="${n} saker trenger oppmerksomhet">! ${n}</span>` : ""}</button>`;
+  }).join("") + `<button role="tab" aria-selected="${ui.fond === "LEDER"}" data-act="fond" data-v="LEDER">Til godkjenning${hosLeder.length ? `<span class="varsel leder">${hosLeder.length}</span>` : ""}</button>`;
+  app.innerHTML = `<div class="faner" role="tablist">${faner}</div><div class="fondsflate">${ui.fond === "LEDER" ? tegnLederko() : tegnFond()}</div>`;
+}
+
+function tegnFond() {
+  const o = OPPSETT[ui.fond], f = S.fond[ui.fond];
+  const nav = f.nav.at(-1);
+  const vekter = o.mandat.typer.includes("aksje") ? sektorvekter(ui.fond, S.dato) : null;
+  const info = `<div class="fondsinfo">
+    <div><span>Porteføljekode</span><b>${o.kode}</b></div>
+    <div><span>Type</span><b>${o.type}</b></div>
+    <div><span>Depotkonto</span><b>${o.depot}</b></div>
+    <div><span>Forvaltningskapital</span><b>${mill(nav ? nav.netto : o.startverdi, 0)}</b></div>
+    <div><span>NAV per andel ${nav ? kortDato(nav.dato) : ""}</span><b>${nav ? kr(nav.perAndel, 4) : "–"}</b></div>
+    <div><span>Andeler</span><b>${nb(f.andeler)}</b></div>
+    <div><span>Forvaltningshonorar</span><b>${nb(o.honorar * 100, 2)} % per år</b></div></div>
+    <div class="mandatrad">
+      <div><span class="etikett">Mandat</span><ul class="mandat">${mandatpunkter(o).map((x) => `<li>${x}</li>`).join("")}</ul></div>
+      ${vekter ? `<div><span class="etikett">Sektorvekting av aksjedelen (grense ${nb(o.mandat.sektor * 100)} %)</span>
+        <div class="sektorer">${Object.entries(vekter).sort((a, b) => b[1] - a[1]).map(([sk, v]) => `<div class="sektor"><span>${sk}</span><span class="stolpe"><i style="width:${Math.min(100, (v / 0.3) * 100)}%" class="${v > o.mandat.sektor ? "over" : v > o.mandat.sektor - 0.02 ? "naer" : ""}"></i><b style="left:${(o.mandat.sektor / 0.3) * 100}%"></b></span><span class="tall">${nb(v * 100, 1)} %</span></div>`).join("")}</div></div>` : ""}
+    </div>`;
+  const nSaker = aapneSaker(ui.fond);
+  const underfaner = [["transaksjoner", "Transaksjoner"], ["avstemming", "Avstemming"], ["nav", "NAV"]].map(([k, t]) => {
+    const n = k === "transaksjoner" ? nSaker.filter((s) => s.kilde === "handel").length : k === "avstemming" ? nSaker.filter((s) => s.type === "avstemming").length : nSaker.filter((s) => s.type === "nav").length;
+    return `<button aria-selected="${ui.fane === k}" data-act="fane" data-v="${k}">${t}${n ? ` <span class="varsel">! ${n}</span>` : ""}</button>`;
+  }).join("");
+  const innhold = ui.fane === "transaksjoner" ? tegnTransaksjoner() : ui.fane === "avstemming" ? tegnAvstemming() : tegnNav();
+  return `${info}<div class="underfaner">${underfaner}</div>${innhold}`;
+}
+
+function tegnTransaksjoner() {
+  const kode = ui.fond;
+  const alle = S.handler.filter((h) => h.fond === kode);
+  const idag = alle.filter((h) => h.handelsdato === S.dato && h.utfall !== "duplikat");
+  const ferdigeIdag = idag.filter((h) => !h.avvist);
+  const helauto = ferdigeIdag.filter((h) => !h.manuell && !h.steg.some((s) => s && ["rettet", "venter", "stoppet"].includes(s.status))).length;
+  const datoer = [...new Set(alle.map((h) => h.handelsdato))].sort().reverse();
+  let liste = alle.slice().reverse();
+  if (ui.bareOppmerksomhet) liste = liste.filter(trengerOppmerksomhet);
+  if (ui.dato !== "alle") liste = liste.filter((h) => h.handelsdato === ui.dato);
+  if (ui.status !== "alle") liste = liste.filter((h) => handelStatus(h)[0] === ui.status || (ui.status === "ferdig" && ["ok", "rettet"].includes(handelStatus(h)[0])));
+  if (ui.sok) { const q = ui.sok.toLowerCase(); liste = liste.filter((h) => [h.id, h.ticker, h.isin, PAPIR[h.ticker].navn, h.ordre, h.meglerRef].some((x) => x.toLowerCase().includes(q))); }
+  const kanHandle = S.fase === 1 || S.fase === 2;
+  const papirValg = Object.keys(PAPIR).map((t) => `<option value="${t}">${PAPIR[t].navn} (${t})</option>`).join("");
+  const opp = alle.filter(trengerOppmerksomhet).length;
+  const uoppgjort = bokforte(kode).filter((h) => h.levert < h.mengde).length;
+
+  const rader = liste.map((h) => {
+    const [s, tekst] = handelStatus(h);
+    const prikker = h.steg.map((st, i) => `<span class="prikk ${st ? "s-" + st.status : ""}" title="${STEG[i]}${st ? ": " + esc(st.tekst) : ""}"></span>`).join("");
+    return `<tr data-act="velg" data-v="${h.id}" tabindex="0" class="${ui.valgt === h.id ? "valgt" : ""}">
+      <td class="tall"><b>${h.id}</b><div class="dempet liten">${kortDato(h.handelsdato)} ${h.tid}</div></td>
+      <td>${PAPIR[h.ticker].navn}<div class="dempet liten">${h.ticker} · ${h.side}</div></td>
+      <td class="hoyre tall">${mengdeTekst(h.ticker, h.mengde)}<div class="dempet liten">${h.netto != null ? kr(h.netto, 0) : ""}</div></td>
+      <td><div class="prikker">${prikker}</div></td>
+      <td><span class="merke m-${s}">${tekst}</span></td></tr>`;
+  }).join("");
+
+  return `
+    <div class="nokkel">
+      <div><span class="dempet liten">Handler i dag</span><b>${ferdigeIdag.length}</b></div>
+      <div><span class="dempet liten">Rett gjennom i dag</span><b>${ferdigeIdag.length ? nb((helauto / ferdigeIdag.length) * 100) + " %" : "–"}</b></div>
+      <div><span class="dempet liten">Trenger oppmerksomhet</span><b>${opp}</b></div>
+      <div><span class="dempet liten">Uoppgjorte handler</span><b>${uoppgjort}</b></div>
+      <div><span class="dempet liten">Alle handler</span><b>${alle.filter((h) => h.utfall !== "duplikat").length}</b></div>
+    </div>
+    <div class="verktoy">
+      <label>Problem i neste handel
+        <select data-felt="problem">${["tilfeldig", "ingen", ...problemerFor(kode)].map((p) => `<option value="${p}" ${ui.problem === p ? "selected" : ""}>${p === "tilfeldig" ? `Tilfeldig (${nb(FEILRATE * 100)} % sjanse)` : PROBLEMNAVN[p]}</option>`).join("")}</select>
+      </label>
+      <button data-act="tilfeldig" ${kanHandle ? "" : "disabled"}>Ny handel</button>
+      <details style="margin:0" id="manuell" ${ui.manuellApen ? "open" : ""}>
+        <summary class="liten">Legg inn handel selv</summary>
+        <div class="rad bunn" style="margin-top:8px">
+          <label>Side <select data-felt="m-side">${["Kjøp", "Salg"].map((x) => `<option ${ui.m.side === x ? "selected" : ""}>${x}</option>`).join("")}</select></label>
+          <label>Papir <select data-felt="m-papir">${papirValg.replace(`value="${ui.m.papir}"`, `value="${ui.m.papir}" selected`)}</select></label>
+          <label>${erAksje(ui.m.papir) ? "Antall aksjer" : "Pålydende i kroner"} <input type="number" data-felt="m-mengde" min="1" value="${esc(ui.m.mengde)}" style="width:130px"></label>
+          <label>Kurs (tom = markedskurs ${kursTekst(ui.m.papir, markedskurs(ui.m.papir, S.dato))}) <input type="number" data-felt="m-kurs" step="0.001" value="${esc(ui.m.kurs)}" style="width:120px"></label>
+          <button data-act="manuell" ${kanHandle ? "" : "disabled"}>Send</button>
+        </div>
+      </details>
+      ${kanHandle ? "" : `<span class="liten dempet">Handler tas imot mellom 10:00 og 18:00. Flytt klokken.</span>`}
+      ${ui.melding.handel ? `<span class="melding">${esc(ui.melding.handel)}</span>` : ""}
+    </div>
+    <div class="arbeid">
+      <div>
+        <div class="filter">
+          <label class="bryter"><input type="checkbox" data-felt="bareOppmerksomhet" ${ui.bareOppmerksomhet ? "checked" : ""}> Vis bare det som trenger oppmerksomhet (${opp})</label>
+          <select data-felt="dato" aria-label="Handelsdato"><option value="alle">Alle datoer</option>${datoer.map((d) => `<option value="${d}" ${ui.dato === d ? "selected" : ""}>${ukedag(d).slice(0, 3)} ${datoTekst(d)}</option>`).join("")}</select>
+          <select data-felt="status" aria-label="Status">${[["alle", "Alle statuser"], ["venter", "Trenger oppmerksomhet"], ["stoppet", "Stoppet"], ["leder", "Hos leder"], ["folges", "Følges opp"], ["vent", "Venter på oppgjør eller avstemming"], ["ferdig", "Ferdig"]].map(([k, t]) => `<option value="${k}" ${ui.status === k ? "selected" : ""}>${t}</option>`).join("")}</select>
+          <input type="search" data-felt="sok" placeholder="Søk: ID, ticker, ISIN" value="${esc(ui.sok)}" style="width:170px">
+          <span class="dempet">${liste.length} av ${alle.length}</span>
+        </div>
+        <div class="forklaring">
+          <span><i class="prikk s-ok"></i>OK</span><span><i class="prikk s-rettet"></i>Rettet underveis</span><span><i class="prikk s-venter"></i>Trenger person</span>
+          <span><i class="prikk s-stoppet"></i>Stoppet</span><span><i class="prikk s-folges"></i>Følges opp automatisk</span><span><i class="prikk s-vent"></i>Ikke forfalt ennå</span>
+        </div>
+        <div class="rull"><table id="handelstabell">
+          <thead><tr><th>Handel</th><th>Papir</th><th class="hoyre">Mengde og beløp</th><th>Steg 1–6</th><th>Status</th></tr></thead>
+          <tbody>${rader || `<tr><td colspan="5" class="tom">Ingen handler med dette filteret.</td></tr>`}</tbody>
+        </table></div>
+      </div>
+      <aside class="panel ${ui.laast ? "laast" : ""}" id="panel">${tegnDetalj()}</aside>
+    </div>`;
+}
+
+function tegnDetalj() {
+  const laas = `<button class="lite stille" data-act="laas">${ui.laast ? "Løsne panelet" : "Lås panelet"}</button>`;
+  const h = ui.valgt && finnHandel(ui.valgt);
+  if (!h || h.fond !== ui.fond) return `<div class="rad mellom"><span class="dempet liten">Ingen handel valgt</span>${laas}</div><p class="tom">Klikk på en handel for å se hva som skjedde i hvert steg.</p>`;
+  const p = PAPIR[h.ticker], o = OPPSETT[h.fond];
+  const [s, tekst] = handelStatus(h);
+  const sak = h.sak && finnSak(h.sak);
+  return `
+    <div class="rad mellom"><span class="merke m-${s}">${tekst}</span>${laas}</div>
+    <h3 style="margin:8px 0 0">${h.id} · ${h.side} ${p.navn}</h3>
+    <dl>
+      <dt>Fond</dt><dd>${o.navn} (${o.kode})</dd>
+      <dt>Papir</dt><dd>${p.navn}${p.kortnavn ? ` (${p.kortnavn})` : ""}</dd>
+      <dt>Ticker · marked</dt><dd>${p.ticker} · ${p.marked} Oslo Børs</dd>
+      <dt>ISIN</dt><dd>${h.isin}${h.isin !== p.isin ? ' <span class="brudd">feil</span>' : ""}</dd>
+      <dt>Type · valuta</dt><dd>${p.type === "aksje" ? `Aksje, ${p.sektor}` : `Statsobligasjon, kupong ${nb(p.kupong, 3)} %, forfall ${datoTekst(p.forfall)}`} · NOK</dd>
+      ${p.type === "aksje" ? `<dt>ESG-score (simulert)</dt><dd>${ESG[p.ticker]}${ESG[p.ticker] <= 60 ? ' <span class="brudd">under 60</span>' : ""}</dd>` : ""}
+      <dt class="skille">Side</dt><dd class="skille">${h.side}</dd>
+      <dt>Mengde</dt><dd>${mengdeTekst(h.ticker, h.mengde)}</dd>
+      <dt>Kurs</dt><dd>${kursTekst(h.ticker, h.kurs)}${erAksje(h.ticker) ? "" : " av pålydende"}</dd>
+      ${h.brutto != null ? `<dt>Handelsbeløp</dt><dd>${kr(h.brutto)}</dd>` : ""}
+      ${h.kurtasje ? `<dt>Kurtasje (2 bp)</dt><dd>${kr(h.kurtasje)}</dd>` : ""}
+      ${h.palopt ? `<dt>Påløpt rente</dt><dd>${kr(h.palopt)}</dd>` : ""}
+      ${h.netto != null ? `<dt><b>Oppgjørsbeløp</b></dt><dd><b>${kr(h.netto)}</b></dd>` : ""}
+      <dt class="skille">Handelstid</dt><dd class="skille">${ukedag(h.handelsdato).slice(0, 3)} ${datoTekst(h.handelsdato)} ${h.tid}</dd>
+      ${h.oppgjor ? `<dt>Oppgjørsdato</dt><dd>${ukedag(h.oppgjor).slice(0, 3)} ${datoTekst(h.oppgjor)}</dd>` : ""}
+      <dt>Levert</dt><dd>${mengdeTekst(h.ticker, h.levert)} av ${mengdeTekst(h.ticker, h.mengde)}</dd>
+      <dt class="skille">Ordre · megler</dt><dd class="skille">${h.ordre} · ${h.megler}</dd>
+      <dt>Meglerens referanse</dt><dd>${h.meglerRef}</dd>
+      <dt>Motpartens konto</dt><dd>${h.ssi ?? '<span class="brudd">mangler</span>'}</dd>
+      <dt>Vår depotkonto</dt><dd>${o.depot}</dd>
+      <dt>Oppgjørssted</dt><dd>Euronext Securities Oslo</dd>
+    </dl>
+    <ol class="steg">${STEG.map((navn, i) => { const st = h.steg[i]; return `<li><span class="prikk ${st ? "s-" + st.status : ""}"></span><div><b>${i + 1}. ${navn}</b><span class="${st && st.status !== "vent" ? "" : "dempet"}">${st ? esc(st.tekst) : "Ikke nådd"}</span></div></li>`; }).join("")}</ol>
+    ${sak ? tegnSak(sak) : ""}
+    <details><summary>Logg (${h.logg.length})</summary><ol class="liten dempet" style="padding-left:18px">${h.logg.map((l) => `<li>${esc(l)}</li>`).join("")}</ol></details>`;
+}
+
+function tegnSak(sak) {
+  const typ = SAKTYPER[sak.type];
+  const u = (ui.utkast[sak.id] ??= { sjekk: sak.sjekk.slice(), forslag: sak.forslag, kommentar: sak.kommentar, leder: "" });
+  const valgt = typ.handlinger.find((x) => x.kode === u.forslag);
+  const statusMerke = { apen: ["venter", "Åpen"], hos_leder: ["leder", "Hos leder"], lost: ["ok", "Løst"], utlopt: ["stoppet", "Lukket uten løsning"] }[sak.status] ?? ["av", sak.status];
+  const topp = `<div class="rad mellom"><b>${sak.id} · ${sak.tittel}</b><span class="merke m-${statusMerke[0]}">${statusMerke[1]}</span></div>
+    <p class="liten" style="margin:6px 0 0">${esc(sak.tekst)}</p>`;
+  const forslagTekst = sak.forslag && typ.handlinger.find((x) => x.kode === sak.forslag)?.tekst;
+  const oppsummering = `<div class="oppsummering"><b>Analytikerens vurdering</b>
+      ${sak.sjekk.length ? `<ul>${sak.sjekk.map((i) => `<li>✓ ${esc(typ.sjekk[i])}</li>`).join("")}</ul>` : '<div class="dempet">Ingen punkter krysset av.</div>'}
+      <div style="margin-top:4px"><b>Forslag:</b> ${esc(forslagTekst ?? "–")}</div>
+      <div><b>Kommentar:</b> «${esc(sak.kommentar)}»</div></div>`;
+  let kropp = "";
+  if (sak.status === "apen" && ui.rolle === "analytiker") {
+    kropp = `
+      ${sak.lederKommentar ? `<p class="retur" style="margin-top:8px"><b>Sendt tilbake av leder:</b> «${esc(sak.lederKommentar)}»</p>` : ""}
+      <fieldset><legend>Hva har du sjekket?</legend>${typ.sjekk.map((t, i) => `<label class="valg"><input type="checkbox" data-felt="sjekk" data-sak="${sak.id}" data-i="${i}" ${u.sjekk.includes(i) ? "checked" : ""}>${esc(t)}</label>`).join("")}</fieldset>
+      <fieldset><legend>Hva mener du bør gjøres?</legend>${typ.handlinger.map((x) => `<label class="valg"><input type="radio" name="forslag-${sak.id}" data-felt="forslag" data-sak="${sak.id}" value="${x.kode}" ${u.forslag === x.kode ? "checked" : ""}>${esc(x.tekst)}${x.leder ? '<span class="krever">krever leder</span>' : ""}</label>`).join("")}</fieldset>
+      <label style="margin-top:10px">Kommentar: hva har du funnet ut?${valgt?.leder ? " (påkrevd)" : ""}<textarea data-felt="kommentar" data-sak="${sak.id}" placeholder="For eksempel: Front office bekrefter at kursen ble skrevet inn feil.">${esc(u.kommentar)}</textarea></label>
+      <div class="rad" style="margin-top:8px"><button data-act="sak-send" data-sak="${sak.id}" class="${valgt?.fare ? "fare" : ""}" ${valgt ? "" : "disabled"}>${!valgt ? "Velg hva som bør gjøres" : valgt.leder ? "Send til leder" : "Utfør"}</button></div>
+      ${ui.melding[sak.id] ? `<div class="melding">${esc(ui.melding[sak.id])}</div>` : ""}`;
+  } else if (sak.status === "apen") {
+    kropp = `<p class="liten dempet" style="margin-top:8px">Saken ligger hos analytikeren og er ikke sendt til godkjenning ennå.</p>`;
+  } else if (sak.status === "hos_leder" && ui.rolle === "leder") {
+    kropp = `${oppsummering}
+      <label style="margin-top:10px">Lederens kommentar${"" /* påkrevd ved retur */}<textarea data-felt="leder" data-sak="${sak.id}" placeholder="Påkrevd hvis du sender tilbake.">${esc(u.leder)}</textarea></label>
+      <div class="rad" style="margin-top:8px"><button data-act="leder-ja" data-sak="${sak.id}">Godkjenn og utfør</button><button data-act="leder-nei" data-sak="${sak.id}" class="stille">Send tilbake</button></div>
+      ${ui.melding[sak.id] ? `<div class="melding">${esc(ui.melding[sak.id])}</div>` : ""}`;
+  } else if (sak.status === "hos_leder") {
+    kropp = `${oppsummering}<p class="liten dempet" style="margin-top:8px">Venter på leder. Bytt rolle øverst for å godkjenne.</p>`;
+  } else {
+    kropp = sak.forslag ? oppsummering : "";
+  }
+  return `<div class="sak ${sak.status}">${topp}${kropp}
+    <details><summary class="liten">Sakslogg (${sak.logg.length})</summary><ol class="liten dempet" style="padding-left:18px">${sak.logg.map((l) => `<li>${esc(l)}</li>`).join("")}</ol></details></div>`;
+}
+
+function tegnAvstemming() {
+  const f = S.fond[ui.fond], a = f.avstemming;
+  if (!a) return `<p class="tom">Ingen avstemming ennå.</p>`;
+  const saker = S.saker.filter((s) => s.fond === ui.fond && s.type === "avstemming" && s.status !== "lost").concat(S.saker.filter((s) => s.fond === ui.fond && s.type === "avstemming" && s.status === "lost").slice(-2));
+  const rader = a.rader.map((r) => {
+    const p = PAPIR[r.ticker];
+    return `<tr><td>${p.navn}<div class="dempet liten">${r.ticker} · ${p.isin}</div></td>
+      <td class="hoyre tall">${nb(r.handelsdag)}</td><td class="hoyre tall">${r.uoppgjort ? (r.uoppgjort > 0 ? "+" : "") + nb(r.uoppgjort) : ""}</td>
+      <td class="hoyre tall">${nb(r.oppgjort)}</td><td class="hoyre tall">${nb(r.depot)}</td>
+      <td class="hoyre tall ${r.diff && r.status === "venter" ? "brudd" : ""}">${r.diff ? nb(r.diff) : "0"}</td>
+      <td class="liten"><span class="prikk s-${r.status}" style="display:inline-block;width:9px;height:9px;margin-right:5px"></span>${esc(r.forklaring || "Stemmer")}</td></tr>`;
+  }).join("");
+  const k = a.kontant;
+  return `
+    <div class="forklarboks"><b>Slik leses tabellen.</b> Vi bokfører handler på handelsdagen, men depotbanken ser dem først når de er gjort opp to bankdager senere. Derfor sammenlignes depotbanken med vår <i>oppgjorte</i> beholdning. Forskjellen mellom handelsdag og oppgjort er uoppgjorte handler, og den er forventet. Alt annet må forklares.</div>
+    <p class="dempet liten">Avstemt ${ukedag(a.dato)} ${datoTekst(a.dato)} kl. 08:00 mot depotbankens rapport per ${datoTekst(f.nav.at(-1)?.dato ?? a.dato)}.</p>
+    <div class="rull"><table>
+      <thead><tr><th>Papir</th><th class="hoyre">Handelsdag</th><th class="hoyre">Uoppgjort</th><th class="hoyre">Oppgjort hos oss</th><th class="hoyre">Depotbanken</th><th class="hoyre">Differanse</th><th>Forklaring</th></tr></thead>
+      <tbody>
+        <tr><td><b>Bankinnskudd (NOK)</b><div class="dempet liten">Uoppgjorte kjøp ${kr(k.kjop, 0)} · salg ${kr(k.salg, 0)}</div></td>
+          <td class="hoyre tall">${kr(k.oss + k.salg - k.kjop, 0)}</td><td class="hoyre tall">${k.salg - k.kjop ? kr(k.salg - k.kjop, 0) : ""}</td>
+          <td class="hoyre tall">${kr(k.oss, 0)}</td><td class="hoyre tall">${kr(k.depot, 0)}</td><td class="hoyre tall">0</td>
+          <td class="liten"><span class="prikk s-ok" style="display:inline-block;width:9px;height:9px;margin-right:5px"></span>Stemmer</td></tr>
+        ${rader}
+      </tbody></table></div>
+    ${saker.map(tegnSak).join("")}`;
+}
+
+function tegnNav() {
+  const f = S.fond[ui.fond], o = OPPSETT[ui.fond];
+  if (!f.nav.length) return `<p class="tom">Ingen NAV beregnet ennå.</p>`;
+  const valgt = f.nav.find((n) => n.dato === ui.navDato) ?? f.nav.at(-1);
+  const navSaker = S.saker.filter((s) => s.fond === ui.fond && s.type === "nav" && (["apen", "hos_leder"].includes(s.status) || s.data.dato === valgt.dato));
+  const statusMerke = (n) => ({ frigitt: `<span class="merke m-ok">Frigitt</span>`, frigitt_leder: `<span class="merke m-leder">Frigitt av leder</span>`, ikke_frigitt: `<span class="merke m-stoppet">Aldri frigitt</span>` }[n.status] ?? `<span class="merke m-stoppet">Blokkert</span>`);
+  const linje = (navn, verdi, forklaring, klasse = "") => `<tr class="${klasse}"><td>${navn}<div class="liten dempet">${forklaring}</div></td><td class="hoyre tall">${kr(verdi, 0)}</td></tr>`;
+  return `
+    <div class="to-kol">
+      <div>
+        <h3>NAV ${ukedag(valgt.dato)} ${datoTekst(valgt.dato)} ${statusMerke(valgt)}</h3>
+        <table class="navtabell"><tbody>
+          ${linje("Aksjer", valgt.aksjer, "Beholdning per handelsdag × sluttkurs")}
+          ${linje("Statsobligasjoner", valgt.obligasjoner, "Pålydende × kurs (uten påløpt rente)")}
+          ${linje("Påløpte renter", valgt.renter, "Rente opptjent siden siste kupong")}
+          ${linje("Bankinnskudd", valgt.bank, "Oppgjort kontantbeholdning")}
+          ${linje("Fordringer", valgt.fordringer, "Salg som ikke er gjort opp")}
+          ${linje("Gjeld", -valgt.gjeld, "Kjøp som ikke er gjort opp")}
+          ${linje("Påløpt forvaltningshonorar", -valgt.honorar, `${nb(o.honorar * 100, 2)} % per år. I dag ${kr(valgt.honorarDag, 0)} for ${valgt.honorarDager} dag${valgt.honorarDager > 1 ? "er" : ""}`)}
+          ${linje("Netto forvaltningskapital", valgt.netto, "", "sum")}
+          <tr><td>Andeler</td><td class="hoyre tall">${nb(valgt.andeler, 2)}</td></tr>
+          <tr class="sum"><td>NAV per andel</td><td class="hoyre tall">${kr(valgt.perAndel, 4)}</td></tr>
+        </tbody></table>
+        <p class="liten dempet" style="margin-top:8px">${esc(valgt.merknad)}${valgt.ekteKurser ? " Ekte sluttkurser." : " Kursene denne dagen er simulert."}</p>
+      </div>
+      <div>
+        <h3>Historikk</h3>
+        <table><thead><tr><th>Dato</th><th class="hoyre">NAV per andel</th><th class="hoyre">Endring</th><th>Status</th></tr></thead>
+        <tbody>${f.nav.slice().reverse().map((n) => `<tr data-act="navdato" data-v="${n.dato}" style="cursor:pointer" class="${n === valgt ? "valgt" : ""}"><td>${ukedag(n.dato).slice(0, 3)} ${datoTekst(n.dato)}</td><td class="hoyre tall">${kr(n.perAndel, 4)}</td><td class="hoyre tall">${n.endring == null ? "" : pst(n.endring)}</td><td>${statusMerke(n)}</td></tr>`).join("")}</tbody></table>
+        ${navSaker.map(tegnSak).join("")}
+      </div>
+    </div>`;
+}
+
+function tegnLederko() {
+  const saker = S.saker.filter((s) => s.status === "hos_leder");
+  const lost = S.saker.filter((s) => s.status === "lost" && s.logg.some((l) => l.includes("Leder"))).slice(-5).reverse();
+  return `
+    ${ui.rolle !== "leder" ? `<p class="retur">Du ser dette som analytiker. Bytt til <b>Leder</b> øverst for å godkjenne eller sende tilbake.</p>` : ""}
+    <h3 style="margin-top:10px">Venter på godkjenning (${saker.length})</h3>
+    ${saker.length ? saker.map((s) => `<div class="liten dempet" style="margin-top:14px">${OPPSETT[s.fond].navn} · ${s.kilde === "handel" ? s.ref : s.ref} · sendt ${s.logg.filter((l) => l.includes("sendte til leder")).at(-1)?.slice(0, 11) ?? ""}</div>${tegnSak(s)}`).join("") : `<p class="tom">Ingen saker venter på godkjenning.</p>`}
+    ${lost.length ? `<h3 style="margin-top:20px">Sist behandlet av leder</h3>${lost.map(tegnSak).join("")}` : ""}`;
+}
+
+// ================= Hendelser =================
+function nyttTegn() { tegn(); }
+document.addEventListener("click", (e) => {
+  const el = e.target.closest("[data-act]");
+  if (!el || el.tagName === "SELECT") return;
+  const act = el.dataset.act, v = el.dataset.v;
+  if (act === "fase") {
+    const maal = Number(v);
+    if (maal > S.fase) while (S.fase < maal) nesteFase();
+    else if (maal < S.fase) spolTil(tidslinje.findLastIndex((t) => t.dato === S.dato && t.fase === maal));
+  }
+  if (act === "nestedag") { const dag = S.dato; do { nesteFase(); } while (S.dato === dag); }
+  if (act === "forrigedag") {
+    // Forrige bankdag, samme tidspunkt hvis det finnes
+    const dag = tidslinje.filter((t) => t.dato < S.dato).at(-1)?.dato;
+    if (dag) { const samme = tidslinje.findLastIndex((t) => t.dato === dag && t.fase === S.fase); spolTil(samme >= 0 ? samme : tidslinje.findLastIndex((t) => t.dato === dag)); }
+  }
+  if (act === "rolle") ui.rolle = v;
+  if (act === "fond") { ui.fond = v; ui.valgt = null; ui.navDato = null; }
+  if (act === "fane") ui.fane = v;
+  if (act === "velg") ui.valgt = v;
+  if (act === "navdato") ui.navDato = v;
+  if (act === "laas") ui.laast = !ui.laast;
+  if (act === "tilfeldig") {
+    const foer = S.handler.length;
+    tilfeldigHandel(ui.fond, ui.problem ?? "tilfeldig", handelstid());
+    ui.valgt = S.handler[foer].id;
+    ui.melding.handel = "";
+  }
+  if (act === "manuell") {
+    const t = ui.m.papir, mengde = Math.round(Number(ui.m.mengde));
+    if (!(mengde > 0)) { ui.melding.handel = "Skriv inn en mengde større enn null."; return tegn(); }
+    if (!erAksje(t) && mengde % 1000) { ui.melding.handel = "Obligasjoner handles i pålydende. Beløpet må gå opp i 1 000 kr, som er størrelsen på én obligasjon."; return tegn(); }
+    const kursInn = ui.m.kurs;
+    const kurs = kursInn ? Number(kursInn) : markedskurs(t, S.dato);
+    const problem = ui.problem && ui.problem !== "tilfeldig" ? ui.problem : "ingen";
+    const foer = S.handler.length;
+    registrer(lagHandel(ui.fond, { side: ui.m.side, ticker: t, mengde, kurs, problem, tid: handelstid() }));
+    ui.valgt = S.handler[foer].id;
+    ui.melding.handel = "";
+  }
+  if (act === "sak-send") {
+    const sak = finnSak(el.dataset.sak), u = ui.utkast[sak.id];
+    const valgt = SAKTYPER[sak.type].handlinger.find((x) => x.kode === u.forslag);
+    if (valgt.leder && u.kommentar.trim().length < 10) { ui.melding[sak.id] = "Skriv en kort kommentar til lederen om hva du har funnet ut."; return tegn(); }
+    ui.melding[sak.id] = "";
+    if (valgt.leder) sendTilLeder(sak, u);
+    else { sak.sjekk = u.sjekk.slice(); sak.forslag = u.forslag; sak.kommentar = u.kommentar.trim(); utfor(sak, u.forslag, "Analytiker"); }
+    delete ui.utkast[sak.id];
+  }
+  if (act === "leder-ja" || act === "leder-nei") {
+    const sak = finnSak(el.dataset.sak), u = ui.utkast[sak.id];
+    if (act === "leder-nei" && u.leder.trim().length < 5) { ui.melding[sak.id] = "Skriv hvorfor saken sendes tilbake."; return tegn(); }
+    ui.melding[sak.id] = "";
+    lederSvar(sak, act === "leder-ja", u.leder);
+    delete ui.utkast[sak.id];
+  }
+  tegn();
+  if (act === "velg") document.getElementById("panel")?.scrollTo(0, 0);
+});
+document.addEventListener("toggle", (e) => { if (e.target.id === "manuell") ui.manuellApen = e.target.open; }, true);
+document.addEventListener("keydown", (e) => {
+  const tr = e.target.closest?.("tr[data-act]");
+  if (tr && (e.key === "Enter" || e.key === " ")) { e.preventDefault(); tr.click(); }
+});
+document.addEventListener("input", (e) => {
+  const el = e.target, felt = el.dataset?.felt;
+  if (!felt) return;
+  if (felt === "kommentar" || felt === "leder") { ui.utkast[el.dataset.sak][felt] = el.value; return; }
+  if (felt === "m-mengde" || felt === "m-kurs") { ui.m[felt.slice(2)] = el.value; return; }
+  if (felt === "sok") { ui.sok = el.value; const pos = el.selectionStart; tegn(); const ny = document.querySelector('[data-felt="sok"]'); ny.focus(); ny.setSelectionRange(pos, pos); }
+});
+document.addEventListener("change", (e) => {
+  const el = e.target, felt = el.dataset?.felt;
+  if (!felt) return;
+  if (felt === "sjekk") { const u = ui.utkast[el.dataset.sak], i = Number(el.dataset.i); u.sjekk = el.checked ? [...new Set([...u.sjekk, i])].sort() : u.sjekk.filter((x) => x !== i); return; }
+  if (felt === "forslag") { ui.utkast[el.dataset.sak].forslag = el.value; return tegn(); }
+  if (felt === "m-side") { ui.m.side = el.value; return; }
+  if (felt === "m-papir") { ui.m.papir = el.value; ui.m.mengde = erAksje(el.value) ? "10000" : "1000000"; ui.m.kurs = ""; return tegn(); }
+  if (felt === "bareOppmerksomhet") ui.bareOppmerksomhet = el.checked;
+  else if (felt === "dato") ui.dato = el.value;
+  else if (felt === "status") ui.status = el.value;
+  else if (felt === "problem") ui.problem = el.value;
+  else return;
+  tegn();
+});
+
+// ================= Forbehold =================
+document.getElementById("forbehold").innerHTML = [
+  `Simuleringen starter på dagens dato og i steget som passer med klokkeslettet. De tre forrige bankdagene (${HIST.map(datoTekst).join(", ")}) er kjørt uten feil, så beholdningene har uoppgjorte handler fra start. Beholdningene er satt opp med kursene ${datoTekst(STARTGRUNNLAG)}.`,
+  `Aksjekurser er ekte sluttkurser fra Yahoo Finance til og med ${datoTekst(SISTE_EKTE_KURS)}. Etter det er de simulert med 1,3 % daglig svingning, likt hver gang. ISIN er kontrollert mot Euronext.`,
+  `Obligasjonskurser er regnet ut fra Norges Banks generiske statsrenter for 3, 5 og 10 år (ekte til og med ${datoTekst(Object.keys(DATA.renter["10Y"]).sort().at(-1))}, simulert etter det), interpolert til hver obligasjons løpetid og flat over 10 år. De er en tilnærming, ikke børskurser.`,
+  `Obligasjonene: ${DATA.obligasjoner.map((o) => `${o.kortnavn} (${o.ticker}, ${o.isin}, ${nb(o.kupong, 3)} %, forfall ${datoTekst(o.forfall)})`).join("; ")}. Kupong, ISIN og ticker er fra Euronext. Årlig kupong, 1000 kr per obligasjon, handles i pålydende. Påløpt rente: alle kupongperiodene som brukes har 365 dager, så ACT/ACT og ACT/365 gir samme svar.`,
+  "Oppgjør er to bankdager etter handel (T+2), som i Norges Banks vilkår og i Euronext Securities Oslo i dag. Norge går over til T+1 11.10.2027. Bankdager tar hensyn til helg, norske helligdager, julaften og nyttårsaften.",
+  "Fondene, meglerne, kontonumrene og oppgjørsinstruksene er oppdiktet.",
+  "ESG-scorene er simulerte og kommer ikke fra en leverandør. Sektorgrensen gjelder andelen av fondets aksjer.",
+  `Mandatene er forenklet: bare tillatte instrumenttyper, ingen short-salg, maks 10 % per aksje, maks 25 % av aksjedelen per sektor, ESG-score over 60 og aksjeandel 40–60 % i kombinasjonsfondet. 5/10/40-regelen i verdipapirfondloven er ikke modellert, og aksjefondet ville brutt den fordi universet er lite.`,
+  `Valgte grenser: ${nb(FEILRATE * 100)} % sjanse for problem per tilfeldig handel, kurs mer enn ${nb(PRISGRENSE * 100)} % fra markedet stoppes, beløpsavvik opp til ${nb(TOLERANSE_KR)} kr mot megler godtas, kurtasje 2 bp.`,
+  "NAV: beholdning per handelsdag × sluttkurs, pluss påløpte renter, bankinnskudd og fordringer, minus gjeld og påløpt forvaltningshonorar, delt på andeler. Tegning og innløsning av andeler, utbytte og skatt er ikke modellert.",
+  "Hovedregel for automatikk: bare det som har én riktig løsning etter en fast regel, rettes uten en person. Det gjelder duplikat, standard oppgjørsinstruks, avrunding innenfor toleranse, purring og nytt oppgjørsforsøk. Endring av stamdata, godkjenning av avvik og frigivelse av NAV med åpne saker krever leder.",
+].map((t) => `<li>${t}</li>`).join("");
+
+start();
+tegn();
+setInterval(() => { const el = document.getElementById("klokketid"); if (el && erLive()) el.textContent = naaOslo().tid; }, 15000);
+</script>
+</body>
+</html>
