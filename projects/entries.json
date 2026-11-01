@@ -10,6 +10,20 @@
   ],
   "entries": [
     {
+      "date": "2026-11-01",
+      "topic": "Strategy and decisions",
+      "title": "Market analysis: Norwegian household banking",
+      "url": "/markets/norwegian-household-banking/",
+      "text": "Price competition, not the policy rate, now sets earnings in Norwegian household banking: lower mortgage prices cost DNB about NOK 2 billion a year, about twice what a 25 bp rate move adds. Costs and deposits, not mortgage growth, will separate the listed banks: SpareBank 1 Sør-Norge ahead of DNB, DNB ahead of Sparebanken Norge.",
+      "tools": "Market analysis, competitor analysis, PESTEL, SWOT",
+      "links": [
+        {
+          "text": "Read the analysis",
+          "url": "/markets/norwegian-household-banking/"
+        }
+      ]
+    },
+    {
       "date": "2026-10-25",
       "topic": "Strategy and decisions",
       "title": "Market analysis: Norwegian salmon farming",
