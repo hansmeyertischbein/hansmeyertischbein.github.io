@@ -19,6 +19,11 @@
       "slug": "norwegian-household-banking",
       "name": "Norwegian household banking",
       "date": "2026-11-01"
+    },
+    {
+      "slug": "norwegian-power-retail",
+      "name": "Norwegian household power retail",
+      "date": "2026-11-08"
     }
   ]
 }
